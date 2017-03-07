@@ -9,7 +9,7 @@ declare hide int Trl_Outcome;			// Global output used in END_TRL
 declare hide int Trl_Start_Time;		// Global output used in END_TRL
 declare hide int LastSearchOutcome;		// Global output used in END_TRL
 
-declare SCHTRIAL(allowed_fix_time,		// see ALL_VARS.pro and DEFAULT.pro
+declare ANTITRIAL(allowed_fix_time,		// see ALL_VARS.pro and DEFAULT.pro
 				curr_holdtime, 			// see SETC_TRL.pro
 				trl_type, 				// see SETC_TRL.pro
 				max_saccade_time, 		// see ALL_VARS.pro and DEFAULT.pro
@@ -20,7 +20,7 @@ declare SCHTRIAL(allowed_fix_time,		// see ALL_VARS.pro and DEFAULT.pro
 				object_fix);			// animated graph object
 
 
-process SCHTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
+process ANTITRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				curr_holdtime,     		// see SETC_TRL.pro
 				trl_type,          		// see SETC_TRL.pro
 				max_saccade_time,  		// see ALL_VARS.pro and DEFAULT.pro

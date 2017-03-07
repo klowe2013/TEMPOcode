@@ -8,6 +8,7 @@ declare SET_CLRS(n_targ_pos);
 process SET_CLRS(n_targ_pos)
 	{
 	declare hide int color_num,r_, g_, b_;
+	declare hide int run_anti_sess = 9;
 	r_ = 0; g_ = 1; b_ = 2;
 	
 	color_num = 0;
@@ -68,7 +69,41 @@ process SET_CLRS(n_targ_pos)
 		Singleton_color[g_]		= 33;	
 		Singleton_color[b_]		= 255;
 		}
-
+	
+	// Now set non-singleton
+	if (State == run_anti_sess)
+	{
+		if (DistCol == 0) // Red
+			{
+			NonSingleton_color[r_]		= 63;	
+			NonSingleton_color[g_]		= 0;	
+			NonSingleton_color[b_]		= 0;
+			}
+		else if (DistCol == 1) // Green
+			{
+			NonSingleton_color[r_]		= 0;	
+			NonSingleton_color[g_]		= 36;	
+			NonSingleton_color[b_]		= 0;
+			}
+		else if (DistCol == 2) // Blue
+			{
+			NonSingleton_color[r_]		= 0;	
+			NonSingleton_color[g_]		= 0;	
+			NonSingleton_color[b_]		= 59;
+			}		
+		else if (DistCol == 3) // Yellow
+			{
+			NonSingleton_color[r_]		= 100;	
+			NonSingleton_color[g_]		= 100;	
+			NonSingleton_color[b_]		= 0;
+			}	
+		else if (DistCol == 4) // Magenta
+			{
+			NonSingleton_color[r_]		= 255;	
+			NonSingleton_color[g_]		= 33;	
+			NonSingleton_color[b_]		= 255;
+			}
+	}
 	
 	dsendf("cm 255 %d %d %d;\n",					// set the color of the fixation point to 255 (leaves room for many target colors)
 						Fixation_color[r_],			// GLOBAL ALERT; Fixation_color is an array so it cannot be passed

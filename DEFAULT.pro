@@ -1231,7 +1231,8 @@ if(monkey == helmholtz)
 			TargOrt					= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
 			SearchEcc				= 8; //entricity in degrees; use to make fixed eccentricity 
 			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
-			SingCol					= 2; 
+			SingCol					= 0; // red
+			DistCol 				= 1; // green
 			PercSingTrl				= 50; //Percentage of trials where singleton is present, see LOC_RAND.pro for code
 			soa_mode				= 0;  //fixation response soa; 1=on, 0=off 
 			
@@ -1344,8 +1345,7 @@ if(monkey == helmholtz)
 			SOA_list[2] = 600;
 			SOA_list[3] = 750;
 			
-			singColor = 0; //red
-			distColor = 1; //green
+			
 		// FIXATION TASK SPECIFIC----------------------------------------------------------------------------
 		
 		if (state == run_fix_sess)

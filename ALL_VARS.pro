@@ -97,7 +97,8 @@ declare int		d1color;	// need to make this more finely adjustable for luminance 
 declare int		SingMode; //declares presence/absence of singleton, set in DEFAULT.pro
 declare int		SingFreq; //singleton present vs absent frequency/proportion, only used in LOC_RAND.pro
 declare int		DistPres; //singleton present (1) vs. absent (0) for strobing. See EVENTDEF.pro, gets set in LOC_RAND.pro
-declare int		SingCol; //declares color of singleton, currently set in DEFAULT.pro and selected in SET_CLRS.pro
+declare int		SingCol; //declares color of singleton, currently set in DEFAULT.pro and selected in SET_CLRS.
+declare int 	DistCol; // declares color of non-singletons in anti task.
 declare int		PercSingTrl; // sets percentage of trials where singleton is present, set in DEFAULT.pro, see also usage in LOC_RAND.pro
 //declare	int		TrainOrt;
 declare int		TargOrt;
