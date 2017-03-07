@@ -197,8 +197,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		}
 	if (SetSize > 1)
 		{
-		id = 1;
-		while (id <= SetSize)
+		id = 0;
+		while (id < SetSize)
 			{
 			if (distAngles[id] != targ_angle)
 				{
@@ -228,8 +228,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	
 	if (SetSize > 1)
 		{
-		id = 1;
-		while (id <= SetSize)
+		id = 0;
+		while (id < SetSize)
 			{
 			if (distAngles[id] != targ_angle)
 				{
@@ -257,8 +257,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		}
 	if (SetSize > 1)
 		{
-		id = 1;
-		while (id <= SetSize)
+		id = 0;
+		while (id < SetSize)
 			{
 			if (distAngles[id] != targ_angle)
 				{
@@ -287,8 +287,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	
 	if (SetSize > 1)
 		{
-		id = 1;
-		while (id <= SetSize)
+		id = 0;
+		while (id < SetSize)
 			{
 			if (distAngles[id] != targ_angle)
 				{
@@ -319,12 +319,17 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	
 	if (SetSize > 1)
 		{
-		for (id = 1, id <= SetSize, id++)
+		id = 0;
+		while (id < SetSize)
+			{
 			if (distAngles[id] != targ_angle)
 			{
 				{
 				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],distAngles[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
+			}
+			id = id+1;
+			nexttick;
 			}
 		}
 		

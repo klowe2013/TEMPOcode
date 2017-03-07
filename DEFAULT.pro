@@ -1296,6 +1296,7 @@ if(monkey == helmholtz)
 			Angle_list[7]			= 135;			
 					
 			catchDifficulty   = 5;
+			stimHorizontal[0] = 3;
 			stimHorizontal[1] = 3;
 			stimHorizontal[2] = 3;
 			stimHorizontal[3] = 3;
@@ -1303,8 +1304,8 @@ if(monkey == helmholtz)
 			stimHorizontal[5] = 3;
 			stimHorizontal[6] = 3;
 			stimHorizontal[7] = 3;
-			stimHorizontal[8] = 3;
 			
+			stimVertical[0] = 3;
 			stimVertical[1] = 3;
 			stimVertical[2] = 3;
 			stimVertical[3] = 3;
@@ -1312,8 +1313,8 @@ if(monkey == helmholtz)
 			stimVertical[5] = 3;
 			stimVertical[6] = 3;
 			stimVertical[7] = 3;
-			stimVertical[8] = 3;
 			
+			distH[0] = 3;
 			distH[1] = 3;
 			distH[2] = 3;
 			distH[3] = 3;
@@ -1321,8 +1322,8 @@ if(monkey == helmholtz)
 			distH[5] = 3;
 			distH[6] = 3;
 			distH[7] = 3;
-			distH[8] = 3;
 			
+			distV[0] = 3;
 			distV[1] = 3;
 			distV[2] = 3;
 			distV[3] = 3;
@@ -1330,17 +1331,17 @@ if(monkey == helmholtz)
 			distV[5] = 3;
 			distV[6] = 3;
 			distV[7] = 3;
-			distV[8] = 3;
 			
-			distAngles[1] = 90;
-			distAngles[2] = 45;
-			distAngles[3] = 0;
-			distAngles[4] = 315;
-			distAngles[5] = 270;
-			distAngles[6] = 225;
-			distAngles[7] = 180;
-			distAngles[8] = 135;
+			distAngles[0] = 90;
+			distAngles[1] = 45;
+			distAngles[2] = 0;
+			distAngles[3] = 315;
+			distAngles[4] = 270;
+			distAngles[5] = 225;
+			distAngles[6] = 180;
+			distAngles[7] = 135;
 			
+			distEccs[0] = 8;
 			distEccs[1] = 8;
 			distEccs[2] = 8;
 			distEccs[3] = 8;
@@ -1348,7 +1349,6 @@ if(monkey == helmholtz)
 			distEccs[5] = 8;
 			distEccs[6] = 8;
 			distEccs[7] = 8;
-			distEccs[8] = 8;
 			
 			SOA_list[0] = 300;
 			SOA_list[1] = 450;
