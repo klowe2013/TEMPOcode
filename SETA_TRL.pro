@@ -90,7 +90,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		TypeCode = 600;
 		saccEnd = curr_target;
 		}
-	else if (singDifficulty < ((ntDiffuiculties/2)))
+	else if (singDifficulty < ((ntDifficulties/2)))
 		{
 		Trl_type = 2;
 		TypeCode = 601;

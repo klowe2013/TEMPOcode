@@ -16,9 +16,13 @@
 
 
 declare hide float 	Size;   																	// Global output will be sent as stobes...        										
-declare hide int   	Color;								
+declare hide int   	Color;	
+declare hide int  	singColor;
+declare hide int 	distColor;							
 declare hide float 	Eccentricity; 
-declare hide float 	Angle;        																// ...by INFOS.pro at trial end.
+declare hide float 	Angle;   
+
+declare hide int id;     																// ...by INFOS.pro at trial end.
 
 declare hide float 	targ_orient; 
 declare hide float 	d1_orient; 
@@ -179,12 +183,15 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		}
 	if (SetSize > 1)
 		{
-		for (id = 1, id < SetSize, id++)
-			if (distAngles[id] != targ_angle)
+		id = 1;
+		while (id <= SetSize)
 			{
+			if (distAngles[id] != targ_angle)
 				{
-				spawnwait DRW_PLAC(distAngles[id], distEccs[id], color, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_PLAC(distAngles[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
+			id = id+1;
+			nexttick;
 			}
 		}
 		
@@ -207,13 +214,17 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	
 	if (SetSize > 1)
 		{
-		for (id = 1, id < SetSize, id++)
-			if (distAngles[id] != targ_angle)
+		id = 1;
+		while (id <= SetSize)
 			{
+			if (distAngles[id] != targ_angle)
 				{
-				spawnwait DRW_PLAC(distAngles[id], distEccs[id], color, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_PLAC(distAngles[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
+			id = id+1;
+			nexttick;
 			}
+			
 		}
 		
 	
@@ -228,16 +239,20 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
 		}
 	if (SetSize > 1)
 		{
-		for (id = 1, id < SetSize, id++)
-			if (distAngles[id] != targ_angle)
+		id = 1;
+		while (id <= SetSize)
 			{
+			if (distAngles[id] != targ_angle)
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],distAngles[id], distEccs[id], distColor, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],distAngles[id], distEccs[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
+			
+			id = id+1;
+			nexttick;
 			}
 		}
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
@@ -253,17 +268,21 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, color, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 		}
 	
 	if (SetSize > 1)
 		{
-		for (id = 1, id <= SetSize, id++)
+		id = 1;
+		while (id <= SetSize)
 			{
 			if (distAngles[id] != targ_angle)
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],distAngles[id], distEccs[id], color, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],distAngles[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
+			
+			id = id+1;
+			nexttick;
 			}
 		}
 		
@@ -281,7 +300,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, color, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 		}
 	
 	if (SetSize > 1)
@@ -290,7 +309,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			if (distAngles[id] != targ_angle)
 			{
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],distAngles[id], distEccs[id], color, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],distAngles[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
 			}
 		}
