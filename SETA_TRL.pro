@@ -82,20 +82,6 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		CatchCode = 501;
 		} 
 	
-	// Set up a pro or anti trial
-	singDifficulty = random(ntDifficulties);
-	if (singDifficulty > ((ntDifficulties/2)+1))
-		{
-		Trl_type = 1;
-		TypeCode = 600;
-		saccEnd = curr_target;
-		}
-	else if (singDifficulty < ((ntDifficulties/2)))
-		{
-		Trl_type = 2;
-		TypeCode = 601;
-		saccEnd = (curr_target+(SetSize/2)) % SetSize;
-		}
 		
 	
 	
@@ -153,7 +139,22 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		}
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	spawnwait SEL_LOCS; // compiles final eccentricity, location, and orientation information for use by TSCH_PGS/LSCH_PGS below
+	spawnwait SEL_ALOCS; // compiles final eccentricity, location, and orientation information for use by ANTI_PGS below
+	
+	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
+	singDifficulty = random(ntDifficulties);
+	if (singDifficulty > ((ntDifficulties/2)+1))
+		{
+		Trl_type = 1;
+		TypeCode = 600;
+		saccEnd = curr_target;
+		}
+	else if (singDifficulty < ((ntDifficulties/2)))
+		{
+		Trl_type = 2;
+		TypeCode = 601;
+		saccEnd = (curr_target+(SetSize/2)) % SetSize;
+		}
 	
 	spawnwait ANTI_PGS(curr_target,							// set above
 			singDifficulty,								// singleton difficulty - H and V set in DEFAULT.pro
