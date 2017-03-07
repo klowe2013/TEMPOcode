@@ -117,6 +117,9 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	// Calculate screen coordinates for stimuli on this trial								
 	size         = llength;   
 	color        = 250;//curr_target + 1;	// Figure out the attributes of the current target 
+	singColor 	= 251;
+	distColor  = 250;
+	
 	angle			= targ_angle; 			
 	eccentricity	= targ_ecc;	
 										
