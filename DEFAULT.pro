@@ -1230,6 +1230,7 @@ if(monkey == helmholtz)
 			DistOrt					= 1; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
 			TargOrt					= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
 			SearchEcc				= 8; //entricity in degrees; use to make fixed eccentricity 
+			Last_SearchEcc 			= 8;
 			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
 			SingCol					= 0; // red
 			DistCol 				= 1; // green
@@ -1245,6 +1246,7 @@ if(monkey == helmholtz)
 			TargetType				= 1; //1 = L, 2 = T
 			PlacPres				= 1; //1 = no placeholders,  2 = placeholders
 			SetSize					= 8; //SS1 = 1, SS2 = 2, etc. up to set size 12;
+			Last_SetSize 			= 8; // Initialize to be same as SetSize
 			// Select Search task and Target/Distractor for Singleton Search
 			SearchType				= 2; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
 			TargOrt1				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT 
@@ -1339,6 +1341,14 @@ if(monkey == helmholtz)
 			distAngles[7] = 180;
 			distAngles[8] = 135;
 			
+			distEccs[1] = 8;
+			distEccs[2] = 8;
+			distEccs[3] = 8;
+			distEccs[4] = 8;
+			distEccs[5] = 8;
+			distEccs[6] = 8;
+			distEccs[7] = 8;
+			distEccs[8] = 8;
 			
 			SOA_list[0] = 300;
 			SOA_list[1] = 450;

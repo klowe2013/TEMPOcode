@@ -70,6 +70,7 @@ declare int		SearchType;				// determines homo/hetero distractors -- Hetero = 1,
 declare int		TargetType;				// determines Target Type -- L = 1, T = 2
 declare int		TrialTp;				// determines random/repeated displays
 declare int		SetSize;				// determines set size via following values -- SS1 = 1, SS2 = 2, SS4 = 3, SS8 = 4, SS12 = 5
+declare int 	Last_SetSize; 			// checks to see if set size changes from trial to trial
 declare int		soa_mode;				// turns search soa mode on/off, see DEFAULT.pro
 declare int     Consec_trl;				// consec trials to get reward
 //Contextual cue related target and distractor locations
@@ -108,6 +109,7 @@ declare int 	TD_Select; //Select Target Distractor relationship for singleton se
 //declare int 	TargID_Select; //Select target type from trial to trial at random in singleton search mode
 declare int 	DistOrt;
 declare	int		SearchEcc;
+declare int 	Last_SearchEcc;
 declare	int		SelEcc; // select eccentricity - see SETS_TRL.PRO
 declare	int		VarEcc; // turn eccentricity selection on/off
 declare	int		TargTrainSet;
@@ -151,11 +153,16 @@ declare int		Failure_Tone_smlP;		// negative secondary reinforcer in Hz (short t
 declare int		Failure_Tone_medP;		// negative secondary reinforcer in Hz (medium timeout)
 declare int		Failure_Tone_bigP;		// negative secondary reinforcer in Hz (long timeout)
 declare int		Fixation_Target;		// Target number for the fixation task (changed by key macros);
-declare int 	stimHorizontal[11];
-declare int		stimVerical[11];
-declare int 	distH[11];
-declare int 	distV[11];
-declare int 	distAngles[12];
+
+// Set up Pro/Anti Variables
+declare float 	stimHorizontal[11];
+declare float	stimVertical[11];
+declare float 	distH[11];
+declare float 	distV[11];
+declare float 	distAngles[12];
+declare float 	distEccs[12];
+declare int 	ntDifficulties;
+declare int 	ndDifficulties;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;
