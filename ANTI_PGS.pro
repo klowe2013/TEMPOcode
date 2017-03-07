@@ -83,6 +83,7 @@ declare ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 				int singDifficulty,
+				int isCatch,
 				float fixation_size,                    										// see DEFAULT.pro and ALL_VARS.pro
 				int fixation_color,                     										// see SET_CLRS.pro
 				int sig_color,                          										// see DEFAULT.pro and ALL_VARS.pro

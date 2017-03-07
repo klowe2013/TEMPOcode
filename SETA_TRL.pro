@@ -15,8 +15,9 @@
 //
 // written by joshua.d.cosman@vanderbilt.edu 	July, 2013
 
-#include C:/TEMPO/ProcLib/TSCH_PGS.pro						// sets all pgs of video memory up for the impending trial
-#include C:/TEMPO/ProcLib/LSCH_PGS.pro						// sets all pgs of video memory up for the impending trial 
+//#include C:/TEMPO/ProcLib/TSCH_PGS.pro						// sets all pgs of video memory up for the impending trial
+//#include C:/TEMPO/ProcLib/LSCH_PGS.pro						// sets all pgs of video memory up for the impending trial 
+#include C:/TEMPO/ProcLib/ANTI_PGS.pro
 
 declare hide int StimTm;									// Should we stim on this trial?
 declare hide int Curr_target;								// OUTPUT: next trial target
@@ -129,7 +130,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	
 	/////////////// Logic allowing us to choose locations differently on the basis of whether we are running probability search task //////////////
-	if(ProbCue == 0) //probability cueing on
+	/*if(ProbCue == 0) //probability cueing on
 		{
 		spawnwait LOC_RAND;	// sets locations of stimuli
 		}
@@ -138,7 +139,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		spawnwait LOC_ASYM;	// sets locations of stimuli
 		}
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	*/
+	
 	spawnwait SEL_ALOCS; // compiles final eccentricity, location, and orientation information for use by ANTI_PGS below
 	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint

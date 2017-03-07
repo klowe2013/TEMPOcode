@@ -111,6 +111,7 @@ process ANTITRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	printf(" \n");
 	//printf(" Random Trials(%d",Rand_Comp_Trl_number);
 
+// Need to change the below to reflect Pro/Anti vars of interest...
 if (SingMode == 0)
 	{
 	printf(" random correct = %d",Rand_Comp_Trl_number);
