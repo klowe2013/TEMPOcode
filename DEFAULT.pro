@@ -1294,8 +1294,8 @@ if(monkey == helmholtz)
 			Angle_list[5]			= 225;
 			Angle_list[6]			= 180; //9:00
 			Angle_list[7]			= 135;			
-			}		
-			
+					
+			catchDifficulty   = 5;
 			stimHorizontal[1] = 3;
 			stimHorizontal[2] = 3;
 			stimHorizontal[3] = 3;
@@ -1354,7 +1354,7 @@ if(monkey == helmholtz)
 			SOA_list[1] = 450;
 			SOA_list[2] = 600;
 			SOA_list[3] = 750;
-			
+			}
 			
 		// FIXATION TASK SPECIFIC----------------------------------------------------------------------------
 		

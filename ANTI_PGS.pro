@@ -65,7 +65,8 @@ declare hide float 	d11_ecc;
 
 
 declare ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
-				int singDifficulty
+				int singDifficulty,
+				int isCatch,
 				float fixation_size,                    										// see DEFAULT.pro and ALL_VARS.pro
 				int fixation_color,                     										// see SET_CLRS.pro
 				int sig_color,                          										// see DEFAULT.pro and ALL_VARS.pro
@@ -140,16 +141,29 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	pd_angle = pd_angle + 180; 																//change this for different quadrent or write some code for flexibility
 	
 	// Get distractor and target sizes
+	if (isCatch)
+	{
+		singDifficulty = catchDifficulty;
+	}
 	targH = stimHorizontal[singDifficulty];
 	targV = stimVertical[singDifficulty];
 	
-	for (id =1,  id < SetSize, id++)
+	id = 0;
+	while (id < SetSize)
 		{
-		distDifficulty[id] = random(ndDifficulties);
+		if (isCatch)
+		{
+			distDifficulty[id] = catchDifficulty;
+		} else
+		{
+			distDifficulty[id] = random(ndDifficulties);
+		}
 		distCode = 700 + (10*id)+distDifficulty[id];
 		// Drop Distractor Code
 		Event_fifo[Set_event] = distCode;		// Set a strobe to identify this file as a Search session and...	
 		Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+		id = id+1;
+		nexttick;
 		}
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	

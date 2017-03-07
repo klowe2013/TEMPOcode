@@ -158,6 +158,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	spawnwait ANTI_PGS(curr_target,							// set above
 			singDifficulty,								// singleton difficulty - H and V set in DEFAULT.pro
+			Catch, 										// Is this a catch trial?
 			fixation_size, 								// see DEFAULT.pro and ALL_VARS.pro
 			fixation_color, 							// see SET_CLRS.pro
 			sig_color, 									// see DEFAULT.pro and ALL_VARS.pro
