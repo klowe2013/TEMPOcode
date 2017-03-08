@@ -5,7 +5,7 @@ process A_LOCS()
 	
 	declare hide int ia;
 	declare hide int angDiff;
-	declare hide int targInd;
+	//declare hide int targInd;
 	
 	// First, check that the set size hasn't changed
 	if (SetSize != Last_SetSize)
