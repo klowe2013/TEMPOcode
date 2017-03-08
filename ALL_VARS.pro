@@ -166,6 +166,8 @@ declare int 	ndDifficulties;
 declare int 	catchDifficulty;
 declare int 	angleOffset;
 declare int 	targInd;
+declare float 	catchH;
+declare float 	catchV;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;

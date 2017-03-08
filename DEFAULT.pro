@@ -1261,7 +1261,7 @@ if(monkey == helmholtz)
 			TargOrt2				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT
 			
 			// Difficulties
-			ndDifficulties 			= 2;
+			ndDifficulties 			= 3;
 			ntDifficulties 			= 2;
 			angleOffset				= 0;
 			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
@@ -1308,6 +1308,9 @@ if(monkey == helmholtz)
 			Angle_list[7]			= 135;			
 					
 			catchDifficulty   = 5;
+			catchH 			  = 1;
+			catchV 			  = 1;
+			
 			stimHorizontal[0] = .7;
 			stimHorizontal[1] = 2;
 			stimHorizontal[2] = .5;
@@ -1326,17 +1329,17 @@ if(monkey == helmholtz)
 			stimVertical[6] = .5;
 			stimVertical[7] = .5;
 			
-			distH[0] = .5;
-			distH[1] = 3;
-			distH[2] = .7;
+			distH[0] = .7;
+			distH[1] = 1;
+			distH[2] = 2;
 			distH[3] = .7;
 			distH[4] = .7;
 			distH[5] = .7;
 			distH[6] = .7;
 			distH[7] = .7;
 			
-			distV[0] = 3;
-			distV[1] = .5;
+			distV[0] = 2;
+			distV[1] = 1;
 			distV[2] = .7;
 			distV[3] = .7;
 			distV[4] = .7;

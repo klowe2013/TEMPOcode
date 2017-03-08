@@ -148,21 +148,25 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	// Get distractor and target sizes
 	if (isCatch)
 	{
-		singDifficulty = catchDifficulty;
+		targH = catchH;
+		targV = catchV;
 	}
-	targH = stimHorizontal[singDifficulty];
-	targV = stimVertical[singDifficulty];
+	else if (!isCatch)
+	{
+		targH = stimHorizontal[singDifficulty];
+		targV = stimVertical[singDifficulty];
+	}
 	
 	id = 0;
 	while (id < SetSize)
-		{
-		if (isCatch)
-		{
-			distDifficulty[id] = catchDifficulty;
-		} else
-		{
+		//{
+		//if (isCatch)
+		//{
+		//	distDifficulty[id] = catchDifficulty;
+		//} else
+		//{
 			distDifficulty[id] = random(ndDifficulties);
-		}
+		//}
 		distCode = 700 + (10*id)+distDifficulty[id];
 		// Drop Distractor Code
 		Event_fifo[Set_event] = distCode;		// Set a strobe to identify this file as a Search session and...	
