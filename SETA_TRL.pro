@@ -58,6 +58,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int fixation_color 			= 255;			// see SET_CLRS.pro
 	declare hide int constant nogo_correct		= 4;			// code for successfully canceled trial (see CMDTRIAL.pro)
 	declare hide int constant go_correct		= 7;			// code for correct saccade on a go trial (see CMDTRIAL.pro)
+	declare hide float equalTol 				= .01; 			// allow for floating point errors when asking whether H > V or V > H
 	
 	declare hide int ii;
 		
@@ -148,17 +149,17 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
 	singDifficulty = random(ntDifficulties);
-	if (singDifficulty > ((ntDifficulties/2)+1))
+	saccEnd = targInd;
+	if ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) > equalTol)
 		{
 		Trl_type = 1;
 		TypeCode = 600;
-		saccEnd = curr_target;
 		}
-	else if (singDifficulty < ((ntDifficulties/2)))
+	else if ((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) > equalTol)
 		{
 		Trl_type = 2;
 		TypeCode = 601;
-		saccEnd = (curr_target+(SetSize/2)) % SetSize;
+		saccEnd = (targInd+(SetSize/2)) % SetSize;
 		}
 	
 	spawnwait ANTI_PGS(curr_target,							// set above
