@@ -116,6 +116,12 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int it;
 	declare hide int lastVal;
 	declare hide int sumProbs;
+	declare hide int sumCong[ndDifficulties];
+	declare hide int cumCong[ndDifficulties];
+	declare hide int isCong;
+	declare hide int relInds[ndDifficulties];
+	declare hide int relProbs[ndDifficulties];
+	declare hide int myInd;
 	
 	// number the pgs that need to be drawn
 	declare hide int   	blank       = 0;										
@@ -175,42 +181,259 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		//	distDifficulty[id] = random(ndDifficulties); // This line commented back out because we want to also probabilistically assign distDifficulty
 		//}
 		
+		// OK, let's think about this. We don't want to do too many processes,
+		// but we also don't want to drop irrelevant distractor codes. Where does
+		// an "if" regarding congruency want to live? And how do we do it while declaring
+		// the fewest number of variables? I suppose the relevant variables will be
+		// sumProbs and cumProbs... a long version could declare "relInds" and "relProbs"?
 		
-		// Get sum of relevant relative probabilities
-		it = 0;
-		sumProbs = 0;
-		while (it < ndDifficulties)
+		if (id == ((targInd + (SetSize/2)) % SetSize)) && (tIsCatch[targInd] == 0) // If we're discussing the anti- location...
+		// the above if statement also passes the below section if the singleton is a catch (no move)
+		//    that is, if the singleton is a no-move, don't bother with congruency of the anti-distractor
 		{
-			sumProbs = sumProbs+distDiffProbs[it];
-		}
-		
-		// Turn relative probabilities of t difficulties into CDF*100
-		it = 0;
-		lastVal = 0; // Counter for CDF
-		while (it < ndDifficulties)
+			// First we should check if we want a congruent or incongruent distractor
+			// Shoot... this requires a more involved loop for flexibility than intended... 
+			//    but I suppose it's necessary
+			// Get sum of relevant relative probabilities
+			ic = 0;
+			sumCong = 0;
+			while (ic < 3) // I don't like that this is hard coded... but I suppose cong/incong/square are all we need?
+			{
+				sumCong = sumCong+congProb[ic];
+			}
+			
+			// Turn relative probabilities of t difficulties into CDF*100
+			ic = 0;
+			lastVal = 0; // Counter for CDF
+			while (it < ntDifficulties)
+			{
+				cumCong[it] = (congProb[it]/sumCong)*100+lastVal; // Add this percentage*100
+				lastVal = cumProbs[it]; // CDF so far = lastVal
+			}
+			nexttick;
+			
+			// Select random value between 1 and 100 (0-99, really)
+			randVal = random(100);
+			isCong = 0;
+			// If our random value is past the range of the "targInd"th CDF value, check the next one
+			// Thought... should the below be >= or just >? I put >= because if there
+			// are two alternatives, and should have 0/1 relative probabilities (i.e.,
+			// exclusively use alternative 2), then if randVal = 0 then the first option
+			// will be spuriously selected...
+			while (randVal >= cumCong[isCong])
+			{
+				isCong = isCong+1;
+			}
+			//isCong = random(3); // This line would be if we're randomly picking congruency
+			
+			// OK, so we've picked our congruency. Now, we should go ahead and assign the "difficulty" if 
+			//    the anti- distractor should be square
+			if (isCong==2)
+			{
+				distDifficulty[id] = catchDistDiff; // Will be changed if we add catch as a "difficulty" level... commented out below
+				
+			}
+			else if (isCong == 1) // If incongruent...
+			{
+				// We need to do this differently depending on whether target is pro or anti
+				// If the target is pro, incongruent is also pro
+				it = 0;
+				nRel = 0;
+				if (tIsPro[targInd]) // if target is pro, pick a pro distractor
+				{
+					while (it < ndDifficulties)
+					{
+						if (dIsPro[it]) // Only pick pro-distractors
+						{
+							relInds[nRel] = it;
+							relProbs[nRel] = distDiffProbs[it];
+							nRel = nRel+1;
+						}
+					}
+					
+					// Get CDF
+					it = 0;
+					sumProbs = 0;
+					while (it < nRel)
+					{
+						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+					}
+					
+					// Turn relative relevant probs into CDF
+					it = 0;
+					lastVal = 0;
+					while (it < nRel)
+					{
+						cumProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
+						lastVal = cumProbs[it]; // CDF so far = lastVal
+					}
+					// Do we need to pick it here? Or can we save operations (potentially)
+					//    and put that part outside this loop?
+				}
+				else if (tIsAnti[targInd]) // if target is anti, pick an anti distractor
+				{
+					while (it < ndDifficulties)
+					{
+						if (dIsAnti[it]) // Only pick anti-distractors
+						{
+							relInds[nRel] = it;
+							relProbs[nRel] = distDiffProbs[it];
+							nRel = nRel+1;
+						}
+					}
+					
+					// Get CDF
+					it = 0;
+					sumProbs = 0;
+					while (it < nRel)
+					{
+						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+					}
+					
+					// Turn relative relevant probs into CDF
+					it = 0;
+					lastVal = 0;
+					while (it < nRel)
+					{
+						cumProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
+						lastVal = cumProbs[it]; // CDF so far = lastVal
+					}
+					// Do we need to pick it here? Or can we save operations (potentially)
+					//    and put that part outside this loop?
+				}
+				
+				// Cool. Now that we've gotten the relevant indices for either pro or anti trials,
+				//    let's randomly select one of them
+				randVal = random(100);
+				myInd = 0;
+				while (randVal >= cumProbs[myInd])
+				{
+					myInd = myInd+1;
+				}
+				// We've now picked the appropriate index INTO THE RELEVANT INDICES. So let's assign the Distractor ID
+				distDifficulty[id] = relInds[id];
+			}
+			else if (isCong == 0) // If congruent...
+			{
+				// We need to do this differently depending on whether target is pro or anti
+				// If the target is pro, incongruent is also pro
+				it = 0;
+				nRel = 0;
+				if (tIsPro[targInd]) // if target is pro, pick an anti distractor
+				{
+					while (it < ndDifficulties)
+					{
+						if (dIsAnti[it]) // Only pick pro-distractors
+						{
+							relInds[nRel] = it;
+							relProbs[nRel] = distDiffProbs[it];
+							nRel = nRel+1;
+						}
+					}
+					
+					// Get CDF
+					it = 0;
+					sumProbs = 0;
+					while (it < nRel)
+					{
+						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+					}
+					
+					// Turn relative relevant probs into CDF
+					it = 0;
+					lastVal = 0;
+					while (it < nRel)
+					{
+						cumProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
+						lastVal = cumProbs[it]; // CDF so far = lastVal
+					}
+					// Do we need to pick it here? Or can we save operations (potentially)
+					//    and put that part outside this loop?
+				}
+				else if (tIsAnti[targInd]) // if target is anti, pick a pro distractor
+				{
+					while (it < ndDifficulties)
+					{
+						if (dIsPro[it]) // Only pick anti-distractors
+						{
+							relInds[nRel] = it;
+							relProbs[nRel] = distDiffProbs[it];
+							nRel = nRel+1;
+						}
+					}
+					
+					// Get CDF
+					it = 0;
+					sumProbs = 0;
+					while (it < nRel)
+					{
+						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+					}
+					
+					// Turn relative relevant probs into CDF
+					it = 0;
+					lastVal = 0;
+					while (it < nRel)
+					{
+						cumProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
+						lastVal = cumProbs[it]; // CDF so far = lastVal
+					}
+					// Do we need to pick it here? Or can we save operations (potentially)
+					//    and put that part outside this loop?
+				}
+				
+				// Cool. Now that we've gotten the relevant indices for either pro or anti trials,
+				//    let's randomly select one of them
+				randVal = random(100);
+				myInd = 0;
+				while (randVal >= cumProbs[myInd])
+				{
+					myInd = myInd+1;
+				}
+				// We've now picked the appropriate index INTO THE RELEVANT INDICES. So let's assign the Distractor ID
+				distDifficulty[id] = relInds[id];
+			}
+			nexttick;
+					
+		}			
+		else // if the distractor in question is not opposite the singleton, don't bother with congruency
 		{
-			cumProbs[it] = (distDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
-			lastVal = cumProbs[it]; // CDF so far = lastVal
+			// Get sum of relevant relative probabilities
+			it = 0;
+			sumProbs = 0;
+			while (it < ndDifficulties)
+			{
+				sumProbs = sumProbs+distDiffProbs[it];
+			}
+			
+			// Turn relative probabilities of t difficulties into CDF*100
+			it = 0;
+			lastVal = 0; // Counter for CDF
+			while (it < ndDifficulties)
+			{
+				cumProbs[it] = (distDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
+				lastVal = cumProbs[it]; // CDF so far = lastVal
+			}
+			nexttick;
+			
+			
+			
+			// Select random value between 1 and 100 (0-99, really)
+			randVal = random(100);
+			distDifficulty[id] = 0;
+			// If our random value is past the range of the "targInd"th CDF value, check the next one
+			// Thought... should the below be >= or just >? I put >= because if there
+			// are two alternatives, and should have 0/1 relative probabilities (i.e.,
+			// exclusively use alternative 2), then if randVal = 0 then the first option
+			// will be spuriously selected...
+			while (randVal >= cumProbs[distDifficulty[id]])
+			{
+				distDifficulty[id] = distDifficulty[id]+1;
+			}
+			// Loop should have broken when randVal is in the range of values assigned to a particular
+			// CDF/difficulty level. When it breaks, get the appropriate difficulty level		
+			
 		}
-		nexttick;
-		
-		
-		
-		// Select random value between 1 and 100 (0-99, really)
-		randVal = random(100);
-		distDifficulty[id] = 0;
-		// If our random value is past the range of the "targInd"th CDF value, check the next one
-		// Thought... should the below be >= or just >? I put >= because if there
-		// are two alternatives, and should have 0/1 relative probabilities (i.e.,
-		// exclusively use alternative 2), then if randVal = 0 then the first option
-		// will be spuriously selected...
-		while (randVal >= cumProbs[distDifficulty[id]])
-		{
-			distDifficulty[id] = distDifficulty[id]+1;
-		}
-		// Loop should have broken when randVal is in the range of values assigned to a particular
-		// CDF/difficulty level. When it breaks, get the appropriate difficulty level		
-		
 		distCode = 700 + (10*id)+distDifficulty[id];
 		// Drop Distractor Code
 		Event_fifo[Set_event] = distCode;		// Set a strobe to identify this file as a Search session and...	

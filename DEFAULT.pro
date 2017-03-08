@@ -1308,6 +1308,7 @@ if(monkey == helmholtz)
 			Angle_list[7]			= 135;			
 					
 			catchDifficulty   = 5;
+			catchDistDiff 	  = 1;
 			catchH 			  = 1;
 			catchV 			  = 1;
 			
@@ -1371,7 +1372,12 @@ if(monkey == helmholtz)
 			distDiffProbs[6] = 0;
 			distDiffProbs[7] = 0;
 			
+			// Set congruent/incongruent relative probabilities
+			congProb[0] = 1;  // This will be congruent
+			congProb[1] = 1;  // This will be incongruent
+			congProb[2] = 0;  // This will be square
 			
+			// Are SOAs even relevant here? Let's take another look later
 			SOA_list[0] = 300;
 			SOA_list[1] = 450;
 			SOA_list[2] = 600;

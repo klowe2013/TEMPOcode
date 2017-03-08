@@ -160,14 +160,20 @@ declare float 	distH[11]; 			// Non-singleton H dimension
 declare float 	distV[11]; 			// Non-singleton V dimension
 declare int 	targDiffProbs[11];  // Relative probabilities of singleton difficulties
 declare int 	distDiffProbs[11];  // Relative probabilities of non-singleton difficulties
-declare int 	tIsPro[11]; 		
-declare int 	tIsAnti[11];
+declare int 	tIsPro[11]; 		// Decides whether the singleton is pro or anti...
+declare int 	tIsAnti[11]; 		// See above, both used for congruency of anti location
+// declare int 	tIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
+declare int 	congProb[3]; 		// Will be used to set relative probabilities of congruent vs incongruent anti- distractors
+declare int 	dIsPro[11]; 		// Decides whether the singleton is pro or anti...
+declare int 	dIsAnti[11]; 		// See above, both used for congruency of anti location
+// declare int 	dIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
 //declare float 	distAngles[12];
 declare int 	singColor;
 declare int 	distColor;
 declare int 	ntDifficulties;
 declare int 	ndDifficulties;
 declare int 	catchDifficulty;
+declare int 	catchDistDiff;
 declare int 	angleOffset;
 declare int 	targInd;
 declare float 	catchH;

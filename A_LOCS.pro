@@ -4,7 +4,8 @@ process A_LOCS()
 {
 	//declare hide int randVal;
 	//declare hide float cumProbs[ntDifficulties];
-	//declare hide int it;
+	declare hide int it;
+	declare hide float equalTol = .001;
 	//declare hide int lastVal;
 	//declare hide int sumProbs;
 	
@@ -12,46 +13,70 @@ process A_LOCS()
 	spawnwait SET_LOCS();
 	nexttick;
 	
-	/* Acually.... the below section should be used for target difficulty,
-	// not target location index....
-	//
-	//
+	// Commented section that was here has been spliced into SETA_TRL and ANTI_PGS
 	
-	// Get sum of relevant relative probabilities
+	// Let's check which singleton difficulties imply pro vs anti
 	it = 0;
-	sumProbs = 0;
 	while (it < ntDifficulties)
 	{
-		sumProbs = sumProbs+targDiffProbs[it];
+		tIsPro[it] = 0;
+		tIsAnti[it] = 0;
+		//tIsCatch[it] = 0;
+		if ((stimVertical[it] - stimHorizontal[it]) > equalTol)
+			{
+			tIsPro[it] = 1;
+			//tIsAnti[it] = 0;
+			//tIsCatch[it] = 0;
+			}
+		else if ((stimHorizontal[it] - stimVertical[it]) > equalTol)
+			{
+			//tIsPro[it] = 0;
+			tIsAnti[it] = 1;
+			//tIsCatch[it] = 0;
+			}
+		/*
+		// This if statement should work because it's in an else... a negative value < -equaltol
+		// should have been caught by the first if
+		else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
+			{
+			//tIsPro[it] = 0;
+			//tIsAnti[it] = 0;
+			tIsCatch[it] = 1;
+			}
+		*/
 	}
-	
-	// Turn relative probabilities of t difficulties into CDF*100
+	nexttick;
+	// We need to repeat the above to assign distractor pro/anti/catch diffs
 	it = 0;
-	lastVal = 0; // Counter for CDF
-	while (it < ntDifficulties)
+	while (it < ndDifficulties)
 	{
-		cumProbs[it] = (targDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
-		lastVal = cumProbs[it]; // CDF so far = lastVal
+		// We need to repeat the above to assign distractor pro/anti/catch diffs
+		if ((distV[it] - distH[it]) > equalTol)
+			{
+			dIsPro[it] = 1;
+			//dIsAnti[it] = 0;
+			//dIsCatch[it] = 0;
+			}
+		else if ((distH[it] - distV[it]) > equalTol)
+			{
+			//dIsPro[it] = 0;
+			dIsAnti[it] = 1;
+			//dIsCatch[it] = 0;
+			}
+		/*
+		// This if statement should work because it's in an else... a negative value < -equaltol
+		// should have been caught by the first if
+		else if (((distH[singDifficulty] - distV[singDifficulty]) < equalTol) || ((distV[singDifficulty] - distH[singDifficulty]) < equalTol))
+			{
+			//dIsPro[it] = 0;
+			//dIsAnti[it] = 0;
+			dIsCatch[it] = 1;
+			}
+		*/
+	
 	}
 	nexttick;
 	
-	
-	
-	// Select random value between 1 and 100 (0-99, really)
-	randVal = random(100);
-	targInd = 0;
-	// If our random value is past the range of the "targInd"th CDF value, check the next one
-	// Thought... should the below be >= or just >? I put >= because if there
-	// are two alternatives, and should have 0/1 relative probabilities (i.e.,
-	// exclusively use alternative 2), then if randVal = 0 then the first option
-	// will be spuriously selected...
-	while (randVal >= cumProbs[targInd])
-	{
-		targInd = targInd+1;
-	}
-	// Loop should have broken when randVal is in the range of values assigned to a particular
-	// CDF/difficulty level. When it breaks, get the appropriate angle/eccentricity
-	*/
 	targInd = random(SetSize);
 	targ_angle = Angle_list[targInd];
 	targ_ecc = Eccentricity_list[targInd];
