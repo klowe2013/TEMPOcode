@@ -59,6 +59,11 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int constant nogo_correct		= 4;			// code for successfully canceled trial (see CMDTRIAL.pro)
 	declare hide int constant go_correct		= 7;			// code for correct saccade on a go trial (see CMDTRIAL.pro)
 	declare hide float equalTol 				= .01; 			// allow for floating point errors when asking whether H > V or V > H
+	declare hide int randVal;
+	declare hide float cumProbs[ntDifficulties];
+	declare hide int it;
+	declare hide int lastVal;
+	declare hide int sumProbs;
 	
 	declare hide int ii;
 		
@@ -73,7 +78,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	// -----------------------------------------------------------------------------------------------
 	// 1) Set up catch trial based on Perc_catch parameter in DEFAULT.pro
 	
-
+	// We'll want to update this if we decide that a "catch" should be defined by a square difficulty...
+	// I'll put the appropriate line down in the "if" statement below, but keep it commented for now
 	CatchNum = random(100);
 	if (CatchNum > Perc_catch)
 		{
@@ -86,69 +92,54 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		CatchCode = 501;
 		} 
 	
-		
-	
-	
 	// -----------------------------------------------------------------------------------------------
 	// 2) Set up all vdosync pages for the upcoming trial using globals defined by user and sets_trl.pro
-	
-	
-	/*if(SingMode == 1)
-		{ //selecting different fixed distractor color for each block
-		if(Block_number == 1 || Block_number == 11 || Block_number == 21)
-			{ 
-			DistFix = 1; //fixed distractor
-			SingCol = 0;
-			}
-		else if(Block_number == 3 || Block_number == 13 || Block_number == 23)
-			{ 
-			DistFix = 1; //fixed distractor
-			SingCol = 1;
-			}
-		else if(Block_number == 5 || Block_number == 15 || Block_number == 25)
-			{ 
-			DistFix = 1; //fixed distractor
-			SingCol = 2;
-			}
-		else if(Block_number == 7 || Block_number == 17 || Block_number == 27)
-			{ 
-			DistFix = 1; //fixed distractor
-			SingCol = 3;
-			}
-		else if(Block_number == 9 || Block_number == 19 || Block_number == 29)
-			{ 
-			DistFix = 1; //fixed distractor
-			SingCol = 4;
-			}
-		else //after 2900 trials, all blocks become random
-			{
-			DistFix = 2; //random distractor	
-			SingCol = random(5); //pick a distractor color at random
-			}
-		}
-	*/
 	
 	spawnwait SET_CLRS(n_targ_pos); //selects distractor/target colors for this trial
 	
 	spawnwait RAND_ORT;	// sets orientations of random stimuli
 	
-	
-	/////////////// Logic allowing us to choose locations differently on the basis of whether we are running probability search task //////////////
-	/*if(ProbCue == 0) //probability cueing on
-		{
-		spawnwait LOC_RAND;	// sets locations of stimuli
-		}
-	else if(ProbCue == 1) //probability cueing on
-		{
-		spawnwait LOC_ASYM;	// sets locations of stimuli
-		}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	*/
-	
-	spawnwait A_LOCS; // compiles final eccentricity, location, and orientation information for use by ANTI_PGS below
+	spawnwait A_LOCS; // updates angles and eccentricities - assumes we want equal spacing
 	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
-	singDifficulty = random(ntDifficulties);
+	
+	// Here, let's take the code I wrote in A_LOCS.pro to randomize singleton difficulty
+	
+	// Get sum of relevant relative probabilities
+	it = 0;
+	sumProbs = 0;
+	while (it < ntDifficulties)
+	{
+		sumProbs = sumProbs+targDiffProbs[it];
+	}
+	
+	// Turn relative probabilities of t difficulties into CDF*100
+	it = 0;
+	lastVal = 0; // Counter for CDF
+	while (it < ntDifficulties)
+	{
+		cumProbs[it] = (targDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
+		lastVal = cumProbs[it]; // CDF so far = lastVal
+	}
+	nexttick;
+	
+	// Select random value between 1 and 100 (0-99, really)
+	randVal = random(100);
+	singDifficulty = 0;
+	// If our random value is past the range of the "targInd"th CDF value, check the next one
+	// Thought... should the below be >= or just >? I put >= because if there
+	// are two alternatives, and should have 0/1 relative probabilities (i.e.,
+	// exclusively use alternative 2), then if randVal = 0 then the first option
+	// will be spuriously selected...
+	while (randVal >= cumProbs[singDifficulty])
+	{
+		singDifficulty = singDifficulty+1;
+	}
+	// Loop should have broken when randVal is in the range of values assigned to a particular
+	// CDF/difficulty level. When it breaks, get the appropriate pro/anti mapping
+	nexttick;
+	
+	// Now, let's test whether this difficulty is a pro or anti trial
 	saccEnd = targInd;
 	if ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) > equalTol)
 		{
@@ -161,6 +152,25 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		TypeCode = 601;
 		saccEnd = (targInd+(SetSize/2)) % SetSize;
 		}
+	/*
+	// This if statement should work because it's in an else... a negative value < -equaltol
+	// should have been caught by the first if
+	else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
+		{
+		catchPro = random(2);
+		if (catchPro)
+		{
+			Trl_type = 1;
+			TypeCode = 600;
+		}
+		else if (!catchPro)
+		{
+			Trl_type = 2;
+			TypeCode = 601;
+			saccEnd = (targInd+(SetSize/2))% SetSize;
+		}
+		}
+	*/
 	
 	spawnwait ANTI_PGS(curr_target,							// set above
 			singDifficulty,								// singleton difficulty - H and V set in DEFAULT.pro

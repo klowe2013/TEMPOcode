@@ -1311,6 +1311,7 @@ if(monkey == helmholtz)
 			catchH 			  = 1;
 			catchV 			  = 1;
 			
+			// H dimension of color singleton options
 			stimHorizontal[0] = .7;
 			stimHorizontal[1] = 2;
 			stimHorizontal[2] = .5;
@@ -1320,6 +1321,7 @@ if(monkey == helmholtz)
 			stimHorizontal[6] = .5;
 			stimHorizontal[7] = .5;
 			
+			// V dimension of color singleton options
 			stimVertical[0] = 2;
 			stimVertical[1] = .7;
 			stimVertical[2] = .5;
@@ -1329,6 +1331,17 @@ if(monkey == helmholtz)
 			stimVertical[6] = .5;
 			stimVertical[7] = .5;
 			
+			// Relative probability of color singleton options
+			targDiffProbs[0] = 1;
+			targDiffProbs[1] = 1;
+			targDiffProbs[2] = 0;
+			targDiffProbs[3] = 0;
+			targDiffProbs[4] = 0;
+			targDiffProbs[5] = 0;
+			targDiffProbs[6] = 0;
+			targDiffProbs[7] = 0;
+			
+			// H dimension of non-singleton
 			distH[0] = .7;
 			distH[1] = 1;
 			distH[2] = 2;
@@ -1338,6 +1351,7 @@ if(monkey == helmholtz)
 			distH[6] = .7;
 			distH[7] = .7;
 			
+			// V dimension of non-singleton
 			distV[0] = 2;
 			distV[1] = 1;
 			distV[2] = .7;
@@ -1346,6 +1360,17 @@ if(monkey == helmholtz)
 			distV[5] = .7;
 			distV[6] = .7;
 			distV[7] = .7;
+			
+			// Relative probability of non-singleton options
+			distDiffProbs[0] = 1;
+			distDiffProbs[1] = 1;
+			distDiffProbs[2] = 1;
+			distDiffProbs[3] = 0;
+			distDiffProbs[4] = 0;
+			distDiffProbs[5] = 0;
+			distDiffProbs[6] = 0;
+			distDiffProbs[7] = 0;
+			
 			
 			SOA_list[0] = 300;
 			SOA_list[1] = 450;

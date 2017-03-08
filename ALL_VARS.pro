@@ -154,10 +154,14 @@ declare int		Failure_Tone_bigP;		// negative secondary reinforcer in Hz (long ti
 declare int		Fixation_Target;		// Target number for the fixation task (changed by key macros);
 
 // Set up Pro/Anti Variables
-declare float 	stimHorizontal[11];
-declare float	stimVertical[11];
-declare float 	distH[11];
-declare float 	distV[11];
+declare float 	stimHorizontal[11]; // Singleton H dimension
+declare float	stimVertical[11]; 	// Singleton V dimension
+declare float 	distH[11]; 			// Non-singleton H dimension
+declare float 	distV[11]; 			// Non-singleton V dimension
+declare int 	targDiffProbs[11];  // Relative probabilities of singleton difficulties
+declare int 	distDiffProbs[11];  // Relative probabilities of non-singleton difficulties
+declare int 	tIsPro[11]; 		
+declare int 	tIsAnti[11];
 //declare float 	distAngles[12];
 declare int 	singColor;
 declare int 	distColor;
@@ -168,6 +172,7 @@ declare int 	angleOffset;
 declare int 	targInd;
 declare float 	catchH;
 declare float 	catchV;
+
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;

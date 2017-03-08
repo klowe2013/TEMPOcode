@@ -111,6 +111,11 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide float	targV;
 	declare hide int 	distDifficulty[12];
 	declare hide int 	distCode;
+	declare hide int randVal;
+	declare hide float cumProbs[ndDifficulties];
+	declare hide int it;
+	declare hide int lastVal;
+	declare hide int sumProbs;
 	
 	// number the pgs that need to be drawn
 	declare hide int   	blank       = 0;										
@@ -146,6 +151,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	pd_angle = pd_angle + 180; 																//change this for different quadrent or write some code for flexibility
 	
 	// Get distractor and target sizes
+	// The below should be eliminated if we put the "catch"
+	//    in the singleton difficulties, but kept for now
 	if (isCatch)
 	{
 		targH = catchH;
@@ -159,14 +166,51 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	
 	id = 0;
 	while (id < SetSize)
-		//{
+		{
 		//if (isCatch)
 		//{
 		//	distDifficulty[id] = catchDifficulty;
 		//} else
 		//{
-			distDifficulty[id] = random(ndDifficulties);
+		//	distDifficulty[id] = random(ndDifficulties); // This line commented back out because we want to also probabilistically assign distDifficulty
 		//}
+		
+		
+		// Get sum of relevant relative probabilities
+		it = 0;
+		sumProbs = 0;
+		while (it < ndDifficulties)
+		{
+			sumProbs = sumProbs+distDiffProbs[it];
+		}
+		
+		// Turn relative probabilities of t difficulties into CDF*100
+		it = 0;
+		lastVal = 0; // Counter for CDF
+		while (it < ndDifficulties)
+		{
+			cumProbs[it] = (distDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
+			lastVal = cumProbs[it]; // CDF so far = lastVal
+		}
+		nexttick;
+		
+		
+		
+		// Select random value between 1 and 100 (0-99, really)
+		randVal = random(100);
+		distDifficulty[id] = 0;
+		// If our random value is past the range of the "targInd"th CDF value, check the next one
+		// Thought... should the below be >= or just >? I put >= because if there
+		// are two alternatives, and should have 0/1 relative probabilities (i.e.,
+		// exclusively use alternative 2), then if randVal = 0 then the first option
+		// will be spuriously selected...
+		while (randVal >= cumProbs[distDifficulty[id]])
+		{
+			distDifficulty[id] = distDifficulty[id]+1;
+		}
+		// Loop should have broken when randVal is in the range of values assigned to a particular
+		// CDF/difficulty level. When it breaks, get the appropriate difficulty level		
+		
 		distCode = 700 + (10*id)+distDifficulty[id];
 		// Drop Distractor Code
 		Event_fifo[Set_event] = distCode;		// Set a strobe to identify this file as a Search session and...	
