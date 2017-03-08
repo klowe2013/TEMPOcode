@@ -74,7 +74,9 @@ process PROANTI()
 	spawnwait SET_PA();						// sets up search RT graph
 					
 	spawnwait SET_CLRS(n_targ_pos);             // calls SET_CLRS.pro, which sets all colors for all tasks based on input
-		
+	
+	spawnwait SET_LOCS(); 						// Sets eccentricities and angles of the targets to come
+	
 	spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
 				go_weight,						// ...trial.  This happens once outside of the while...
 				stop_weight,					// ...loop just to set up for the first iteration. After...

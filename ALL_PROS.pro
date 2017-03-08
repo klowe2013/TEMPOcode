@@ -146,6 +146,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/UPD8_INH.pro	// updates inhibition function for cmanding
 #include C:/TEMPO/ProcLib/UPD8_SOA.pro  
 #include C:/TEMPO/ProcLib/UPD8_SCH.pro	// updates search performance RT
+#include C:/TEMPO/ProcLib/SET_LOCS.pro 
 #include C:/TEMPO/ProcLib/INFOS.pro		// queue up all trial event codes for strobing to plexon
 #include C:/TEMPO/ProcLib/END_TRL.pro	// ends a trial based on outcome
 #include C:/TEMPO/ProcLib/KEY_REWD.pro	// needed to give reward manually from keyboard (stupid)
