@@ -13,8 +13,8 @@ process FLSHSCRN()
 	declare hide int blank			= 0;
 	declare hide int flash			= 1;
 	declare int		 trl_ct			= 0;
-	declare hide float flashTime;
-	declare hide float IFI;
+	//declare hide float flashTime;
+	//declare hide float IFI;
 	declare hide float flashStart;
 	declare hide float offTime;
 	declare hide int flashOnEv = 9999;
@@ -22,6 +22,15 @@ process FLSHSCRN()
 	declare hide int flashSuccEv = 9997;
 	declare hide int flashSessEnd = 9991;
 	declare hide int flashSessStart = 9990;
+	
+	// Number the trial stages to make them easier to read below
+	declare hide int 	need_fix  	= 1;
+	declare hide int 	wait_flash 	= 2;
+	declare hide int 	waitIFI 	= 3;
+	declare hide int 	stage;
+	
+	// This variable makes the while loop work
+	declare hide int 	trl_running;
 	
 	trl_ct = 0;
 	
@@ -36,6 +45,7 @@ process FLSHSCRN()
 		}
 	dsend("EM RFRSH");
 	
+	//system("dialog Flash_Vars");
 		
 	if (Last_task != run_flash_sess)			// Only do this if we have gone into another task or if this is first run of day.
 		{
@@ -60,6 +70,10 @@ process FLSHSCRN()
 			
 	nexttick 10;									// to prevent buffer overflows after task reentry.
 	
+	// Let's identify the next section of trials as a flash session
+	Event_fifo[Set_event] = flashSessStart;									// queue TrialStart_ strobe
+	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
+		
 	while (State == run_flash_sess)					// while the user has not yet terminated the countermanding task
 		{		
 		
@@ -85,8 +99,6 @@ process FLSHSCRN()
 					object_targ);               	// see GRAPHS.pro
 		
 		// Start the trial running
-		Event_fifo[Set_event] = flashSessStart;									// queue TrialStart_ strobe
-		Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
 		trl_running=1;
 		stage = need_fix;
 		while (trl_running)
@@ -113,12 +125,14 @@ process FLSHSCRN()
 					dsendf("vp %d\n",blank);
 					stage = need_fix;
 					printf("Broke fixation\n");
+					//printf("Stage = %d",stage);
 					trl_running = 0;
 					}
 				else if (In_FixWin && time() > flashStart + flashTime)
 					{
 						dsendf("XM RFRSH:\n");
 						dsendf("vp %d\n",blank);
+						//printf("Stim turned off...");
 						offTime = time();
 						stage = waitIFI;
 						Event_fifo[Set_event] = flashSuccEv;									// queue TrialStart_ strobe
@@ -127,20 +141,33 @@ process FLSHSCRN()
 						spawn JUICE(juice_channel,Base_Reward_time);				// YEAH BABY!  THAT'S WHAT IT'S ALL ABOUT!
 						trl_ct = trl_ct + 1;
 						print(trl_ct);
-						nexttick(250);
+						//printf("Stage = %d",stage);
+						//nexttick;
 					}
+				/*else
+					{
+					//printf("Waiting...");
+					}
+				*/
 				}
 			// Wait for an IFI
 			if (stage == waitIFI)
 				{
 				if (time() > offTime + IFI)
 					{
-					trial_running = 0;
+					//printf(IFI);
+					//printf("Waiting for IFI\n");
+					trl_running = 0;
 					}
 				}
 				
-			nexttick(100);									// wait at least one cycle and do it all again
+			nexttick;									// wait at least one cycle and do it all again
 			}
+			
+			while (Pause)
+				{
+				nexttick;
+				}
 		}
 	
 	Event_fifo[Set_event] = flashSessEnd;									// queue TrialStart_ strobe

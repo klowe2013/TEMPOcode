@@ -107,6 +107,10 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide float	stim_ecc_y;										
 	declare hide int   	open        = 0;										
 	declare hide int   	fill        = 1;										
+	declare hide float 	targH;
+	declare hide float	targV;
+	declare hide int 	distDifficulty[12];
+	declare hide int 	distCode;
 	
 	// number the pgs that need to be drawn
 	declare hide int   	blank       = 0;										
@@ -283,7 +287,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
 		}
 	
 	if (SetSize > 1)
@@ -315,7 +319,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
 		}
 	
 	if (SetSize > 1)

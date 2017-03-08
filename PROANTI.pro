@@ -144,7 +144,7 @@ process PROANTI()
 			 
 		 
 		 //Spawn the trial
-		 spawnwait ANTITRIAL(allowed_fix_time, 	// run a trial with variables defined in SETC_TRL.pro
+		 spawnwait ANTITR(allowed_fix_time, 	// run a trial with variables defined in SETC_TRL.pro
 							curr_holdtime, 
 							trl_type, 
 							max_saccade_time, 

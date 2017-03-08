@@ -38,7 +38,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int run_gonogo_sess = 4;
 	declare hide int run_delayed_sess = 6;
 	declare hide int run_search_sess = 7;
-	
+	declare hide int run_anti_sess = 9;
 	
 	
 	//
@@ -153,6 +153,18 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 				min_soa,
 				max_soa,
 				expo_jitter_soa);
+		}
+	else if (State == run_anti_sess)
+		{
+		spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
+				go_weight,						// ...trial.  This happens once outside of the while...
+				stop_weight,					// ...loop just to set up for the first iteration. After...
+				ignore_weight,					// ...that SETC_TRL.pro will be called by END_TRL.pro.
+				staircase,
+				n_SSDs,
+				min_holdtime,
+                max_holdtime,
+				expo_jitter);
 		}
 	
 		

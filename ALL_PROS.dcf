@@ -1,8 +1,8 @@
 ; TEMPO DIALOG CONFIGURATION FILE
-; Copyright 1997-2014 Reflective Computing.  All Rights Reserved.
+; Copyright 1997-2017 Reflective Computing.  All Rights Reserved.
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
-; Wed Jul 23 17:05:16 2014
+; Wed Mar 08 08:52:54 2017
 ; DLOAD C:\TEMPO\ProcLib\ALL_PROS.dcf
 
 ; DIALOGS
@@ -15,17 +15,18 @@ DIAOBJ   0,0,2,265,120,345,148,"OK","start;\r\ndpop Info_and_StartClock;"
 DIAOBJ   0,3,1,15,12,240,156,"","ALL_PROS.pro     (F1)\r\n\r\nprotocol control structure\r\nand associated protocols\r\n\r\nwritten by\r\ndavid.c.godlove@vanderbilt.edu\r\nJanuary, 2011"
 
 DIAPAGE 1,"Choose_Task"
-DIAPOS   1,0,0,972,-1,-1,405,580,791,940,1
+DIAPOS   1,0,0,972,-1,-1,144,480,530,858,1
 DIAOBJ   1,0,2,190,52,338,80,"Countermanding","quiet State = 1;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task"
 DIAOBJ   1,1,1,20,16,165,64,"","Which task do you\r\nwant to run? (F2)"
-DIAOBJ   1,2,2,271,284,351,308,"Exit","Exit"
-DIAOBJ   1,3,2,170,284,256,308,"Stop Clock","stop"
+DIAOBJ   1,2,2,271,311,351,335,"Exit","Exit"
+DIAOBJ   1,3,2,171,311,257,335,"Stop Clock","stop"
 DIAOBJ   1,4,2,190,124,338,152,"GONOGO","quiet State = 4;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task"
 DIAOBJ   1,5,2,190,16,338,44,"Fixation","quiet State = 2;\r\ndialog Fixation_Main;\r\ndpop Choose_Task"
 DIAOBJ   1,6,2,190,88,338,116,"Memory Guided","quiet State = 3;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task"
-DIAOBJ   1,7,2,190,160,338,188,"VEP","quiet State = 5;\r\ndialog Fixation_Main;\r\ndpop Choose_Task"
+DIAOBJ   1,7,2,190,160,338,188,"VEP","quiet State = 5;\r\ndialog Flash_Vars;\r\ndpop Choose_Task"
 DIAOBJ   1,8,2,190,196,338,224,"Delayed task","quiet State = 6;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task"
-DIAOBJ   1,9,2,190,232,338,260,"Search","quiet State = 7;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task"
+DIAOBJ   1,9,2,190,232,338,260,"Search","quiet State = 7;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task;"
+DIAOBJ   1,10,2,191,274,335,296,"Pro/Anti","quiet State = 9;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task;"
 
 DIAPAGE 2,"Pre_Task_Main"
 DIAPOS   2,0,0,0,-1,-1,790,204,1175,880,2
@@ -33,16 +34,18 @@ DIAOBJ   2,0,2,210,612,275,636,"OK","OK = 1;\r\ndialog In_Task_pane;\r\nDSET; DP
 DIAOBJ   2,1,2,290,612,355,636,"Cancel","quiet state = 0;\r\ndialog Choose_Task;\r\nDPOP"
 DIAOBJ   2,2,1,125,12,275,60,"","Please set all \r\nappropriate variables \r\nfor task initiation."
 DIAOBJ   2,3,1,15,584,160,632,"","Press OK to start task.\r\nPess Cancel to return\r\nto task selection."
-DIAOBJ   2,4,1,15,240,145,288,"","Adjust the relative\r\ndistribution of trial\r\ntypes."
-DIAOBJ   2,5,1,15,412,150,460,"","Adjust the task\r\ntiming."
-DIAOBJ   2,6,1,15,324,145,372,"","Adjust stimulus\r\nproperties."
-DIAOBJ   2,7,1,15,496,150,544,"","Adjust eye input\r\nrelated parameters."
-DIAOBJ   2,8,2,210,496,350,532,"Eyes / Windows","Dialog Pre_Task_Trial_Eyes"
-DIAOBJ   2,9,2,210,324,350,360,"Stimuli","Dialog Pre_Task_Trial_Stimuli"
-DIAOBJ   2,10,2,210,412,350,448,"Timing","Dialog Pre_Task_Trial_Timing"
-DIAOBJ   2,11,2,210,240,350,276,"Trial Types","Dialog Pre_Task_Trial_Types"
-DIAOBJ   2,12,1,15,140,170,212,"","Select a monkey \r\nto apply subject \r\nspecific defaults."
-DIAOBJ   2,13,2,210,144,350,180,"Monkey","dialog Select_Monkey"
+DIAOBJ   2,4,1,13,152,143,200,"","Adjust the relative\r\ndistribution of trial\r\ntypes."
+DIAOBJ   2,5,1,14,284,149,332,"","Adjust the task\r\ntiming."
+DIAOBJ   2,6,1,10,226,140,274,"","Adjust stimulus\r\nproperties."
+DIAOBJ   2,7,1,8,340,143,388,"","Adjust eye input\r\nrelated parameters."
+DIAOBJ   2,8,2,207,347,347,383,"Eyes / Windows","Dialog Pre_Task_Trial_Eyes"
+DIAOBJ   2,9,2,205,224,345,260,"Stimuli","Dialog Pre_Task_Trial_Stimuli"
+DIAOBJ   2,10,2,208,283,348,319,"Timing","Dialog Pre_Task_Trial_Timing"
+DIAOBJ   2,11,2,209,151,349,187,"Trial Types","Dialog Pre_Task_Trial_Types"
+DIAOBJ   2,12,1,10,84,165,156,"","Select a monkey \r\nto apply subject \r\nspecific defaults."
+DIAOBJ   2,13,2,206,89,346,125,"Monkey","dialog Select_Monkey"
+DIAOBJ   2,14,1,12,411,141,457,"","Set search\r\nstimulus properties"
+DIAOBJ   2,15,2,209,417,346,447,"Search Stims","Dialog Search_Info"
 
 DIAPAGE 3,"Pre_Task_Trial_Types"
 DIAPOS   3,0,0,0,-1,-1,690,64,1095,924,3
@@ -444,7 +447,7 @@ DIAOBJ   11,62,5,405,156,475,180,"","SSD_list[11]"
 DIAOBJ   11,63,1,200,4,415,88,"","Set the stop-signal delays\r\nin vertical retrace units.\r\n(These must be monotonically\r\nincreasing.  The number of SSDs \r\nis calculated based on blanks.)"
 
 DIAPAGE 12,"In_Task_pane"
-DIAPOS   12,0,0,972,-1,-1,407,426,843,985,12
+DIAPOS   12,0,0,972,-1,-1,91,241,527,873,12
 DIAOBJ   12,0,2,148,489,275,517,"Quit Task","dialog Quit_Check"
 DIAOBJ   12,1,2,286,489,412,517,"Apply Changes","DSET;"
 DIAOBJ   12,2,3,331,157,400,181,"","Base_Punish_time"
@@ -459,7 +462,7 @@ DIAOBJ   12,10,1,5,77,168,117,"","Target window size"
 DIAOBJ   12,11,1,5,117,168,157,"","Base reward time"
 DIAOBJ   12,12,1,5,157,168,197,"","Base punish time"
 DIAOBJ   12,13,1,5,41,168,81,"","Fix window size"
-DIAOBJ   12,14,1,52,4,348,40,"","Monitor and control in-task variables"
+DIAOBJ   12,14,1,6,3,302,39,"","Monitor and control in-task variables"
 DIAOBJ   12,15,1,296,0,341,24,"","(F4)"
 DIAOBJ   12,16,2,13,489,140,517,"Pause","quiet Pause = 1;\r\ndialog Resume"
 DIAOBJ   12,17,1,5,277,168,317,"","Set Size"
@@ -483,15 +486,19 @@ DIAOBJ   12,34,5,200,397,261,424,"","SingMode"
 DIAOBJ   12,35,5,200,437,261,464,"","SingCol"
 DIAOBJ   12,36,3,240,397,400,426,"","SingMode"
 DIAOBJ   12,37,3,240,437,400,466,"","SingCol"
+DIAOBJ   12,38,2,147,532,275,554,"Timing Vars","Dialog Pre_Task_Trial_Timing"
+DIAOBJ   12,39,2,24,45,152,67,"Search Stimuli","dialog Search_Info"
+DIAOBJ   12,40,2,32,60,160,82,"Button",""
+DIAOBJ   12,41,2,10,532,138,554,"Search Stimuli","dialog Search_Info"
 
 DIAPAGE 13,"Quit_Check"
 DIAPOS   13,0,0,0,-1,-1,440,320,800,500,13
-DIAOBJ   13,0,2,230,116,345,140,"Quit Task","quiet state = 0;\r\nDPOP In_Task_pane;\r\nDPOP Fixation_Main;\r\nDPOP;\r\n"
+DIAOBJ   13,0,2,230,116,345,140,"Quit Task","quiet state = 0;\r\nDPOP In_Task_pane;\r\nDPOP Fixation_Main;\r\nDPOP;\r\nDPOP Flash_Vars;\r\n"
 DIAOBJ   13,1,2,110,116,220,140,"Don't Quit","DPOP"
 DIAOBJ   13,2,1,5,12,215,76,"","QUIT TASK\r\n\r\nAre you sure you want to quit?"
 
 DIAPAGE 14,"Fixation_Main"
-DIAPOS   14,0,0,0,-1,-1,685,616,1035,944,14
+DIAPOS   14,0,0,0,-1,-1,445,604,795,932,14
 DIAOBJ   14,0,2,115,268,180,292,"Start","quiet OK = 1;"
 DIAOBJ   14,1,2,195,268,255,292,"Quit","dialog Quit_Check;"
 DIAOBJ   14,2,1,5,64,130,88,"","Reward duration"
@@ -522,7 +529,7 @@ DIAOBJ   15,0,1,35,20,145,48,"","Task is paused."
 DIAOBJ   15,1,2,50,60,115,84,"Resume","quiet Pause = 0;\r\nDPOP"
 
 DIAPAGE 16,"Select_Monkey"
-DIAPOS   16,0,0,0,-1,-1,495,324,755,772,16
+DIAPOS   16,0,0,0,-1,-1,488,431,748,879,16
 DIAOBJ   16,0,2,180,388,245,412,"OK","DPOP"
 DIAOBJ   16,1,2,60,257,182,289,"Euler","quiet Monkey = 2;\r\nquiet Set_monkey = 1;\r\ndpop"
 DIAOBJ   16,2,2,60,216,182,248,"Broca","quiet Monkey = 3;\r\nquiet Set_monkey = 1;\r\ndpop"
@@ -534,6 +541,48 @@ DIAPAGE 17,"MemGuide_Pre_Task_Main"
 DIAPOS   17,0,0,0,-1,-1,820,220,1205,896,17
 DIAOBJ   17,0,2,215,604,275,628,"OK","OK = 1;\r\ndialog MemGuided_In_Task;\r\nDSET; DPOP"
 DIAOBJ   17,1,2,295,604,360,628,"Cancel","quiet state = 0;\r\ndialog Choose_Task;\r\nDPOP"
+
+DIAPAGE 18,"Flash_Vars"
+DIAPOS   18,0,-1,-1,-1,-1,65,260,439,693,18
+DIAOBJ   18,0,2,284,50,348,72,"OK","DSET; DPOP"
+DIAOBJ   18,1,2,280,118,352,139,"Quit","dialog Quit_Check"
+DIAOBJ   18,2,1,6,19,80,38,"","Flash Dur."
+DIAOBJ   18,3,1,1,57,72,79,"","Inter-Flash"
+DIAOBJ   18,4,4,90,16,178,39,"","flashTime"
+DIAOBJ   18,5,4,86,53,177,75,"","IFI"
+DIAOBJ   18,6,3,199,17,273,34,"","flashTime"
+DIAOBJ   18,7,3,197,52,273,74,"","IFI"
+DIAOBJ   18,9,1,6,92,68,109,"","Reward"
+DIAOBJ   18,10,4,87,91,178,110,"","Base_Reward_time"
+DIAOBJ   18,11,3,197,89,274,108,"","Base_Reward_time"
+DIAOBJ   18,12,2,283,16,348,37,"Start","quiet OK = 1;"
+DIAOBJ   18,13,2,283,86,348,107,"Pause","quiet Pause = 1;\r\ndialog Resume"
+
+DIAPAGE 19,"Search_Info"
+DIAPOS   19,0,-1,-1,-1,-1,594,493,954,730,19
+DIAOBJ   19,0,2,42,171,106,193,"OK","quiet sVarsSet = 1; DSET; DPOP"
+DIAOBJ   19,1,2,253,174,317,196,"Cancel","DPOP"
+DIAOBJ   19,2,1,5,15,140,37,"","Target: L(1) or T(2)?"
+DIAOBJ   19,3,5,168,10,217,32,"","TargetType"
+DIAOBJ   19,4,3,241,16,305,37,"","TargetType"
+DIAOBJ   19,5,1,6,43,134,65,"","Target Orientation"
+DIAOBJ   19,6,5,169,41,216,62,"","TargOrt"
+DIAOBJ   19,7,3,239,41,302,61,"","TargOrt"
+DIAOBJ   19,8,1,7,72,148,94,"","Distractor Orientation"
+DIAOBJ   19,9,5,170,73,218,92,"","DistOrt"
+DIAOBJ   19,10,3,251,72,301,91,"","DistOrt"
+DIAOBJ   19,11,2,143,174,219,196,"Apply","quiet sVarsSet = 1; DSET;"
+DIAOBJ   19,12,1,7,102,135,124,"","Salient Distractor?"
+DIAOBJ   19,13,5,168,101,217,120,"","SingMode"
+DIAOBJ   19,14,3,237,100,303,120,"","SingMode"
+DIAOBJ   19,15,1,4,132,132,154,"","Search Type"
+DIAOBJ   19,16,5,167,126,218,148,"","SearchType"
+DIAOBJ   19,17,3,232,124,302,147,"","SearchType"
+
+DIAPAGE 20,"Search_Reminder"
+DIAPOS   20,0,-1,-1,-1,-1,500,369,662,486,20
+DIAOBJ   20,0,2,39,55,103,77,"OK","DSET; DPOP"
+DIAOBJ   20,2,1,4,12,154,48,"","Remember to update\r\nSearch stimulus info!"
 
 ; END OF DIALOGS
 

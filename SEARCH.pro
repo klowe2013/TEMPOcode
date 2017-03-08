@@ -67,7 +67,15 @@ process SEARCH()
 						Room);	
 			Set_monkey = 0;
 			}
+			nexttick;
 		}
+	sVarsSet = 0;
+	system("dialog Search_Info"); 		// Reminder to change stiminfo
+	while (!sVarsSet)
+		{
+		nexttick;
+		}
+	
 	
 	//spawnwait GOODVARS(State);
 	

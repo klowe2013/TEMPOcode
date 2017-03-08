@@ -23,7 +23,8 @@ process DEFAULT(int state,
 	declare hide int run_flash_sess		= 5;	// state 5 is flash screen protocol
 	declare hide int run_delayed_sess   = 6;
 	declare hide int run_search_sess    = 7;
-
+	declare hide int run_anti_sess 		= 9;
+	
 	
 
 	declare hide int xena    	= 1;
@@ -269,8 +270,13 @@ process DEFAULT(int state,
 	Canc_alert				= 0;	// Alert operator that the monk has canceled a trial (during training)
 	Fixed_trl_length		= 0;	// 1 for fixed trial length, 0 for fixed inter trial intervals
 	Trial_length			= 0; 	// fixed at this value (only works if Fixed_trl_length == 1) must figure out max time for this variable and include it in comments
-	Inter_trl_int			= 1000;	// how long between trials (only works if Fixed_trl_length == 0)
 	
+	
+	// WZ: change for ultrasound experiments	
+	Inter_trl_int			= 1000;	// how long between trials (only works if Fixed_trl_length == 0)
+//	Inter_trl_int			= 4000;	// how long between trials (only works if Fixed_trl_length == 0)
+// end US change	
+
 	
 	
 	
@@ -985,6 +991,8 @@ if(monkey == helmholtz)
 			Cancl_time				= 1200;
 			Min_Holdtime			= 500;  // minimum time after fixation before target presentation
 			Max_Holdtime			= 500; // maximum time after fixation before target presentation
+			targ_hold_time 			= 200;
+			
 			
 			Max_saccade_time		= 350;
 			Base_Reward_time		= 30;
@@ -1138,10 +1146,12 @@ if(monkey == helmholtz)
 			DistOrt					= 1; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
 			TargOrt					= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
 			SearchEcc				= 8; //entricity in degrees; use to make fixed eccentricity 
-			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
+			SingMode				= 0; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
 			SingCol					= 2; 
 			PercSingTrl				= 50; //Percentage of trials where singleton is present, see LOC_RAND.pro for code
 			soa_mode				= 0;  //fixation response soa; 1=on, 0=off 
+			sVarsSet 				= 0;
+			
 			
 			///////// Use this variable to manipulate predictability of Fixation / Search ISI
 			FixJitter			    = 0;  // 0 = random fixation-search ISI; 1 = Fixed; see sets_trl.pro
@@ -1232,8 +1242,8 @@ if(monkey == helmholtz)
 			SearchEcc				= 8; //entricity in degrees; use to make fixed eccentricity 
 			Last_SearchEcc 			= 8;
 			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
-			SingCol					= 0; // red
-			DistCol 				= 1; // green
+			SingCol					= 2; // red
+			DistCol 				= 4; // green
 			PercSingTrl				= 50; //Percentage of trials where singleton is present, see LOC_RAND.pro for code
 			soa_mode				= 0;  //fixation response soa; 1=on, 0=off 
 			
@@ -1252,6 +1262,10 @@ if(monkey == helmholtz)
 			TargOrt1				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT 
 			TargOrt2				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT
 			
+			// Difficulties
+			ndDifficulties 			= 5;
+			ntDifficulties 			= 6;
+			angleOffset				= 0;
 			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
 			max_plactime			= 700;
 			min_plactime			= 1000;
@@ -1296,41 +1310,41 @@ if(monkey == helmholtz)
 			Angle_list[7]			= 135;			
 					
 			catchDifficulty   = 5;
-			stimHorizontal[0] = 3;
-			stimHorizontal[1] = 3;
-			stimHorizontal[2] = 3;
-			stimHorizontal[3] = 3;
-			stimHorizontal[4] = 3;
-			stimHorizontal[5] = 3;
-			stimHorizontal[6] = 3;
-			stimHorizontal[7] = 3;
+			stimHorizontal[0] = .7;
+			stimHorizontal[1] = 1;
+			stimHorizontal[2] = 1.3;
+			stimHorizontal[3] = 1.4;
+			stimHorizontal[4] = 1.7;
+			stimHorizontal[5] = 2;
+			stimHorizontal[6] = .5;
+			stimHorizontal[7] = .5;
 			
-			stimVertical[0] = 3;
-			stimVertical[1] = 3;
-			stimVertical[2] = 3;
-			stimVertical[3] = 3;
-			stimVertical[4] = 3;
-			stimVertical[5] = 3;
+			stimVertical[0] = 2;
+			stimVertical[1] = 1.7;
+			stimVertical[2] = 1.4;
+			stimVertical[3] = 1.3;
+			stimVertical[4] = 1;
+			stimVertical[5] = .7;
 			stimVertical[6] = 3;
 			stimVertical[7] = 3;
 			
-			distH[0] = 3;
-			distH[1] = 3;
+			distH[0] = .5;
+			distH[1] = 1;
 			distH[2] = 3;
-			distH[3] = 3;
-			distH[4] = 3;
-			distH[5] = 3;
-			distH[6] = 3;
-			distH[7] = 3;
+			distH[3] = .7;
+			distH[4] = .7;
+			distH[5] = .7;
+			distH[6] = .7;
+			distH[7] = .7;
 			
 			distV[0] = 3;
-			distV[1] = 3;
-			distV[2] = 3;
-			distV[3] = 3;
-			distV[4] = 3;
-			distV[5] = 3;
-			distV[6] = 3;
-			distV[7] = 3;
+			distV[1] = 1;
+			distV[2] = .5;
+			distV[3] = .7;
+			distV[4] = .7;
+			distV[5] = .7;
+			distV[6] = .7;
+			distV[7] = .7;
 			
 			distAngles[0] = 90;
 			distAngles[1] = 45;

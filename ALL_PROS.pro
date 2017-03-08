@@ -99,6 +99,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/SET_INH.pro	// sets up the inhibition function graph used in cmanding
 #include C:/TEMPO/ProcLib/SET_SOA.pro
 #include C:/TEMPO/ProcLib/SET_SCH.pro	// sets parameters for search RT graph
+#include C:/TEMPO/ProcLib/Set_PA.pro
 #include C:/TEMPO/ProcLib/WINDOWS.pro	// sets fixation and target window size (these valeus are needed in WATCHEYE.pro)
 #include C:/TEMPO/ProcLib/WATCHEYE.pro	// monitors eye position on each process cyle
 #include C:/TEMPO/ProcLib/TONE.pro      // does simple frequency conversion and presents tone accordingly
@@ -110,7 +111,8 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/CMDTRIAL.pro	// runs a single countermanding trial based on input
 #include C:/TEMPO/ProcLib/MGTRIAL.pro
 #include C:/TEMPO/ProcLib/SCHTRIAL.pro
-
+//#include C:/TEMPO/ProcLib/VMAPTRIAL.pro
+#include C:/TEMPO/ProcLib/ANTITR.pro
 #include C:/TEMPO/ProcLib/REP_ORT.pro   // simple process for selecting repeated display orientations prior to trial
 #include C:/TEMPO/ProcLib/RAND_ORT.pro	// simple process for selecting random display orientation prior to trial
 #include C:/TEMPO/ProcLib/LOC_REP.pro	// simple process for selecting repeated display locations prior to trial
@@ -119,25 +121,26 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/LOC_ASYM.pro	// select displays for probability cueing mode
 
 #include C:/TEMPO/ProcLib/SEL_LOCS.pro	// simple process for selecting stimulus locations on a given trials, from above 2 files
+#include C:/TEMPO/ProcLib/A_LOCS.pro
 
 #include C:/TEMPO/ProcLib/DRW_T.pro		// simple process for drawing T stimulus, incldues T_ORIENT
 #include C:/TEMPO/ProcLib/DRW_L.pro	    // simple process for drawing L stimulus, incldues L_ORIENT
 #include C:/TEMPO/ProcLib/DRW_PLAC.pro	// simple process for drawing placeholder stimulus
 #include C:/TEMPO/ProcLib/DRW_SQR.pro	// simple process for drawing box
-
+#include C:/TEMPO/ProcLib/DRW_RECT.pro
 #include C:/TEMPO/ProcLib/FIX_PGS.pro	// setup fixation stimuli
 #include C:/TEMPO/ProcLib/FLS_PGS.pro	// setup flash stimuli
 //#include C:/TEMPO/ProcLib/LSCH_PGS.pro	// setup search windows - L
 //#include C:/TEMPO/ProcLib/TSCH_PGS.pro	// setup search windows - T
 #include C:/TEMPO/ProcLib/CMD_PGS.pro	// setup countermanding windows
-
+#include C:/TEMPO/ProcLib/ANTI_PGS.pro
 #include C:/TEMPO/ProcLib/SETC_TRL.pro	// sets up all of the input to run a countermanding trial
 #include C:/TEMPO/ProcLib/SETMGTRL.pro
 //#include C:/TEMPO/ProcLib/SETM_TRL.pro
 #include C:/TEMPO/ProcLib/SETG_TRL.pro  // sets up all input to run a gonogo trial
 #include C:/TEMPO/ProcLib/SETD_TRL.pro  // sets up all input to run a delayed saccade trial
 #include C:/TEMPO/ProcLib/SETS_TRL.pro  // sets up all input to run a search trial
-
+#include C:/TEMPO/ProcLib/SETA_TRL.pro 	// sets up all input to run a pro/anti trial
 #include C:/TEMPO/ProcLib/GNGTRIAL.pro	// runs a single gonogo guided trial based on input
 #include C:/TEMPO/ProcLib/DELTRIAL.pro 	// runs a single delayed saccade trial based on input
 #include C:/TEMPO/ProcLib/UPD8_INH.pro	// updates inhibition function for cmanding
@@ -158,7 +161,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/FLSHSCRN.pro	// for gross VEPs
 #include C:/TEMPO/ProcLib/QUE_TTL.pro	// makes a ring buffer for sending TTL events
 
-
+#include C:/TEMPO/ProcLib/PROANTI.pro 	// Pro/Anti Task
 
 //----------------------------------------------------------------------
 process IDLE() enabled					// When the clock is started the task is not yet running.
@@ -175,7 +178,9 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 	declare hide int run_flash_sess		= 5;	// state 5 is flash screen protocol
 	declare hide int run_delayed_sess	= 6;
 	declare hide int run_search_sess	= 7;
-
+	declare hide int run_vm_sess 		= 8;
+	declare hide int run_anti_sess 		= 9;
+	
 	seed1(timeus());					// randomly seed the number generator
 	normal(1);							// call the normal distribution to replenish queue after seeding
 	idling = 1;							// makes the while loop run
@@ -262,6 +267,12 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 			spawn SEARCH();			// start delayed sacc task
 			idling = 0;					// stop idling
 			}					
+		if (State == run_anti_sess)
+			{
+			OK = 0;
+			spawn PROANTI();
+			idling = 0;
+			}
 		nexttick;						// if no task is specified idle for another process... 
 										// ...cycle and then check again.
 		}

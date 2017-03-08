@@ -27,8 +27,10 @@ declare hide int Curr_SSD;									// SSD on next stop or ignore trial
 declare hide int Curr_holdtime;								// next trial time between fixation and target onset
 declare hide int Decide_SSD;
 
+declare hide int TypeCode;
 declare hide int DistFix;
-
+declare hide int singDifficulty;
+declare hide int saccEnd;
 declare SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for explanations of these globals
 				float go_weight,
 				float stop_weight,
@@ -90,7 +92,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	// 2) Set up all vdosync pages for the upcoming trial using globals defined by user and sets_trl.pro
 	
 	
-	if(SingMode == 1)
+	/*if(SingMode == 1)
 		{ //selecting different fixed distractor color for each block
 		if(Block_number == 1 || Block_number == 11 || Block_number == 21)
 			{ 
@@ -123,6 +125,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 			SingCol = random(5); //pick a distractor color at random
 			}
 		}
+	*/
 	
 	spawnwait SET_CLRS(n_targ_pos); //selects distractor/target colors for this trial
 	
@@ -141,7 +144,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	*/
 	
-	spawnwait SEL_ALOCS; // compiles final eccentricity, location, and orientation information for use by ANTI_PGS below
+	spawnwait A_LOCS; // compiles final eccentricity, location, and orientation information for use by ANTI_PGS below
 	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
 	singDifficulty = random(ntDifficulties);

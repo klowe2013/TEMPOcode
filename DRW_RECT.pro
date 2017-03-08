@@ -18,11 +18,12 @@
 
 declare DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, int color, int fill, float conversion_X, float conversion_Y);
 
-process DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, int color, int fill, float conversion_X, float conversion_Y);
+process DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, int color, int fill, float conversion_X, float conversion_Y)
 {
 	declare hide float stim_ecc_x;
 	declare hide float stim_ecc_y;
-	declare hide float half_size;
+	declare hide float half_sizeH;
+	declare hide float half_sizeV;
 	declare hide int ulx;
 	declare hide int uly;
 	declare hide int lrx;

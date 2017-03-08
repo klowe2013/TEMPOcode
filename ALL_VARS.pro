@@ -102,6 +102,7 @@ declare int		SingCol; //declares color of singleton, currently set in DEFAULT.pr
 declare int 	DistCol; // declares color of non-singletons in anti task.
 declare int		PercSingTrl; // sets percentage of trials where singleton is present, set in DEFAULT.pro, see also usage in LOC_RAND.pro
 //declare	int		TrainOrt;
+declare int 	sVarsSet;
 declare int		TargOrt;
 declare int		TargOrt1; //specific to singleton search mode sets T1 
 declare int		TargOrt2; //specific to singleton search mode sets T2 
@@ -161,9 +162,12 @@ declare float 	distH[11];
 declare float 	distV[11];
 declare float 	distAngles[12];
 declare float 	distEccs[12];
+declare int 	singColor;
+declare int 	distColor;
 declare int 	ntDifficulties;
 declare int 	ndDifficulties;
 declare int 	catchDifficulty;
+declare int 	angleOffset;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;
@@ -222,6 +226,10 @@ declare int Success_tone;				//GLOBAL OUTPUT FOR INFOS.pro will be set by END_TR
 declare int Failure_tone;				//GLOBAL OUTPUT FOR INFOS.pro will be set by END_TRL.pro
 
 
+
+// Flash Variables
+declare float IFI;
+declare float flashTime;
 
 
 
