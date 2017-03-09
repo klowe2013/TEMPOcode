@@ -164,6 +164,8 @@ declare int fix_manual = 1;				//auto fixation task = 1
 
 #include C:/TEMPO/ProcLib/PROANTI.pro 	// Pro/Anti Task
 #include C:/TEMPO/ProcLib/SET_LOCS.pro
+#include C:/TEMPO/ProcLib/ANTI_DIFFS.pro
+
 //----------------------------------------------------------------------
 process IDLE() enabled					// When the clock is started the task is not yet running.
 	{									// At any time we can press a button to return to this...

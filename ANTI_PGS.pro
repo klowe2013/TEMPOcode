@@ -109,7 +109,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int   	fill        = 1;										
 	declare hide float 	targH;
 	declare hide float	targV;
-	declare hide int 	distDifficulty[12];
+	/*declare hide int 	distDifficulty[12];
 	declare hide int 	distCode;
 	declare hide int randVal;
 	declare hide float cumProbs[ndDifficulties];
@@ -124,6 +124,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int relInds[ndDifficulties];
 	declare hide int relProbs[ndDifficulties];
 	declare hide int myInd;
+	*/
 	
 	// number the pgs that need to be drawn
 	declare hide int   	blank       = 0;										
@@ -172,6 +173,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		targV = stimVertical[singDifficulty];
 	}
 	
+	/* Moved to ANTI_DIFFS.pro
 	id = 0;
 	while (id < SetSize)
 		{
@@ -443,6 +445,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		id = id+1;
 		nexttick;
 		}
+	*/
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 1

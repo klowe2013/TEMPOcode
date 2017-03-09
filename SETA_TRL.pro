@@ -18,6 +18,7 @@
 //#include C:/TEMPO/ProcLib/TSCH_PGS.pro						// sets all pgs of video memory up for the impending trial
 //#include C:/TEMPO/ProcLib/LSCH_PGS.pro						// sets all pgs of video memory up for the impending trial 
 #include C:/TEMPO/ProcLib/ANTI_PGS.pro
+//#include C:/TEMPO/ProcLib/ANTI_DIFFS.pro
 
 declare hide int StimTm;									// Should we stim on this trial?
 declare hide int Curr_target;								// OUTPUT: next trial target
@@ -65,7 +66,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int lastVal;
 	declare hide int sumProbs;
 	
-	declare hide int ii;
+	//declare hide int ii;
 		
 	// -----------------------------------------------------------------------------------------------
 	// Update block; trls per block set in DEFAULT.pro
@@ -101,10 +102,13 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	spawnwait A_LOCS; // updates angles and eccentricities - assumes we want equal spacing
 	
+	spawnwait ANTI_DIFFS; // selects difficulty levels for this trial
+	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
 	
 	// Here, let's take the code I wrote in A_LOCS.pro to randomize singleton difficulty
 	
+	/* Moved to ANTI_DIFFS
 	// Get sum of relevant relative probabilities
 	it = 0;
 	sumProbs = 0;
@@ -139,6 +143,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	// Loop should have broken when randVal is in the range of values assigned to a particular
 	// CDF/difficulty level. When it breaks, get the appropriate pro/anti mapping
 	nexttick;
+	*/
+	
 	
 	// Now, let's test whether this difficulty is a pro or anti trial
 	saccEnd = targInd;
