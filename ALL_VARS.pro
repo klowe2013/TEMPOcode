@@ -170,8 +170,8 @@ declare int 	dIsAnti[11]; 		// See above, both used for congruency of anti locat
 //declare float 	distAngles[12];
 declare int 	singColor;
 declare int 	distColor;
-declare int 	ntDifficulties;
-declare int 	ndDifficulties;
+declare int 	ntDifficulties = 11;
+declare int 	ndDifficulties = 11;
 declare int 	catchDifficulty;
 declare int 	catchDistDiff;
 declare int 	angleOffset;

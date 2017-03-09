@@ -1,6 +1,6 @@
 declare SET_LOCS();
 
-process SET_LOCS();
+process SET_LOCS()
 {
 	declare hide int ia;
 	declare hide int angDiff;

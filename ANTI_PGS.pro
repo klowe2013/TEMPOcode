@@ -114,11 +114,13 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int randVal;
 	declare hide float cumProbs[ndDifficulties];
 	declare hide int it;
+	declare hide int ic;
 	declare hide int lastVal;
 	declare hide int sumProbs;
-	declare hide int sumCong[ndDifficulties];
+	declare hide int sumCong;
 	declare hide int cumCong[ndDifficulties];
 	declare hide int isCong;
+	declare hide int nRel;
 	declare hide int relInds[ndDifficulties];
 	declare hide int relProbs[ndDifficulties];
 	declare hide int myInd;
@@ -187,7 +189,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		// the fewest number of variables? I suppose the relevant variables will be
 		// sumProbs and cumProbs... a long version could declare "relInds" and "relProbs"?
 		
-		if (id == ((targInd + (SetSize/2)) % SetSize)) && (tIsCatch[targInd] == 0) // If we're discussing the anti- location...
+		if (id == ((targInd + (SetSize/2)) % SetSize)) //&& (tIsCatch[targInd] == 0) // If we're discussing the anti- location...
 		// the above if statement also passes the below section if the singleton is a catch (no move)
 		//    that is, if the singleton is a no-move, don't bother with congruency of the anti-distractor
 		{
@@ -478,7 +480,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 				{
-				spawnwait DRW_PLAC(Angle_list[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_PLAC(Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
 			id = id+1;
 			nexttick;
@@ -509,7 +511,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 				{
-				spawnwait DRW_PLAC(Angle_list[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_PLAC(Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
 			id = id+1;
 			nexttick;
@@ -538,7 +540,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], distEccs[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
 			
 			id = id+1;
@@ -568,7 +570,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
 			
 			id = id+1;
@@ -601,7 +603,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			if (Angle_list[id] != targ_angle)
 			{
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], distEccs[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
 			}
 			id = id+1;

@@ -163,7 +163,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/QUE_TTL.pro	// makes a ring buffer for sending TTL events
 
 #include C:/TEMPO/ProcLib/PROANTI.pro 	// Pro/Anti Task
-
+#include C:/TEMPO/ProcLib/SET_LOCS.pro
 //----------------------------------------------------------------------
 process IDLE() enabled					// When the clock is started the task is not yet running.
 	{									// At any time we can press a button to return to this...

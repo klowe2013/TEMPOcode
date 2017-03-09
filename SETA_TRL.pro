@@ -112,6 +112,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	{
 		sumProbs = sumProbs+targDiffProbs[it];
 	}
+	nexttick;
 	
 	// Turn relative probabilities of t difficulties into CDF*100
 	it = 0;

@@ -1,3 +1,7 @@
+
+#include C:/TEMPO/ProcLib/SET_LOCS.pro
+
+
 declare A_LOCS();
 
 process A_LOCS()
