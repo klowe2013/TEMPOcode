@@ -34,7 +34,7 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 	declare hide int run_search_sess = 7;
 	declare hide int run_anti_sess = 9;
 
-	//spawn TONE(failure_tone,tone_duration);							// present negative tone
+	spawn TONE(failure_tone,tone_duration);							// present negative tone
 	
 	Event_fifo[Set_event] = Tone_;									// ...queue strobe...
 	Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue...

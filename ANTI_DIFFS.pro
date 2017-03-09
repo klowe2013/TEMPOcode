@@ -53,6 +53,7 @@ process ANTI_DIFFS()
 			tIsCatch[it] = 1;
 			}
 		*/
+		it = it+1;
 	}
 	nexttick;
 	// We need to repeat the above to assign distractor pro/anti/catch diffs
@@ -82,7 +83,7 @@ process ANTI_DIFFS()
 			dIsCatch[it] = 1;
 			}
 		*/
-	
+		it = it+1;
 	}
 	nexttick;
 	
@@ -95,6 +96,7 @@ process ANTI_DIFFS()
 	while (it < ntDifficulties)
 	{
 		sumProbs = sumProbs+targDiffProbs[it];
+		it = it+1;
 	}
 	nexttick;
 	
@@ -105,6 +107,7 @@ process ANTI_DIFFS()
 	{
 		cumTProbs[it] = (targDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
 		lastVal = cumTProbs[it]; // CDF so far = lastVal
+		it = it+1;
 	}
 	nexttick;
 	
@@ -146,7 +149,7 @@ process ANTI_DIFFS()
 		// the fewest number of variables? I suppose the relevant variables will be
 		// sumProbs and cumDProbs... a long version could declare "relInds" and "relProbs"?
 		
-		if (id == ((targInd + (SetSize/2)) % SetSize)) //&& (tIsCatch[targInd] == 0) // If we're discussing the anti- location...
+		if ((id == ((targInd + (SetSize/2)) % SetSize)) && (tIsCatch[targInd] == 0)) // If we're discussing the anti- location...
 		// the above if statement also passes the below section if the singleton is a catch (no move)
 		//    that is, if the singleton is a no-move, don't bother with congruency of the anti-distractor
 		{
@@ -159,16 +162,18 @@ process ANTI_DIFFS()
 			while (ic < 3) // I don't like that this is hard coded... but I suppose cong/incong/square are all we need?
 			{
 				sumCong = sumCong+congProb[ic];
+				ic = ic+1;
 			}
 			nexttick;
 			
 			// Turn relative probabilities of t difficulties into CDF*100
-			ic = 0;
+			it = 0;
 			lastVal = 0; // Counter for CDF
 			while (it < ntDifficulties)
 			{
 				cumCong[it] = (congProb[it]/sumCong)*100+lastVal; // Add this percentage*100
 				lastVal = cumDProbs[it]; // CDF so far = lastVal
+				it = it+1;
 			}
 			nexttick;
 			
@@ -198,10 +203,10 @@ process ANTI_DIFFS()
 			{
 				// We need to do this differently depending on whether target is pro or anti
 				// If the target is pro, incongruent is also pro
-				it = 0;
 				nRel = 0;
 				if (tIsPro[targInd]) // if target is pro, pick a pro distractor
 				{
+					it = 0;
 					while (it < ndDifficulties)
 					{
 						if (dIsPro[it]) // Only pick pro-distractors
@@ -210,6 +215,7 @@ process ANTI_DIFFS()
 							relProbs[nRel] = distDiffProbs[it];
 							nRel = nRel+1;
 						}
+						it = it+1;
 					}
 					nexttick;
 					
@@ -219,6 +225,7 @@ process ANTI_DIFFS()
 					while (it < nRel)
 					{
 						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+						it = it+1;
 					}
 					
 					// Turn relative relevant probs into CDF
@@ -228,6 +235,7 @@ process ANTI_DIFFS()
 					{
 						cumDProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
 						lastVal = cumDProbs[it]; // CDF so far = lastVal
+						it = it+1;
 					}
 					nexttick;
 					// Do we need to pick it here? Or can we save operations (potentially)
@@ -235,6 +243,7 @@ process ANTI_DIFFS()
 				}
 				else if (tIsAnti[targInd]) // if target is anti, pick an anti distractor
 				{
+					it = 0;
 					while (it < ndDifficulties)
 					{
 						if (dIsAnti[it]) // Only pick anti-distractors
@@ -243,6 +252,7 @@ process ANTI_DIFFS()
 							relProbs[nRel] = distDiffProbs[it];
 							nRel = nRel+1;
 						}
+						it = it+1;
 					}
 					nexttick;
 					
@@ -252,6 +262,7 @@ process ANTI_DIFFS()
 					while (it < nRel)
 					{
 						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+						it = it+1;
 					}
 					
 					// Turn relative relevant probs into CDF
@@ -261,6 +272,7 @@ process ANTI_DIFFS()
 					{
 						cumDProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
 						lastVal = cumDProbs[it]; // CDF so far = lastVal
+						it = it+1;
 					}
 					nexttick;
 					// Do we need to pick it here? Or can we save operations (potentially)
@@ -282,10 +294,10 @@ process ANTI_DIFFS()
 			{
 				// We need to do this differently depending on whether target is pro or anti
 				// If the target is pro, incongruent is also pro
-				it = 0;
 				nRel = 0;
 				if (tIsPro[targInd]) // if target is pro, pick an anti distractor
 				{
+					it = 0;
 					while (it < ndDifficulties)
 					{
 						if (dIsAnti[it]) // Only pick pro-distractors
@@ -294,6 +306,7 @@ process ANTI_DIFFS()
 							relProbs[nRel] = distDiffProbs[it];
 							nRel = nRel+1;
 						}
+						it = it+1;
 					}
 					nexttick;
 					// Get CDF
@@ -302,6 +315,7 @@ process ANTI_DIFFS()
 					while (it < nRel)
 					{
 						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+						it = it+1;
 					}
 					
 					// Turn relative relevant probs into CDF
@@ -311,6 +325,7 @@ process ANTI_DIFFS()
 					{
 						cumDProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
 						lastVal = cumDProbs[it]; // CDF so far = lastVal
+						it = it+1;
 					}
 					nexttick;
 					// Do we need to pick it here? Or can we save operations (potentially)
@@ -318,6 +333,7 @@ process ANTI_DIFFS()
 				}
 				else if (tIsAnti[targInd]) // if target is anti, pick a pro distractor
 				{
+					it = 0;
 					while (it < ndDifficulties)
 					{
 						if (dIsPro[it]) // Only pick anti-distractors
@@ -326,6 +342,7 @@ process ANTI_DIFFS()
 							relProbs[nRel] = distDiffProbs[it];
 							nRel = nRel+1;
 						}
+						it = it+1;
 					}
 					nexttick;
 					
@@ -335,6 +352,7 @@ process ANTI_DIFFS()
 					while (it < nRel)
 					{
 						sumProbs = sumProbs + distDiffProbs[relInds[it]];
+						it = it+1;
 					}
 					
 					// Turn relative relevant probs into CDF
@@ -344,6 +362,7 @@ process ANTI_DIFFS()
 					{
 						cumDProbs[it] = (distDiffProbs[relInds[it]]/sumProbs)*100+lastVal; // Add this percentage*100
 						lastVal = cumDProbs[it]; // CDF so far = lastVal
+						it = it+1;
 					}
 					nexttick;
 					// Do we need to pick it here? Or can we save operations (potentially)
@@ -372,6 +391,7 @@ process ANTI_DIFFS()
 			while (it < ndDifficulties)
 			{
 				sumProbs = sumProbs+distDiffProbs[it];
+				it = it+1;
 			}
 			
 			// Turn relative probabilities of t difficulties into CDF*100
@@ -381,6 +401,7 @@ process ANTI_DIFFS()
 			{
 				cumDProbs[it] = (distDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
 				lastVal = cumDProbs[it]; // CDF so far = lastVal
+				it = it+1;
 			}
 			nexttick;
 			

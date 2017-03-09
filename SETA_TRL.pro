@@ -30,7 +30,7 @@ declare hide int Decide_SSD;
 
 declare hide int TypeCode;
 declare hide int DistFix;
-declare hide int singDifficulty;
+
 declare hide int saccEnd;
 declare SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for explanations of these globals
 				float go_weight,
@@ -98,7 +98,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	spawnwait SET_CLRS(n_targ_pos); //selects distractor/target colors for this trial
 	
-	spawnwait RAND_ORT;	// sets orientations of random stimuli
+	//spawnwait RAND_ORT;	// sets orientations of random stimuli
 	
 	spawnwait A_LOCS; // updates angles and eccentricities - assumes we want equal spacing
 	

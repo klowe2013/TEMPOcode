@@ -13,6 +13,7 @@ process SET_LOCS()
 	{
 		Angle_list[ia] = (90+angleOffset+(angDiff*ia)) % 360;
 		Eccentricity_list[ia] = SearchEcc;
+		ia = ia+1;
 	}
 	
 	nexttick;	
