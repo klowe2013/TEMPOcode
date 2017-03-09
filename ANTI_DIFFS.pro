@@ -204,7 +204,7 @@ process ANTI_DIFFS()
 				// We need to do this differently depending on whether target is pro or anti
 				// If the target is pro, incongruent is also pro
 				nRel = 0;
-				if (tIsPro[targInd]) // if target is pro, pick a pro distractor
+				if (tIsPro[singDifficulty]) // if target is pro, pick a pro distractor
 				{
 					it = 0;
 					while (it < ndDifficulties)
