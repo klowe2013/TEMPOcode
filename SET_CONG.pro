@@ -337,7 +337,7 @@ process SET_CONG()
 				it = 0;
 				lastVal = 0; // Counter for CDF
 				thisVal = 0;
-				while (it < ndDifficulties)
+				while (it < nRel)
 				{
 					thisVal = catchDiffPerc[relInds[it]]*100;
 					cumDProbs[it] = (thisVal/sumProbs)+lastVal; // Add this percentage*100

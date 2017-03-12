@@ -176,9 +176,9 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		targV = stimVertical[singDifficulty];
 	}
 	
-	/* Moved to ANTI_DIFFS.pro
 	id = 0;
 	while (id < SetSize)
+		/* Moved to ANTI_DIFFS.pro and SET_CONG.pro
 		{
 		//if (isCatch)
 		//{
@@ -440,7 +440,11 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			// Loop should have broken when randVal is in the range of values assigned to a particular
 			// CDF/difficulty level. When it breaks, get the appropriate difficulty level		
 			
-		}
+		}*/ 
+		
+		
+		//Changed above comments to just the above section because that was the part that moved.
+		// Now, the below still drops the difficulty codes for distractors before the pages are set up
 		distCode = 700 + (10*id)+distDifficulty[id];
 		// Drop Distractor Code
 		Event_fifo[Set_event] = distCode;		// Set a strobe to identify this file as a Search session and...	
@@ -448,8 +452,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		id = id+1;
 		nexttick;
 		}
-	*/
-	
+		
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 1
 	// print("fixation with photodiode");

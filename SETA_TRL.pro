@@ -83,7 +83,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	// We'll want to update this if we decide that a "catch" should be defined by a square difficulty...
 	// I'll put the appropriate line down in the "if" statement below, but keep it commented for now
 	CatchNum = random(100);
-	if (CatchNum > Perc_catch)
+	if (CatchNum >= Perc_catch)
 		{
 		Catch = 0;
 		CatchCode = 500;
