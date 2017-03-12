@@ -180,6 +180,7 @@ declare float 	catchH;
 declare float 	catchV;
 declare int 	singDifficulty = 0;
 declare int 	distDifficulty[12];
+declare int 	catchDiffPerc[12];
 declare int 	oppDiff = 0;
 declare int 	doCongruency;
 

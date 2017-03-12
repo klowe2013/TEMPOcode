@@ -1378,6 +1378,18 @@ if(monkey == helmholtz)
 			congProb[1] = 0;  // This will be incongruent
 			congProb[2] = 1;  // This will be square
 			
+			// Here, we put in a section that says: if the singleton is square,
+			//    on what percent of trials (if doing congruency) should it be what difficulty?
+			catchDiffPerc[0] = 1;
+			catchDiffPerc[1] = 1;
+			catchDiffPerc[2] = 1;
+			catchDiffPerc[3] = 0;
+			catchDiffPerc[4] = 0;
+			catchDiffPerc[5] = 0;
+			catchDiffPerc[6] = 0;
+			catchDiffPerc[7] = 0;
+			
+			
 			// Are SOAs even relevant here? Let's take another look later
 			SOA_list[0] = 300;
 			SOA_list[1] = 450;
