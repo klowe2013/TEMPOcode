@@ -97,7 +97,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 														// NOTE: if you add a bunch more strobes to INFOS.pro and you...
 														// start getting buffer overflow errors increase the number of nextticks.
 	
-	if (State == run_cmd_sess)
+	/*if (State == run_cmd_sess)
 		{
 		spawn SETC_TRL(n_targ_pos,			
 					go_weight,				
@@ -108,8 +108,9 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 					min_holdtime,                   
 					max_holdtime,                   
 					expo_jitter);  
+		
 		}
-	else if (State == run_search_sess)
+	else */ if (State == run_search_sess)
 		{
 		spawnwait SETS_TRL(n_targ_pos,			
 					go_weight,				

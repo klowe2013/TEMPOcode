@@ -162,11 +162,11 @@ declare int 	targDiffProbs[11];  // Relative probabilities of singleton difficul
 declare int 	distDiffProbs[11];  // Relative probabilities of non-singleton difficulties
 declare int 	tIsPro[11]; 		// Decides whether the singleton is pro or anti...
 declare int 	tIsAnti[11]; 		// See above, both used for congruency of anti location
-// declare int 	tIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
+ declare int 	tIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
 declare int 	congProb[3]; 		// Will be used to set relative probabilities of congruent vs incongruent anti- distractors
 declare int 	dIsPro[11]; 		// Decides whether the singleton is pro or anti...
 declare int 	dIsAnti[11]; 		// See above, both used for congruency of anti location
-// declare int 	dIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
+declare int 	dIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
 //declare float 	distAngles[12];
 declare int 	singColor;
 declare int 	distColor;
@@ -178,9 +178,10 @@ declare int 	angleOffset;
 declare int 	targInd;
 declare float 	catchH;
 declare float 	catchV;
-declare hide int singDifficulty = 0;
-declare hide int distDifficulty[12];
-
+declare int 	singDifficulty = 0;
+declare int 	distDifficulty[12];
+declare int 	oppDiff = 0;
+declare int 	doCongruency;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;

@@ -1,8 +1,8 @@
 // This code sets the difficulty levels for the singleton and non-singletons for Pro/Anti
 
-declare ANTI_DIFFS();
+declare A_DIFFS();
 
-process ANTI_DIFFS()
+process A_DIFFS()
 {
 	
 	declare hide int 	distDifficulty[12];
@@ -423,5 +423,6 @@ process ANTI_DIFFS()
 			// CDF/difficulty level. When it breaks, get the appropriate difficulty level		
 			
 		}
+		id = id+1;
 	}
 }

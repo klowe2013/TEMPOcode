@@ -108,7 +108,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/WATCHBOD.pro	// monitors body movement on each process cycle
 #include C:/TEMPO/ProcLib/SVR_BELL.pro	// sounds speaker on server
 #include C:/TEMPO/ProcLib/SVR_BEL2.pro	// sounds speaker on server (different)
-#include C:/TEMPO/ProcLib/CMDTRIAL.pro	// runs a single countermanding trial based on input
+//#include C:/TEMPO/ProcLib/CMDTRIAL.pro	// runs a single countermanding trial based on input
 #include C:/TEMPO/ProcLib/MGTRIAL.pro
 #include C:/TEMPO/ProcLib/SCHTRIAL.pro
 //#include C:/TEMPO/ProcLib/VMAPTRIAL.pro
@@ -121,7 +121,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/LOC_ASYM.pro	// select displays for probability cueing mode
 
 #include C:/TEMPO/ProcLib/SEL_LOCS.pro	// simple process for selecting stimulus locations on a given trials, from above 2 files
-#include C:/TEMPO/ProcLib/A_LOCS.pro
+//#include C:/TEMPO/ProcLib/A_LOCS.pro
 
 #include C:/TEMPO/ProcLib/DRW_T.pro		// simple process for drawing T stimulus, incldues T_ORIENT
 #include C:/TEMPO/ProcLib/DRW_L.pro	    // simple process for drawing L stimulus, incldues L_ORIENT
@@ -132,9 +132,9 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/FLS_PGS.pro	// setup flash stimuli
 //#include C:/TEMPO/ProcLib/LSCH_PGS.pro	// setup search windows - L
 //#include C:/TEMPO/ProcLib/TSCH_PGS.pro	// setup search windows - T
-#include C:/TEMPO/ProcLib/CMD_PGS.pro	// setup countermanding windows
+//#include C:/TEMPO/ProcLib/CMD_PGS.pro	// setup countermanding windows
 #include C:/TEMPO/ProcLib/ANTI_PGS.pro
-#include C:/TEMPO/ProcLib/SETC_TRL.pro	// sets up all of the input to run a countermanding trial
+//#include C:/TEMPO/ProcLib/SETC_TRL.pro	// sets up all of the input to run a countermanding trial
 #include C:/TEMPO/ProcLib/SETMGTRL.pro
 //#include C:/TEMPO/ProcLib/SETM_TRL.pro
 #include C:/TEMPO/ProcLib/SETG_TRL.pro  // sets up all input to run a gonogo trial
@@ -152,7 +152,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/KEY_REWD.pro	// needed to give reward manually from keyboard (stupid)
 #include C:/TEMPO/ProcLib/KEY_TARG.pro	// see above
 #include C:/TEMPO/ProcLib/FIXATION.pro	// fixation control structure
-#include C:/TEMPO/ProcLib/CMANDING.pro	// countermanding control structure
+//#include C:/TEMPO/ProcLib/CMANDING.pro	// countermanding control structure
 //#include C:/TEMPO/ProcLib/MEMORY.pro	// mem guided sacc task control structure
 #include C:/TEMPO/ProcLib/MGUIDE.pro
 #include C:/TEMPO/ProcLib/GONOGO.pro    // gonogo sacc task control structure
@@ -164,7 +164,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 
 #include C:/TEMPO/ProcLib/PROANTI.pro 	// Pro/Anti Task
 #include C:/TEMPO/ProcLib/SET_LOCS.pro
-#include C:/TEMPO/ProcLib/ANTI_DIFFS.pro
+//#include C:/TEMPO/ProcLib/ANTI_DIFFS.pro
 
 //----------------------------------------------------------------------
 process IDLE() enabled					// When the clock is started the task is not yet running.
@@ -226,7 +226,7 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 		if (State == run_cmd_sess)		// user wants to run the countermanding task
 			{
 			OK = 0;
-			spawn CMANDING();			// start countermanding
+			//spawn CMANDING();			// start countermanding
 			idling = 0;					// stop idling
 			}
 			

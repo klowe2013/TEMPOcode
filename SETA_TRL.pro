@@ -18,7 +18,8 @@
 //#include C:/TEMPO/ProcLib/TSCH_PGS.pro						// sets all pgs of video memory up for the impending trial
 //#include C:/TEMPO/ProcLib/LSCH_PGS.pro						// sets all pgs of video memory up for the impending trial 
 #include C:/TEMPO/ProcLib/ANTI_PGS.pro
-//#include C:/TEMPO/ProcLib/ANTI_DIFFS.pro
+#include C:/TEMPO/ProcLib/A_DIFFS.pro
+#include C:/TEMPO/ProcLib/SET_LOCS.pro
 
 declare hide int StimTm;									// Should we stim on this trial?
 declare hide int Curr_target;								// OUTPUT: next trial target
@@ -100,9 +101,18 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	//spawnwait RAND_ORT;	// sets orientations of random stimuli
 	
-	spawnwait A_LOCS; // updates angles and eccentricities - assumes we want equal spacing
+	//spawnwait A_LOCS; // updates angles and eccentricities - assumes we want equal spacing
 	
-	spawnwait ANTI_DIFFS; // selects difficulty levels for this trial
+	
+	// Refresh angles/eccentricities
+	spawnwait SET_LOCS();
+	nexttick;
+	
+	targInd = random(SetSize);
+	targ_angle = Angle_list[targInd];
+	targ_ecc = Eccentricity_list[targInd];
+	
+	spawnwait A_DIFFS; // selects difficulty levels for this trial
 	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
 	

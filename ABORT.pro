@@ -27,7 +27,7 @@ process ABORT()
                                                 // ...RDX communication with vdosync.
                                                 // NOTE: if you add a bunch more strobes to INFOS.pro and you...
 	                                            // start getting buffer overflow errors increase the number of nextticks.
-	if (State == run_cmd_sess)
+	/*if (State == run_cmd_sess)
 		{
 		spawnwait SETC_TRL(n_targ_pos,			// notice that this is spawnwait instead of spawn b/c
 					go_weight,					// ...no inter trial interval is imposed.
@@ -38,8 +38,9 @@ process ABORT()
 					min_holdtime,                   
 					max_holdtime,                   
 					expo_jitter);  
+		
 		}
-	else if (State == run_search_sess)
+	else */ if (State == run_search_sess)
 		{
 		spawnwait SETS_TRL(n_targ_pos,			// notice that this is spawnwait instead of spawn b/c
 					go_weight,					// ...no inter trial interval is imposed.

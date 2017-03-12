@@ -11,7 +11,7 @@ process SET_LOCS()
 	ia = 0;
 	while (ia < SetSize)
 	{
-		Angle_list[ia] = (90+angleOffset+(angDiff*ia)) % 360;
+		Angle_list[ia] = (90+angleOffset-(angDiff*ia)) % 360;
 		Eccentricity_list[ia] = SearchEcc;
 		ia = ia+1;
 	}

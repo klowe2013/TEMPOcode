@@ -1256,13 +1256,14 @@ if(monkey == helmholtz)
 			PlacPres				= 1; //1 = no placeholders,  2 = placeholders
 			SetSize					= 8; //SS1 = 1, SS2 = 2, etc. up to set size 12;
 			// Select Search task and Target/Distractor for Singleton Search
-			SearchType				= 2; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
+			SearchType				= 1; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
 			TargOrt1				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT 
 			TargOrt2				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT
 			
 			// Difficulties
 			ndDifficulties 			= 3;
 			ntDifficulties 			= 2;
+			doCongruency 			= 1;
 			angleOffset				= 0;
 			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
 			max_plactime			= 700;
@@ -1333,7 +1334,7 @@ if(monkey == helmholtz)
 			stimVertical[7] = .5;
 			
 			// Relative probability of color singleton options
-			targDiffProbs[0] = 1;
+			targDiffProbs[0] = 0;
 			targDiffProbs[1] = 1;
 			targDiffProbs[2] = 0;
 			targDiffProbs[3] = 0;
@@ -1364,7 +1365,7 @@ if(monkey == helmholtz)
 			
 			// Relative probability of non-singleton options
 			distDiffProbs[0] = 1;
-			distDiffProbs[1] = 1;
+			distDiffProbs[1] = 0;
 			distDiffProbs[2] = 1;
 			distDiffProbs[3] = 0;
 			distDiffProbs[4] = 0;
@@ -1373,9 +1374,9 @@ if(monkey == helmholtz)
 			distDiffProbs[7] = 0;
 			
 			// Set congruent/incongruent relative probabilities
-			congProb[0] = 1;  // This will be congruent
-			congProb[1] = 1;  // This will be incongruent
-			congProb[2] = 0;  // This will be square
+			congProb[0] = 0;  // This will be congruent
+			congProb[1] = 0;  // This will be incongruent
+			congProb[2] = 1;  // This will be square
 			
 			// Are SOAs even relevant here? Let's take another look later
 			SOA_list[0] = 300;
