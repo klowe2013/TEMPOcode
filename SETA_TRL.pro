@@ -169,12 +169,15 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		TypeCode = 601;
 		saccEnd = (targInd+(SetSize/2)) % SetSize;
 		}
-	/*
+	
 	// This if statement should work because it's in an else... a negative value < -equaltol
 	// should have been caught by the first if
 	else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
 		{
-		catchPro = random(2);
+		Catch = 1;
+		CatchCode = 501;
+		}
+		/*catchPro = random(2);
 		if (catchPro)
 		{
 			Trl_type = 1;

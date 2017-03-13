@@ -1256,13 +1256,13 @@ if(monkey == helmholtz)
 			PlacPres				= 1; //1 = no placeholders,  2 = placeholders
 			SetSize					= 8; //SS1 = 1, SS2 = 2, etc. up to set size 12;
 			// Select Search task and Target/Distractor for Singleton Search
-			SearchType				= 1; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
+			SearchType				= 2; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
 			TargOrt1				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT 
 			TargOrt2				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT
 			
 			// Difficulties
 			ndDifficulties 			= 3;
-			ntDifficulties 			= 2;
+			ntDifficulties 			= 3;
 			doCongruency 			= 1;
 			angleOffset				= 0;
 			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
@@ -1374,9 +1374,9 @@ if(monkey == helmholtz)
 			distDiffProbs[7] = 0;
 			
 			// Set congruent/incongruent relative probabilities
-			congProb[0] = 0;  // This will be congruent
+			congProb[0] = 1;  // This will be congruent
 			congProb[1] = 0;  // This will be incongruent
-			congProb[2] = 1;  // This will be square
+			congProb[2] = 0;  // This will be square
 			
 			// Here, we put in a section that says: if the singleton is square,
 			//    on what percent of trials (if doing congruency) should it be what difficulty?

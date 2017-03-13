@@ -80,8 +80,8 @@ process SET_CONG()
 			cumCong[it] = (thisVal/sumCong)+lastVal; // Add this percentage*100
 			lastVal = cumCong[it]; // CDF so far = lastVal
 			//printf("thisVal = %d\n",thisVal);
-			//printf("cumCong[it] = %d",cumCong[it]);
-			//printf("\n");
+			printf("cumCong[it] = %d",cumCong[it]);
+			printf("\n");
 			it = it+1;
 			
 		}
@@ -102,9 +102,9 @@ process SET_CONG()
 			//printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
 			isCong = isCong+1;
 		}
-		//printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
-		//printf("isCong = %d",isCong);
-		//printf("\n");
+		printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
+		printf("isCong = %d",isCong);
+		printf("\n");
 		
 		nexttick;
 		//isCong = random(3); // This line would be if we're randomly picking congruency
@@ -191,9 +191,8 @@ process SET_CONG()
 				// Turn relative relevant probs into CDF
 				it = 0;
 				lastVal = 0;
-				
-				while (it < nRel)
 				thisVal = 0;
+				while (it < nRel)
 				{
 					thisVal = distDiffProbs[relInds[it]]*100;
 					cumDProbs[it] = (thisVal/sumProbs)+lastVal; // Add this percentage*100
@@ -205,6 +204,47 @@ process SET_CONG()
 				nexttick;
 				// Do we need to pick it here? Or can we save operations (potentially)
 				//    and put that part outside this loop?
+			} else if (tIsCatch[singDifficulty]) // if target is square, pick a pro or anti distractor based on relative probs in catchDiffPerc
+			{
+				// We need RelInds below in order to keep it out of this particular
+				//     loop, but we can just say that all distractor possibilities are relevant
+				it = 0;
+				nRel = 0;
+				while (it < ndDifficulties)
+				{
+					relInds[nRel] = it;
+					relProbs[nRel] = distDiffProbs[it];
+					nRel = nRel+1;
+					it = it+1;
+				}
+				nexttick;
+				
+				// Let's do the boilerplate CDF thing here, but on catchDiffPerc
+				it = 0;
+				sumProbs = 0;
+				while (it < nRel)
+				{
+					sumProbs = sumProbs+catchDiffPerc[relInds[it]];
+					it = it+1;
+				}
+				//printf("sumProbs = %d",sumProbs);
+				//printf("\n");
+				nexttick;
+				
+				// Turn relative probabilities of t difficulties into CDF*100
+				it = 0;
+				lastVal = 0; // Counter for CDF
+				thisVal = 0;
+				while (it < nRel)
+				{
+					thisVal = catchDiffPerc[relInds[it]]*100;
+					cumDProbs[it] = (thisVal/sumProbs)+lastVal; // Add this percentage*100
+					lastVal = cumDProbs[it]; // CDF so far = lastVal
+					it = it+1;
+					//printf("cumDProbs[%d] = %d",it,cumDProbs[it]);
+					//printf("\n");
+				}
+				nexttick;
 			}
 			
 			// Cool. Now that we've gotten the relevant indices for either pro or anti trials,
@@ -222,7 +262,7 @@ process SET_CONG()
 			printf("\n");
 			nexttick;
 			
-		} else if (isCong == 0) // If incongruent...
+		} else if (isCong == 0) // If congruent...
 		{
 			// We need to do this differently depending on whether target is pro or anti
 			// If the target is pro, incongruent is also pro
@@ -268,12 +308,12 @@ process SET_CONG()
 				nexttick;
 				// Do we need to pick it here? Or can we save operations (potentially)
 				//    and put that part outside this loop?
-			} else if (tIsAnti[singDifficulty]) // if target is anti, pick an anti distractor
+			} else if (tIsAnti[singDifficulty]) // if target is anti, pick a pro distractor
 			{
 				it = 0;
 				while (it < ndDifficulties)
 				{
-					if (dIsAnti[it]) // Only pick anti-distractors
+					if (dIsPro[it]) // Only pick anti-distractors
 					{
 						relInds[nRel] = it;
 						relProbs[nRel] = distDiffProbs[it];
@@ -357,6 +397,7 @@ process SET_CONG()
 			{
 				myInd = myInd+1;
 			}
+		
 		// We've now picked the appropriate index INTO THE RELEVANT INDICES. So let's assign the Distractor ID
 			oppDiff = relInds[myInd];
 			printf("oppDiff = %d",oppDiff);

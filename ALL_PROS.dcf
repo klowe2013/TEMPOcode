@@ -2,7 +2,7 @@
 ; Copyright 1997-2017 Reflective Computing.  All Rights Reserved.
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
-; Fri Mar 10 12:53:20 2017
+; Mon Mar 13 10:34:56 2017
 ; DLOAD C:\TEMPO\ProcLib\ALL_PROS.dcf
 
 ; DIALOGS
@@ -15,7 +15,7 @@ DIAOBJ   0,0,2,265,120,345,148,"OK","start;\r\ndpop Info_and_StartClock;"
 DIAOBJ   0,3,1,15,12,240,156,"","ALL_PROS.pro     (F1)\r\n\r\nprotocol control structure\r\nand associated protocols\r\n\r\nwritten by\r\ndavid.c.godlove@vanderbilt.edu\r\nJanuary, 2011"
 
 DIAPAGE 1,"Choose_Task"
-DIAPOS   1,0,0,972,-1,-1,144,480,530,858,1
+DIAPOS   1,0,0,972,-1,-1,692,321,1078,699,1
 DIAOBJ   1,0,2,190,52,338,80,"Countermanding","quiet State = 1;\r\ndialog Pre_Task_Main;\r\ndpop Choose_Task"
 DIAOBJ   1,1,1,20,16,165,64,"","Which task do you\r\nwant to run? (F2)"
 DIAOBJ   1,2,2,271,311,351,335,"Exit","Exit"
@@ -447,7 +447,7 @@ DIAOBJ   11,62,5,405,156,475,180,"","SSD_list[11]"
 DIAOBJ   11,63,1,200,4,415,88,"","Set the stop-signal delays\r\nin vertical retrace units.\r\n(These must be monotonically\r\nincreasing.  The number of SSDs \r\nis calculated based on blanks.)"
 
 DIAPAGE 12,"In_Task_pane"
-DIAPOS   12,0,0,972,-1,-1,91,241,527,873,12
+DIAPOS   12,0,0,972,-1,-1,709,288,1145,920,12
 DIAOBJ   12,0,2,148,489,275,517,"Quit Task","dialog Quit_Check"
 DIAOBJ   12,1,2,286,489,412,517,"Apply Changes","DSET;"
 DIAOBJ   12,2,3,331,157,400,181,"","Base_Punish_time"
@@ -525,7 +525,7 @@ DIAOBJ   14,21,5,140,220,210,244,"","fix_manual"
 DIAOBJ   14,22,3,255,220,320,244,"","fix_manual"
 
 DIAPAGE 15,"Resume"
-DIAPOS   15,0,0,0,-1,-1,460,202,640,338,15
+DIAPOS   15,0,126,721,-1,-1,706,239,886,375,15
 DIAOBJ   15,0,1,35,20,145,48,"","Task is paused."
 DIAOBJ   15,1,2,50,60,115,84,"Resume","quiet Pause = 0;\r\nDPOP"
 
@@ -591,16 +591,16 @@ DIAOBJ   21,0,2,272,15,336,37,"OK","DSET; DPOP"
 DIAOBJ   21,1,2,272,45,336,67,"Cancel","DPOP"
 
 DIAPAGE 22,"PA_Distractors"
-DIAPOS   22,0,-1,-1,-1,-1,221,419,749,889,22
-DIAOBJ   22,0,2,92,410,156,432,"OK","DSET; DPOP"
-DIAOBJ   22,1,2,292,407,356,429,"Cancel","DPOP"
-DIAOBJ   22,2,2,189,411,252,430,"Apply","DSET;"
-DIAOBJ   22,3,3,447,35,497,56,"","distDiffProbs[0]"
-DIAOBJ   22,4,3,464,66,497,87,"","distDiffProbs[1]"
-DIAOBJ   22,5,3,466,93,499,118,"","distDiffProbs[2]"
-DIAOBJ   22,6,5,387,32,423,55,"","distDiffProbs[0]"
-DIAOBJ   22,7,5,385,64,427,86,"","distDiffProbs[1]"
-DIAOBJ   22,8,5,383,92,429,113,"","distDiffProbs[2]"
+DIAPOS   22,0,0,972,-1,-1,403,218,1077,727,22
+DIAOBJ   22,0,2,146,446,210,468,"OK","DSET; DPOP"
+DIAOBJ   22,1,2,325,440,389,462,"Cancel","DPOP"
+DIAOBJ   22,2,2,236,444,299,463,"Apply","DSET;"
+DIAOBJ   22,3,3,404,29,454,50,"","distDiffProbs[0]"
+DIAOBJ   22,4,3,423,62,456,83,"","distDiffProbs[1]"
+DIAOBJ   22,5,3,422,87,455,112,"","distDiffProbs[2]"
+DIAOBJ   22,6,5,341,30,377,53,"","distDiffProbs[0]"
+DIAOBJ   22,7,5,339,61,381,83,"","distDiffProbs[1]"
+DIAOBJ   22,8,5,340,91,386,112,"","distDiffProbs[2]"
 DIAOBJ   22,9,1,6,39,19,61,"","1"
 DIAOBJ   22,10,1,6,73,16,91,"","2"
 DIAOBJ   22,11,1,4,100,15,119,"","3"
@@ -616,25 +616,37 @@ DIAOBJ   22,20,3,138,93,178,113,"","distH[2]"
 DIAOBJ   22,21,5,195,33,228,57,"","distV[0]"
 DIAOBJ   22,22,5,196,65,230,85,"","distV[1]"
 DIAOBJ   22,23,5,194,93,228,114,"","distV[2]"
-DIAOBJ   22,24,3,300,36,330,57,"","distV[0]"
-DIAOBJ   22,25,3,284,61,331,84,"","distV[1]"
-DIAOBJ   22,26,3,273,91,331,115,"","distV[2]"
+DIAOBJ   22,24,3,281,34,311,55,"","distV[0]"
+DIAOBJ   22,25,3,261,59,308,82,"","distV[1]"
+DIAOBJ   22,26,3,248,92,306,116,"","distV[2]"
 DIAOBJ   22,27,1,10,268,138,290,"","Do Congruency?"
 DIAOBJ   22,28,1,10,295,138,317,"","Congruent %"
 DIAOBJ   22,29,1,10,324,138,346,"","Incongruent %"
 DIAOBJ   22,30,1,15,352,143,374,"","\"Catch\" %"
-DIAOBJ   22,31,5,150,290,210,313,"","congProb[0]"
+DIAOBJ   22,31,5,179,288,239,311,"","congProb[0]"
 DIAOBJ   22,32,3,249,292,377,314,"","congProb[0]"
-DIAOBJ   22,33,5,150,320,214,341,"","congProb[1]"
+DIAOBJ   22,33,5,176,318,240,339,"","congProb[1]"
 DIAOBJ   22,34,3,247,317,375,339,"","congProb[1]"
-DIAOBJ   22,35,5,147,347,213,366,"","congProb[2]"
+DIAOBJ   22,35,5,176,343,242,362,"","congProb[2]"
 DIAOBJ   22,36,3,249,340,377,362,"","congProb[2]"
+DIAOBJ   22,37,1,511,9,639,31,"","Prob In Catch"
+DIAOBJ   22,38,3,605,34,658,54,"","catchDiffPerc[0]"
+DIAOBJ   22,39,5,519,32,564,55,"","catchDiffPerc[0]"
+DIAOBJ   22,40,5,518,64,561,87,"","catchDiffPerc[1]"
+DIAOBJ   22,41,3,603,66,655,88,"","catchDiffPerc[1]"
+DIAOBJ   22,42,3,599,95,657,115,"","catchDiffPerc[2]"
+DIAOBJ   22,43,5,520,95,558,116,"","catchDiffPerc[2]"
+DIAOBJ   22,44,3,308,267,375,285,"","doCongruency"
+DIAOBJ   22,45,5,179,260,241,283,"","doCongruency"
+DIAOBJ   22,46,1,12,382,164,404,"","Hetero = 1, Homo = 2"
+DIAOBJ   22,47,5,180,378,246,395,"","SearchType"
+DIAOBJ   22,48,3,308,368,377,384,"","SearchType"
 
 DIAPAGE 23,"PA_Singletons"
-DIAPOS   23,0,-1,-1,-1,-1,270,430,798,811,23
-DIAOBJ   23,0,2,42,317,106,339,"OK","DSET; DPOP"
-DIAOBJ   23,1,2,227,317,291,339,"Cancel","DPOP"
-DIAOBJ   23,2,2,133,319,196,338,"Apply","DSET;"
+DIAPOS   23,0,-1,-1,-1,-1,71,231,599,657,23
+DIAOBJ   23,0,2,132,363,196,385,"OK","DSET; DPOP"
+DIAOBJ   23,1,2,347,364,411,386,"Cancel","DPOP"
+DIAOBJ   23,2,2,244,366,307,385,"Apply","DSET;"
 DIAOBJ   23,3,3,447,35,497,56,"","targDiffProbs[0]"
 DIAOBJ   23,4,3,464,66,497,87,"","targDiffProbs[1]"
 DIAOBJ   23,5,3,466,93,499,118,"","targDiffProbs[2]"
@@ -659,6 +671,9 @@ DIAOBJ   23,23,5,194,93,228,114,"","stimVertical[2]"
 DIAOBJ   23,24,3,300,36,330,57,"","stimVertical[0]"
 DIAOBJ   23,25,3,284,61,331,84,"","stimVertical[1]"
 DIAOBJ   23,26,3,273,91,331,115,"","stimVertical[2]"
+DIAOBJ   23,27,3,241,316,320,338,"","ntDifficulties"
+DIAOBJ   23,28,5,158,314,220,336,"","ntDifficulties"
+DIAOBJ   23,29,1,17,310,145,332,"","# Difficulties"
 
 DIAPAGE 24,"PA_Vars"
 DIAPOS   24,0,-1,-1,-1,-1,16,73,376,253,24

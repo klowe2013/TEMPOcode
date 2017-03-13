@@ -63,10 +63,12 @@ process A_DIFFS()
 	// Loop should have broken when randVal is in the range of values assigned to a particular
 	// CDF/difficulty level. When it breaks, get the appropriate pro/anti mapping
 	nexttick;
+	printf("singDifficulty = %d\n",singDifficulty);
 	
 	if (SearchType == 2)
 	{
 		spawnwait SET_CONG();
+		printf("oppDiff = %d\n",oppDiff);
 		id = 0;
 		while (id < SetSize)
 		{
