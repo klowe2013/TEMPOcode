@@ -112,7 +112,17 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	//printf(" Random Trials(%d",Rand_Comp_Trl_number);
 
 // Need to change the below to reflect Pro/Anti vars of interest...
-if (SingMode == 0)
+printf(" pro correct = %d", Pro_Comp_Trl_number);
+printf(" 	%d 		%d",ProPerAcc, avg_pro_rt);
+printf("\n");
+printf(" anti correct = %d", Anti_Comp_Trl_number);
+printf(" 	%d 		%d",AntiPerAcc, avg_anti_rt);
+printf("\n");
+printf(" catch correct = %d", Catch_Comp_Trl_number);
+printf(" 	%d",CatchPerAcc);
+printf("\n");
+
+/*if (SingMode == 0)
 	{
 	printf(" random correct = %d",Rand_Comp_Trl_number);
 	printf("    %d",RandPerAcc);
@@ -144,8 +154,8 @@ else if (SingMode == 1)
 	printf(" present RT)\n");
 	printf("soa = %d\n",search_fix_time);
 	}	
-	
-	if (SingMode == 0)
+*/
+	/*if (SingMode == 0)
 	{
 		Event_fifo[Set_event] = SearchHeader_;									// queue TrialStart_ strobe
 		Set_event = (Set_event + 1) % Event_fifo_N;																			// HERE IS WHERE THE FUN BEGINS
@@ -155,6 +165,10 @@ else if (SingMode == 1)
 		Event_fifo[Set_event] = CaptureHeader_;									// queue TrialStart_ strobe
 		Set_event = (Set_event + 1) % Event_fifo_N;																			// HERE IS WHERE THE FUN BEGINS
 	}
+	*/
+	
+	Event_fifo[Set_event] = AntiHeader_;									// queue TrialStart_ strobe
+	Set_event = (Set_event + 1) % Event_fifo_N;	
 	
 	Event_fifo[Set_event] = TrialStart_;									// queue TrialStart_ strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue

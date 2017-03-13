@@ -43,6 +43,7 @@ declare hide constant GONOGOHeader_		= 1503;
 declare hide constant DelayedHeader_    = 1504;
 declare hide constant SearchHeader_     = 1507;
 declare hide constant CaptureHeader_     = 1508;
+declare hide constant AntiHeader_ 		= 1509;
 declare hide constant Identify_Room_	= 1500; // Room 28
 declare hide constant ShamStim_ 		= 665;
 declare hide constant Stimulation_ 		= 666;

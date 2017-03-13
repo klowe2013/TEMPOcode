@@ -103,7 +103,55 @@ process END_TRL(int trl_outcome)
 				Rep_Comp_Trl_number = Rep_Comp_Trl_number + 1;
 				}	 
 			}	
-		else
+		else if (State == run_anti_sess) 
+			{
+			
+			Comp_Trl_number = Comp_Trl_number + 1;
+			Consec_corr = Consec_corr + 1; // allows me to set how many correct trials in a row to get reward
+			
+			if (Catch == 1)
+			{
+				Catch_Comp_Trl_number = Catch_Comp_Trl_number + 1;
+				CatchPerAcc = (Catch_Comp_Trl_number/(Catch_Comp_Trl_number + catch_inacc_sacc))*100;
+			} else if (Trl_type == 1) // prosaccade
+			{
+				Pro_Comp_Trl_number = Pro_Comp_Trl_number + 1;
+				ProPerAcc = (Pro_Comp_Trl_number/(Pro_Comp_Trl_number+pro_inacc_sacc))*100;
+				cum_pro_rt = cum_pro_rt + current_rt;
+				avg_pro_rt = cum_pro_rt/Pro_Comp_Trl_number;
+			} else if (Trl_type == 2) // antisaccade
+			{
+				Anti_Comp_Trl_number = Anti_Comp_Trl_number + 1;
+				AntiPerAcc = (Anti_Comp_Trl_number/(Anti_Comp_Trl_number+anti_inacc_sacc))*100;
+				cum_anti_rt = cum_anti_rt + current_rt;
+				avg_anti_rt = cum_anti_rt/Anti_Comp_Trl_number;
+			}
+			/*
+			if (TrialTp == 1)
+				{ 
+				if (SingMode == 0)
+					{				
+					Rand_Comp_Trl_number = Rand_Comp_Trl_number + 1;	
+					}
+				else if (SingMode == 1)
+					{
+					if (DistPres == 1111)
+						{
+						Rand_Comp_Trl_DA = Rand_Comp_Trl_DA + 1;	
+						}
+					else if (DistPres == 2222)	
+						{
+						Rand_Comp_Trl_DP = Rand_Comp_Trl_DP + 1;	
+						}
+					}
+				}
+			*/
+		 	else
+				{
+				Rep_Comp_Trl_number = Rep_Comp_Trl_number + 1;
+				}	 
+			}	
+			
 			{
 			Comp_Trl_number = Comp_Trl_number + 1;			// THIS IS PLACED INCORRECTLY.  IF THE TRIAL WAS CORRECT BUT UNREWARDED THIS WILL NOT COUNT
 			}											// DON'T HAVE TIME TO FIX RIGHT NOW
@@ -158,6 +206,43 @@ process END_TRL(int trl_outcome)
 					rep_inacc_sacc = rep_inacc_sacc + 1;
 				}
 			}	
+		else if (State == run_anti_sess) 
+			{
+			Comp_Trl_number = Comp_Trl_number + 1;
+			if (Catch == 1)
+			{
+				catch_inacc_sacc = catch_inacc_sacc + 1;
+			} else if (Trl_type == 1) // pro
+			{
+				pro_inacc_sacc = pro_inacc_sacc + 1;
+			} else if (Trl_type == 2) // anti
+			{
+				anti_inacc_sacc = anti_inacc_sacc + 1;
+			}
+			/*
+				if (SingMode == 0)
+					{				
+					rand_inacc_sacc = rand_inacc_sacc + 1;
+					}
+				else if (SingMode == 1)
+					{
+					if (DistPres == 1111)
+						{
+						rand_inacc_sacc_DA = rand_inacc_sacc_DA + 1;
+						}
+					else if (DistPres == 2222)	
+						{
+						rand_inacc_sacc_DP = rand_inacc_sacc_DP + 1;
+						}
+					}	
+				}
+			
+			else
+				{
+					rep_inacc_sacc = rep_inacc_sacc + 1;
+				}
+			}	
+			*/
 		else
 			{
 			Comp_Trl_number = Comp_Trl_number;			// THIS IS PLACED INCORRECTLY.  IF THE TRIAL WAS CORRECT BUT UNREWARDED THIS WILL NOT COUNT

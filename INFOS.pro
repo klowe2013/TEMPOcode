@@ -144,7 +144,10 @@ declare INFOS();
 				
 				}
 
-			else
+			else if (State == run_anti_sess) 
+			{
+				// eventCodes     Here's where we would put any additional needed event codes
+			} else
 				{
 			
 				stop_sig_color_r	= Stop_sig_color[0];

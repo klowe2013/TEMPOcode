@@ -13,6 +13,22 @@ declare float	Rand_Comp_Trl_DA; 		//search specific - gives correct number of ra
 declare float	Rand_Comp_Trl_DP; 		//search specific - gives correct number of random NOGO/catch trials
 declare float	Rep_Comp_NG_Trl; 		//search specific - gives correct number of repeat NOGO/catch trials
 
+// Below section is pro/anti specific
+declare float 	Pro_Comp_Trl_number = 0;
+declare float 	pro_inacc_sacc = 0;
+declare float 	ProPerAcc = 0;
+declare float 	cum_pro_rt = 0;
+declare float 	avg_pro_rt = 0;
+declare float 	Anti_Comp_Trl_number = 0;
+declare float 	anti_inacc_sacc = 0;
+declare float 	AntiPerAcc = 0;
+declare float 	avg_anti_rt = 0;
+declare float 	cum_anti_rt = 0;
+declare float 	Catch_Comp_Trl_number = 0;
+declare float 	catch_inacc_sacc = 0;
+declare float 	CatchPerAcc = 0;
+
+
 //----------------------------------------------------------------------------------------------------------------
 // Online analysis variables
 declare int		RandPerAcc;

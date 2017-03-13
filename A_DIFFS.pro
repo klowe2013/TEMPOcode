@@ -65,6 +65,11 @@ process A_DIFFS()
 	nexttick;
 	printf("singDifficulty = %d\n",singDifficulty);
 	
+	// Send target location code       eventCode
+	Event_fifo[Set_event] = 6000 + (100*targInd) + singDifficulty;		// Set a strobe to identify this file as a Search session and...	
+	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+	
+	
 	if (SearchType == 2)
 	{
 		spawnwait SET_CONG();
@@ -100,7 +105,10 @@ process A_DIFFS()
 				distDifficulty[id] = oppDiff;
 				printf("t diff = %d",distDifficulty[id]);
 				printf("\n");
-			} else 
+			} else if (id == targInd)
+			{
+				distDifficulty[id] = singDifficulty; // This makes decoding easier if we make the distractor in the singleton location (which won't be shown) the same as the singleton
+			} else
 			{
 				it = 0;
 				sumProbs = 0;
@@ -142,6 +150,9 @@ process A_DIFFS()
 				}
 				
 			}
+			// Send distractor location and difficulty code       eventCode
+			Event_fifo[Set_event] = 6000 + (100*id) + distDifficulty[id];		// Set a strobe to identify this file as a Search session and...	
+			Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 			
 			id = id+1;
 		}

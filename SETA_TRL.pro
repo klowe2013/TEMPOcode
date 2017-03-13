@@ -112,49 +112,13 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	targ_angle = Angle_list[targInd];
 	targ_ecc = Eccentricity_list[targInd];
 	
+	// Send target location code    eventCode
+	Event_fifo[Set_event] = 800 + targ_angle;		// Set a strobe to identify this file as a Search session and...	
+	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+	
 	spawnwait A_DIFFS; // selects difficulty levels for this trial
 	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
-	
-	// Here, let's take the code I wrote in A_LOCS.pro to randomize singleton difficulty
-	
-	/* Moved to ANTI_DIFFS
-	// Get sum of relevant relative probabilities
-	it = 0;
-	sumProbs = 0;
-	while (it < ntDifficulties)
-	{
-		sumProbs = sumProbs+targDiffProbs[it];
-	}
-	nexttick;
-	
-	// Turn relative probabilities of t difficulties into CDF*100
-	it = 0;
-	lastVal = 0; // Counter for CDF
-	while (it < ntDifficulties)
-	{
-		cumProbs[it] = (targDiffProbs[it]/sumProbs)*100+lastVal; // Add this percentage*100
-		lastVal = cumProbs[it]; // CDF so far = lastVal
-	}
-	nexttick;
-	
-	// Select random value between 1 and 100 (0-99, really)
-	randVal = random(100);
-	singDifficulty = 0;
-	// If our random value is past the range of the "targInd"th CDF value, check the next one
-	// Thought... should the below be >= or just >? I put >= because if there
-	// are two alternatives, and should have 0/1 relative probabilities (i.e.,
-	// exclusively use alternative 2), then if randVal = 0 then the first option
-	// will be spuriously selected...
-	while (randVal >= cumProbs[singDifficulty])
-	{
-		singDifficulty = singDifficulty+1;
-	}
-	// Loop should have broken when randVal is in the range of values assigned to a particular
-	// CDF/difficulty level. When it breaks, get the appropriate pro/anti mapping
-	nexttick;
-	*/
-	
 	
 	// Now, let's test whether this difficulty is a pro or anti trial
 	saccEnd = targInd;
@@ -191,6 +155,9 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		}
 		}
 	*/
+	// Send catch code    eventCode
+	Event_fifo[Set_event] = CatchCode;		// Set a strobe to identify this file as a Search session and...	
+	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 	
 	spawnwait ANTI_PGS(curr_target,							// set above
 			singDifficulty,								// singleton difficulty - H and V set in DEFAULT.pro

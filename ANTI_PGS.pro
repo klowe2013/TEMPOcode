@@ -182,10 +182,10 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		
 		//Changed above comments to just the above section because that was the part that moved.
 		// Now, the below still drops the difficulty codes for distractors before the pages are set up
-		distCode = 700 + (10*id)+distDifficulty[id];
+		//distCode = 700 + (10*id)+distDifficulty[id];
 		// Drop Distractor Code
-		Event_fifo[Set_event] = distCode;		// Set a strobe to identify this file as a Search session and...	
-		Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+		//Event_fifo[Set_event] = distCode;		// Set a strobe to identify this file as a Search session and...	
+		///Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 		id = id+1;
 		nexttick;
 		}
