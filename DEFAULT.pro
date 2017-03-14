@@ -1275,6 +1275,11 @@ if(monkey == helmholtz)
 			fixCue 					= 0;
 			cueCongThresh 			= 100; // Completely congruent
 			curr_cuetime 			= 0;  // How long to present cue
+			neutCueThresh 			= 334; // How often we should make the cue neutral while cuing trials
+											// 334 makes pro, neutral, and anti cues occur evenly and lets neutral cues be 50/50 for target type
+											// This works because it calculates backwards from the trial type, not forward from cue
+											// That being the case, this percentage needs to be even on both pro and anti
+											// trials in order to be non-predictive of the ensuing stimulus
 			
 			targ_hold_time			= 200;
 			Max_sacc_duration		= 50;

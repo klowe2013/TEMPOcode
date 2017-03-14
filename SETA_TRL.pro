@@ -139,7 +139,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	{
 		if (Trl_type = 1) // if pro
 		{
-			if ((random(1000)*1000) > 334) // if it shouldn't stay neutral...
+			if ((random(1000)*1000) > neutCueThresh) // if it shouldn't stay neutral...
 			{
 				if ((random(100)*100) > cueCongThresh) // if invalid
 				{
@@ -151,7 +151,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 			}
 		} else if (Trl_type == 2) // if anti
 		{ 
-			if ((random(1000)*1000) > 334) // if it shouldn't stay neutral...
+			if ((random(1000)*1000) > neutCueThresh) // if it shouldn't stay neutral...
 			{
 				if ((random(100)*100) > cueCongThresh) // if invalid
 				{
