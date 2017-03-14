@@ -9,7 +9,7 @@ declare hide int Trl_Outcome;			// Global output used in END_TRL
 declare hide int Trl_Start_Time;		// Global output used in END_TRL
 declare hide int LastSearchOutcome;		// Global output used in END_TRL
 
-declare ANTITR(allowed_fix_time,		// see ALL_VARS.pro and DEFAULT.pro
+declare SCHTRIAL(allowed_fix_time,		// see ALL_VARS.pro and DEFAULT.pro
 				curr_holdtime, 			// see SETC_TRL.pro
 				trl_type, 				// see SETC_TRL.pro
 				max_saccade_time, 		// see ALL_VARS.pro and DEFAULT.pro
@@ -20,7 +20,7 @@ declare ANTITR(allowed_fix_time,		// see ALL_VARS.pro and DEFAULT.pro
 				object_fix);			// animated graph object
 
 
-process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
+process SCHTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				curr_holdtime,     		// see SETC_TRL.pro
 				trl_type,          		// see SETC_TRL.pro
 				max_saccade_time,  		// see ALL_VARS.pro and DEFAULT.pro
@@ -111,18 +111,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	printf(" \n");
 	//printf(" Random Trials(%d",Rand_Comp_Trl_number);
 
-// Need to change the below to reflect Pro/Anti vars of interest...
-printf(" pro correct = %d", Pro_Comp_Trl_number);
-printf("    %d    %d",ProPerAcc, avg_pro_rt);
-printf("\n");
-printf(" anti correct = %d", Anti_Comp_Trl_number);
-printf("    %d    %d",AntiPerAcc, avg_anti_rt);
-printf("\n");
-printf(" catch correct = %d", Catch_Comp_Trl_number);
-printf("    %d",CatchPerAcc);
-printf("\n");
-
-/*if (SingMode == 0)
+if (SingMode == 0)
 	{
 	printf(" random correct = %d",Rand_Comp_Trl_number);
 	printf("    %d",RandPerAcc);
@@ -154,8 +143,8 @@ else if (SingMode == 1)
 	printf(" present RT)\n");
 	printf("soa = %d\n",search_fix_time);
 	}	
-*/
-	/*if (SingMode == 0)
+	
+	if (SingMode == 0)
 	{
 		Event_fifo[Set_event] = SearchHeader_;									// queue TrialStart_ strobe
 		Set_event = (Set_event + 1) % Event_fifo_N;																			// HERE IS WHERE THE FUN BEGINS
@@ -165,10 +154,6 @@ else if (SingMode == 1)
 		Event_fifo[Set_event] = CaptureHeader_;									// queue TrialStart_ strobe
 		Set_event = (Set_event + 1) % Event_fifo_N;																			// HERE IS WHERE THE FUN BEGINS
 	}
-	*/
-	
-	Event_fifo[Set_event] = AntiHeader_;									// queue TrialStart_ strobe
-	Set_event = (Set_event + 1) % Event_fifo_N;	
 	
 	Event_fifo[Set_event] = TrialStart_;									// queue TrialStart_ strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
@@ -412,7 +397,7 @@ else if (SingMode == 1)
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
 				lastsearchoutcome = failure;
 				printf("Error (no saccade)\n");								// ...tell the user whats up...
-				//spawn SVR_BELL();
+				spawn SVR_BELL();
 				trl_running = 0;											// ...and terminate the trial.
 				}			
 			else if (Catch == 1 && In_FixWin && 

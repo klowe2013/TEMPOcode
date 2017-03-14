@@ -80,8 +80,8 @@ process SET_CONG()
 			cumCong[it] = (thisVal/sumCong)+lastVal; // Add this percentage*100
 			lastVal = cumCong[it]; // CDF so far = lastVal
 			//printf("thisVal = %d\n",thisVal);
-			printf("cumCong[it] = %d",cumCong[it]);
-			printf("\n");
+			//printf("cumCong[it] = %d",cumCong[it]);
+			//printf("\n");
 			it = it+1;
 			
 		}
@@ -102,9 +102,9 @@ process SET_CONG()
 			//printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
 			isCong = isCong+1;
 		}
-		printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
-		printf("isCong = %d",isCong);
-		printf("\n");
+		//printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
+		//printf("isCong = %d",isCong);
+		//printf("\n");
 		
 		nexttick;
 		//isCong = random(3); // This line would be if we're randomly picking congruency
@@ -120,7 +120,7 @@ process SET_CONG()
 			// We need to do this differently depending on whether target is pro or anti
 			// If the target is pro, incongruent is also pro
 			nRel = 0;
-			printf("reached congruency = 1\n");
+			//printf("reached congruency = 1\n");
 			if (tIsPro[singDifficulty]) // if target is pro, pick a pro distractor
 			{
 				it = 0;
@@ -161,7 +161,7 @@ process SET_CONG()
 				//    and put that part outside this loop?
 			} else if (tIsAnti[singDifficulty]) // if target is anti, pick an anti distractor
 			{
-				printf("reached tIsAnti section\n");
+				//printf("reached tIsAnti section\n");
 				it = 0;
 				while (it < ndDifficulties)
 				{
@@ -176,7 +176,7 @@ process SET_CONG()
 				}
 				nexttick;
 				
-				printf("relInds calculated\n");
+				//printf("relInds calculated\n");
 				// Get CDF
 				it = 0;
 				sumProbs = 0;
@@ -187,7 +187,7 @@ process SET_CONG()
 					nexttick;
 				}
 				
-				printf("Got PDF\n");
+				//printf("Got PDF\n");
 				// Turn relative relevant probs into CDF
 				it = 0;
 				lastVal = 0;
@@ -200,7 +200,7 @@ process SET_CONG()
 					it = it+1;
 					nexttick;
 				}
-				printf("Got CDF\n");
+				//printf("Got CDF\n");
 				nexttick;
 				// Do we need to pick it here? Or can we save operations (potentially)
 				//    and put that part outside this loop?
@@ -258,8 +258,8 @@ process SET_CONG()
 			nexttick;
 		// We've now picked the appropriate index INTO THE RELEVANT INDICES. So let's assign the Distractor ID
 			oppDiff = relInds[myInd];
-			printf("oppDiff = %d",oppDiff);
-			printf("\n");
+			//printf("oppDiff = %d",oppDiff);
+			//printf("\n");
 			nexttick;
 			
 		} else if (isCong == 0) // If congruent...
@@ -280,9 +280,9 @@ process SET_CONG()
 					}
 					it = it+1;
 				}
-				printf("nRel = %d, ",nRel);
-				printf("firstRel = %d",relInds[0]);
-				printf("\n");
+				//printf("nRel = %d, ",nRel);
+				//printf("firstRel = %d",relInds[0]);
+				//printf("\n");
 				nexttick;
 				
 				// Get CDF
@@ -400,8 +400,8 @@ process SET_CONG()
 		
 		// We've now picked the appropriate index INTO THE RELEVANT INDICES. So let's assign the Distractor ID
 			oppDiff = relInds[myInd];
-			printf("oppDiff = %d",oppDiff);
-			printf("\n");
+			//printf("oppDiff = %d",oppDiff);
+			//printf("\n");
 			nexttick;
 		}
 	} else

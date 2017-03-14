@@ -30,6 +30,7 @@ process END_TRL(int trl_outcome)
 	declare hide int constant too_fast      = 14;		// made a saccade too quickly while in training to slow down
 	declare					  now;			
 
+	declare hide int 			run_anti_sess = 9;
 	declare hide float play_the_odds;					// see if subject will randomly be rewarded or punished on this trial and by how much
 	
 	//--------------------------------------------------------------------------------------------------
@@ -145,13 +146,14 @@ process END_TRL(int trl_outcome)
 						}
 					}
 				}
-			*/
+			
 		 	else
 				{
 				Rep_Comp_Trl_number = Rep_Comp_Trl_number + 1;
-				}	 
+				}
+			*/
 			}	
-			
+		else
 			{
 			Comp_Trl_number = Comp_Trl_number + 1;			// THIS IS PLACED INCORRECTLY.  IF THE TRIAL WAS CORRECT BUT UNREWARDED THIS WILL NOT COUNT
 			}											// DON'T HAVE TIME TO FIX RIGHT NOW
@@ -212,12 +214,15 @@ process END_TRL(int trl_outcome)
 			if (Catch == 1)
 			{
 				catch_inacc_sacc = catch_inacc_sacc + 1;
+				CatchPerAcc = (Catch_Comp_Trl_number/(Catch_Comp_Trl_number + catch_inacc_sacc))*100;
 			} else if (Trl_type == 1) // pro
 			{
 				pro_inacc_sacc = pro_inacc_sacc + 1;
+				ProPerAcc = (Pro_Comp_Trl_number/(Pro_Comp_Trl_number + pro_inacc_sacc))*100;
 			} else if (Trl_type == 2) // anti
 			{
 				anti_inacc_sacc = anti_inacc_sacc + 1;
+				AntiPerAcc = (Anti_Comp_Trl_number/(Anti_Comp_Trl_number + anti_inacc_sacc))*100;
 			}
 			/*
 				if (SingMode == 0)
@@ -243,6 +248,7 @@ process END_TRL(int trl_outcome)
 				}
 			}	
 			*/
+			}
 		else
 			{
 			Comp_Trl_number = Comp_Trl_number;			// THIS IS PLACED INCORRECTLY.  IF THE TRIAL WAS CORRECT BUT UNREWARDED THIS WILL NOT COUNT

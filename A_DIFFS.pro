@@ -63,7 +63,7 @@ process A_DIFFS()
 	// Loop should have broken when randVal is in the range of values assigned to a particular
 	// CDF/difficulty level. When it breaks, get the appropriate pro/anti mapping
 	nexttick;
-	printf("singDifficulty = %d\n",singDifficulty);
+	//printf("singDifficulty = %d\n",singDifficulty);
 	
 	// Send target location code       eventCode
 	Event_fifo[Set_event] = 6000 + (100*targInd) + singDifficulty;		// Set a strobe to identify this file as a Search session and...	
@@ -73,7 +73,7 @@ process A_DIFFS()
 	if (SearchType == 2)
 	{
 		spawnwait SET_CONG();
-		printf("oppDiff = %d\n",oppDiff);
+		//printf("oppDiff = %d\n",oppDiff);
 		id = 0;
 		while (id < SetSize)
 		{
@@ -84,7 +84,7 @@ process A_DIFFS()
 	{
 		spawnwait SET_CONG();
 						
-		printf("in A_DIFFS - oppDiff = %d",oppDiff);
+		//printf("in A_DIFFS - oppDiff = %d",oppDiff);
 		
 		id = 0;
 		while (id < SetSize)
@@ -103,8 +103,8 @@ process A_DIFFS()
 				//distDifficulty[id] = random(ndDifficulties);
 				//spawnwait SET_CONG();
 				distDifficulty[id] = oppDiff;
-				printf("t diff = %d",distDifficulty[id]);
-				printf("\n");
+				//printf("t diff = %d",distDifficulty[id]);
+				//printf("\n");
 			} else if (id == targInd)
 			{
 				distDifficulty[id] = singDifficulty; // This makes decoding easier if we make the distractor in the singleton location (which won't be shown) the same as the singleton

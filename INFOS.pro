@@ -13,7 +13,7 @@ declare int stop_sig_color_r, stop_sig_color_g, stop_sig_color_b;
 declare int ignore_sig_color_r, ignore_sig_color_g, ignore_sig_color_b;
 declare int fixation_color_r, fixation_color_g, fixation_color_b;
 declare int target_color_r, target_color_g, target_color_b;
-		
+declare hide int run_anti_sess = 9;
 		
 declare INFOS();
 
@@ -144,10 +144,11 @@ declare INFOS();
 				
 				}
 
-			else if (State == run_anti_sess) 
+			/*else if (State == run_anti_sess) 
 			{
+				printf("Nothing to send for anti\n");
 				// eventCodes     Here's where we would put any additional needed event codes
-			} else
+			} */else if (State != run_anti_sess)
 				{
 			
 				stop_sig_color_r	= Stop_sig_color[0];

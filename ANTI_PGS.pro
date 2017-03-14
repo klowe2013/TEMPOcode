@@ -145,8 +145,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	distColor  = 250;
 	
 	angle			= targ_angle; 		
-		printf("In ANTI_PGS: angle = %d, index = %d",targ_angle,targInd);
-		printf("\n");
+		//printf("In ANTI_PGS: angle = %d, index = %d",targ_angle,targInd);
+		//printf("\n");
 		
 	eccentricity	= targ_ecc;	
 										
