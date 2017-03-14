@@ -6,6 +6,7 @@
 
 declare hide constant FixSpotOn_		= 2301;
 declare hide constant Fixate_			= 2660;
+declare hide constant CueOn_ 			= 2661;
 declare hide constant PlacOn_			= 2320;
 declare hide constant Target_			= 2651; 
 declare hide constant FixSpotOff_		= 2300;

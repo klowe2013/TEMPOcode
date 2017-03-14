@@ -153,6 +153,7 @@ declare int		Classic;				// emulates the old stop signal task
 declare int		Stop_sig_color[3];		// need to make this more finely adjustable for luminance matching
 declare int		Ignore_sig_color[3];	// need to make this more finely adjustable for luminance matching
 declare int		Fixation_color[3];		// need to make this more finely adjustable for luminance matching
+declare int 	Cue_color[3]; 			// Pro/Anti only
 declare int		Mask_sig_color[3];		//temporal
 declare int		N_targ_pos;				// number of target positions (need to calculate this myself based on user input)
 declare int		Color_list[12,3];		// color of each stimulus individually (see critique above)
@@ -199,6 +200,10 @@ declare int 	distDifficulty[12];
 declare int 	catchDiffPerc[12];
 declare int 	oppDiff = 0;
 declare int 	doCongruency;
+declare int 	fixCue;
+declare int 	cueColors[3];
+declare int 	cueCongThresh;
+declare int 	curr_cuetime;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;

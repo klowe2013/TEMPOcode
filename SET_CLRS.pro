@@ -103,7 +103,57 @@ process SET_CLRS(n_targ_pos)
 			NonSingleton_color[g_]		= 33;	
 			NonSingleton_color[b_]		= 255;
 			}
+		nexttick;
+		// now let's set cue color
+		if (cueColors[cueType] == 0) // Red
+			{
+			Cue_color[r_]		= 63;	
+			Cue_color[g_]		= 0;	
+			Cue_color[b_]		= 0;
+			}
+		else if (cueColors[cueType] == 1) // Green
+			{
+			Cue_color[r_]		= 0;	
+			Cue_color[g_]		= 36;	
+			Cue_color[b_]		= 0;
+			}
+		else if (cueColors[cueType] == 2) // Blue
+			{
+			Cue_color[r_]		= 0;	
+			Cue_color[g_]		= 0;	
+			Cue_color[b_]		= 59;
+			}		
+		else if (cueColors[cueType] == 3) // Yellow
+			{
+			Cue_color[r_]		= 100;	
+			Cue_color[g_]		= 100;	
+			Cue_color[b_]		= 0;
+			}	
+		else if (cueColors[cueType] == 4) // Magenta
+			{
+			Cue_color[r_]		= 255;	
+			Cue_color[g_]		= 33;	
+			Cue_color[b_]		= 255;
+			}
+		else if (cueColors[cueType] == 5) // Fix color
+			{
+			Cue_color[r_] 		= 35;
+			Cue_color[g_] 		= 33;
+			Cue_color[b_] 		= 27;
+			}
+		
+		// Drop codes for singleton, distractor, and cue colors
+		Event_fifo[Set_event] = 700 + SingCol;										// queue strobe
+		Set_event = (Set_event + 1) % Event_fifo_N;
+		
+		Event_fifo[Set_event] = 710 + DistCol;										// queue strobe
+		Set_event = (Set_event + 1) % Event_fifo_N;
+		
+		Event_fifo[Set_event] = 730 + cueColors[cueType];										// queue strobe
+		Set_event = (Set_event + 1) % Event_fifo_N;
+				
 	}
+	nexttick;
 	
 	dsendf("cm 255 %d %d %d;\n",					// set the color of the fixation point to 255 (leaves room for many target colors)
 						Fixation_color[r_],			// GLOBAL ALERT; Fixation_color is an array so it cannot be passed
@@ -133,5 +183,10 @@ process SET_CLRS(n_targ_pos)
 	dsendf("cm 250 %d %d %d;\n",					// set the color of the fixation point to 255 (leaves room for many target colors)
 						NonSingleton_color[r_],			// GLOBAL ALERT; Fixation_color is an array so it cannot be passed
 	                    NonSingleton_color[g_],
-						NonSingleton_color[b_]);						
+						NonSingleton_color[b_]);		
+
+	dsendf("cm 249 %d %d %d;\n",					// set the color of the fixation point to 255 (leaves room for many target colors)
+						Cue_color[r_],			// GLOBAL ALERT; Fixation_color is an array so it cannot be passed
+	                    Cue_color[g_],
+						Cue_color[b_]);						
 	}

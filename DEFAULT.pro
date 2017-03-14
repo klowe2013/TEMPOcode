@@ -88,6 +88,10 @@ process DEFAULT(int state,
 	Fixation_color[g_]		= 33;	
 	Fixation_color[b_]		= 27;	
 	
+	Cue_color[r_]			= 35;	
+	Cue_color[g_]			= 33;	
+	Cue_color[b_]			= 27;	
+	
 	N_targ_pos				= 2;	// number of target positions (this is calculated below based on user input)
 									
 	Color_list[0,r_]		= 35;	// color of each target individually
@@ -1268,6 +1272,9 @@ if(monkey == helmholtz)
 			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
 			max_plactime			= 700;
 			min_plactime			= 1000;
+			fixCue 					= 0;
+			cueCongThresh 			= 100; // Completely congruent
+			curr_cuetime 			= 0;  // How long to present cue
 			
 			targ_hold_time			= 200;
 			Max_sacc_duration		= 50;
@@ -1283,6 +1290,11 @@ if(monkey == helmholtz)
 			NonSingleton_color[r_]		= 35;	
 			NonSingleton_color[g_]		= 33;	
 			NonSingleton_color[b_]		= 27; 
+			
+			// Set colors for the cue conditions
+			cueColors[1] 			= 2;
+			cueColors[2] 			= 5;
+			cueColors[3] 			= 3;
 			
 			Size_list[0]			= 1.5;	// size of each target individually (degrees)
 			Size_list[1]			= 1.5;

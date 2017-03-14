@@ -58,6 +58,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide float CatchNum;	
 	declare hide float per_jitter, jitter, decide_jitter, holdtime_diff, plac_diff, plac_jitter;
 	declare hide int fixation_color 			= 255;			// see SET_CLRS.pro
+	declare hide int cue_color 					= 249;
 	declare hide int constant nogo_correct		= 4;			// code for successfully canceled trial (see CMDTRIAL.pro)
 	declare hide int constant go_correct		= 7;			// code for correct saccade on a go trial (see CMDTRIAL.pro)
 	declare hide float equalTol 				= .01; 			// allow for floating point errors when asking whether H > V or V > H
@@ -97,7 +98,6 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	// -----------------------------------------------------------------------------------------------
 	// 2) Set up all vdosync pages for the upcoming trial using globals defined by user and sets_trl.pro
 	
-	spawnwait SET_CLRS(n_targ_pos); //selects distractor/target colors for this trial
 	
 	//spawnwait RAND_ORT;	// sets orientations of random stimuli
 	
@@ -134,6 +134,44 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		saccEnd = (targInd+(SetSize/2)) % SetSize;
 		}
 	
+	cueType = 2;
+	if (fixCue)
+	{
+		if (Trl_type = 1) // if pro
+		{
+			if ((random(1000)*1000) > 334) // if it shouldn't stay neutral...
+			{
+				if ((random(100)*100) > cueCongThresh) // if invalid
+				{
+					cueType = 3; // anti cue
+				} else
+				{
+					cueType = 1; // pro cue
+				}
+			}
+		} else if (Trl_type == 2) // if anti
+		{ 
+			if ((random(1000)*1000) > 334) // if it shouldn't stay neutral...
+			{
+				if ((random(100)*100) > cueCongThresh) // if invalid
+				{
+					cueType = 1; // pro cue
+				} else
+				{
+					cueType = 2; // anti cue
+				}
+			}
+		}
+	}
+	Event_fifo[Set_event] = 720 + cueType;										// queue strobe
+	Set_event = (Set_event + 1) % Event_fifo_N;
+				
+	nexttick;
+	
+	// Set up colors
+	spawnwait SET_CLRS(n_targ_pos); //selects distractor/target colors for this trial
+	
+		
 	// This if statement should work because it's in an else... a negative value < -equaltol
 	// should have been caught by the first if
 	else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
@@ -146,6 +184,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		{
 			Trl_type = 1;
 			TypeCode = 600;
+			
 		}
 		else if (!catchPro)
 		{
@@ -155,6 +194,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		}
 		}
 	*/
+	
+	
 	// Send catch code    eventCode
 	Event_fifo[Set_event] = CatchCode;		// Set a strobe to identify this file as a Search session and...	
 	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
@@ -164,6 +205,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 			Catch, 										// Is this a catch trial?
 			fixation_size, 								// see DEFAULT.pro and ALL_VARS.pro
 			fixation_color, 							// see SET_CLRS.pro
+			cue_color,
 			sig_color, 									// see DEFAULT.pro and ALL_VARS.pro
 			scr_width, 									// see RIGSETUP.pro
 			scr_height, 								// see RIGSETUP.pro

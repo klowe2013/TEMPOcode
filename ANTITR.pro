@@ -41,23 +41,26 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	
 	// Number the trial stages to make them easier to read below
 	declare hide int 	need_fix  		= 1;
-	declare hide int 	fixating_ph		= 2;
-	declare hide int 	fixating_targ	= 3;
-	declare hide int 	fixating_off	= 4;
-	declare hide int 	fixation_offset	= 5;
-	declare hide int 	in_flight 		= 6;
-	declare hide int 	on_target 		= 7;	
+	declare hide int 	fixating_cue 	= 2;
+	declare hide int 	fixating_ph		= 3;
+	declare hide int 	fixating_targ	= 4;
+	declare hide int 	fixating_off	= 5;
+	declare hide int 	fixation_offset	= 6;
+	declare hide int 	in_flight 		= 7;
+	declare hide int 	on_target 		= 8;	
 	declare hide int 	stage;
 	
 	// Number the stimuli pages to make reading easier
 	declare hide int   	blank       = 0;
 	declare hide int	fixation_pd = 1;
 	declare hide int	fixation    = 2;
-	declare hide int	plac_pd   	= 3;
-	declare hide int	plac      	= 4;
-	declare hide int	target_f_pd = 5;
-	declare hide int	target_f    = 6;
-	declare hide int	target      = 7;
+	declare hide int 	cue_pd 		= 3;
+	declare hide int 	cue 		= 4;
+	declare hide int	plac_pd   	= 5;
+	declare hide int	plac      	= 6;
+	declare hide int	target_f_pd = 7;
+	declare hide int	target_f    = 8;
+	declare hide int	target      = 9;
 	
 	// Assign values to success and failure so they are more readable
 	declare hide int	success		 = 1;
@@ -213,6 +216,35 @@ else if (SingMode == 1)
 			
 
 	//--------------------------------------------------------------------------------------------
+	// STAGE turn on cue and photodiode (subject looking at fixation window waiting for placeholder onset
+		else if (stage == fixating_cue)
+			{
+			if (!In_FixWin)													// If the eyes stray out of the fixation window...
+				{
+				Trl_Outcome = broke_fix;									// TRIAL OUTCOME ERROR (broke fixation)
+				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+				lastsearchoutcome = failure;
+				printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
+				trl_running = 0;											// ...and terminate the trial.
+				}
+			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime)	// But if the eyes are still in the window at end of holdtime...
+				{
+				Event_fifo[Set_event] = CueOn_;										// queue strobe
+				Set_event = (Set_event + 1) % Event_fifo_N;
+				dsendf("vp %d\n",cue_pd);								// ...flip the pg to the placeholders with pd marker...	
+				dsendf("XM RFRSH:\n"); 										// ...wait one vetical retrace...
+				dsendf("vp %d\n",cue);									// ...flip the pg to the placeholders without pd marker.
+				//dsendf("wm %d\n", plac_duration); // set as a variable in ALLVARS and add a random jitter
+				stage = fixating_ph;
+				}	
+			else if (StimDone == 0 && StimTm == 1 && In_FixWin && time() > aquire_fix_time + (curr_holdtime - 150))	// But if the eyes are still in the window at end of holdtime...
+				{ 
+					spawn STIM(stim_channel);
+					StimDone = 1;
+				}
+			}
 	// STAGE fixating placeholders (the subject is looking at the fixation point waiting for placeholder onset)		
 		else if (stage == fixating_ph)
 			{
@@ -226,7 +258,7 @@ else if (SingMode == 1)
 				printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
 				trl_running = 0;											// ...and terminate the trial.
 				}
-			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime)	// But if the eyes are still in the window at end of holdtime...
+			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime + curr_cuetime)	// But if the eyes are still in the window at end of holdtime...
 				{
 				if (PlacPres == 2) // if placeholder are present (set in DEFAULT.pro), we need to present those fuckers.
 					{

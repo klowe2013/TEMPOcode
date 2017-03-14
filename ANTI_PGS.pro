@@ -69,6 +69,7 @@ declare ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 				int isCatch,
 				float fixation_size,                    										// see DEFAULT.pro and ALL_VARS.pro
 				int fixation_color,                     										// see SET_CLRS.pro
+				int cue_color,
 				int sig_color,                          										// see DEFAULT.pro and ALL_VARS.pro
 				float scr_width,                        										// see RIGSETUP.pro
 				float scr_height,                       										// see RIGSETUP.pro
@@ -86,6 +87,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 				int isCatch,
 				float fixation_size,                    										// see DEFAULT.pro and ALL_VARS.pro
 				int fixation_color,                     										// see SET_CLRS.pro
+				int cue_color,
 				int sig_color,                          										// see DEFAULT.pro and ALL_VARS.pro
 				float scr_width,                        										// see RIGSETUP.pro
 				float scr_height,                       										// see RIGSETUP.pro
@@ -130,11 +132,13 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int   	blank       = 0;										
 	declare hide int	fixation_pd = 1;										
 	declare hide int	fixation    = 2;
-	declare hide int	plac_pd   	= 3;										
-	declare hide int	plac      	= 4;	
-	declare hide int	target_f_pd = 5;										
-	declare hide int	target_f  	= 6;
-	declare hide int	target      = 7;										
+	declare hide int 	cue_pd 		= 3;
+	delcare hide int 	cue 		= 4;
+	declare hide int	plac_pd   	= 5;										
+	declare hide int	plac      	= 6;	
+	declare hide int	target_f_pd = 7;										
+	declare hide int	target_f  	= 8;
+	declare hide int	target      = 9;										
 	
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
@@ -206,14 +210,30 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
     nexttick;
 	
+	//----------------------------------------------------------------------------------------------------------------------
+	// Draw pg 3
+	// print("cue with photodiode");
+	dsendf("rw %d,%d;\n",cue_pd,cue_pd); 												// draw first pg of video memory
+	dsendf("cl:\n");																			// clear screen
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	// Draw pg 3	 
+	// Draw pg 4	  
+	// print("cue");
+	dsendf("rw %d,%d;\n",cue,cue);   													// draw second pg of video memory                                       
+	dsendf("cl:\n");																			// clear screen
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+    nexttick;
+	
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+	// Draw pg 5	 
 	// print("placeholders with photodiode");
 	
 
 	dsendf("rw %d,%d;\n",plac_pd,plac_pd);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	
 	if (SetSize > 0)
 		{
@@ -238,12 +258,12 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	nexttick;
 		
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	// Draw pg 4	 
+	// Draw pg 6	 
 	// print("placeholders");
 	dsendf("rw %d,%d;\n",plac,plac);  												// draw pg 3                                        
 	dsendf("cl:\n");
 
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
 	if (SetSize > 0)
 		{
@@ -270,7 +290,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	nexttick;
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	// Draw pg 5	 
+	// Draw pg 7	 
 	// print("target, fixation, and distractors with photodiode");
 	dsendf("rw %d,%d;\n",target_f_pd,target_f_pd);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
@@ -293,13 +313,13 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			nexttick;
 			}
 		}
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
 	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
     nexttick;
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	// Draw pg 6	 
+	// Draw pg 8	 
 	// print("target, fixation, and distractors");
 	dsendf("rw %d,%d;\n",target_f,target_f);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
@@ -324,14 +344,14 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			}
 		}
 		
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
 	
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
     nexttick;
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	// Draw pg 7	  
+	// Draw pg 9	  
 	// print("target and distractors");
 	dsendf("rw %d,%d;\n",target,target);  														// draw pg 4                                        
 	dsendf("cl:\n");																			// clear screen
@@ -360,11 +380,11 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	
 	if (soa_mode==1)
 		{
-		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, open, deg2pix_X, deg2pix_Y);
+		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, open, deg2pix_X, deg2pix_Y);
 		}
 	else
 		{
-		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);		
+		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);		
 		}
 	nexttick; 
 	
