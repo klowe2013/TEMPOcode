@@ -1243,10 +1243,10 @@ if(monkey == helmholtz)
 			TargTrainSet			= 1; //1=random loc, 2= fixed pos. 1, 3 = fixed pos 2., etc. up to max location number
 			DistOrt					= 1; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
 			TargOrt					= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
-			SearchEcc				= 8; //entricity in degrees; use to make fixed eccentricity 
+			SearchEcc				= 6; //entricity in degrees; use to make fixed eccentricity 
 			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
-			SingCol					= 0; // red
-			DistCol 				= 1; // green
+			SingCol					= 1; // 0 = red - see SET_CLRS.pro
+			DistCol 				= 0; // 1 = green
 			PercSingTrl				= 50; //Percentage of trials where singleton is present, see LOC_RAND.pro for code
 			soa_mode				= 0;  //fixation response soa; 1=on, 0=off 
 			
@@ -1254,11 +1254,11 @@ if(monkey == helmholtz)
 			FixJitter			    = 0;  // 0 = random fixation-search ISI; 1 = Fixed; see sets_trl.pro
 			//////////
 			
-			catch_hold_time			= 200;
+			catch_hold_time			= 800;
 			Perc_catch				= 0; //percent catch trials
 			TargetType				= 1; //1 = L, 2 = T
 			PlacPres				= 1; //1 = no placeholders,  2 = placeholders
-			SetSize					= 8; //SS1 = 1, SS2 = 2, etc. up to set size 12;
+			SetSize					= 4; //SS1 = 1, SS2 = 2, etc. up to set size 12;
 			// Select Search task and Target/Distractor for Singleton Search
 			SearchType				= 2; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
 			TargOrt1				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT 
@@ -1267,16 +1267,16 @@ if(monkey == helmholtz)
 			// Difficulties
 			ndDifficulties 			= 3;
 			ntDifficulties 			= 3;
-			doCongruency 			= 1;
-			angleOffset				= 0;
+			doCongruency 			= 0;
+			angleOffset				= -15;
 			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
 			max_plactime			= 700;
 			min_plactime			= 1000;
-			fixCue 					= 0;
+			fixCue 					= 1;
 			cueCongThresh 			= 100; // Completely congruent
-			curr_cuetime 			= 0;  // How long to present cue
-			neutCueThresh 			= 334; // How often we should make the cue neutral while cuing trials
-											// 334 makes pro, neutral, and anti cues occur evenly and lets neutral cues be 50/50 for target type
+			//curr_cuetime 			= 500;  // How long to present cue
+			neutCueThresh 			= 333; // How often we should make the cue neutral while cuing trials
+											// 333 makes pro, neutral, and anti cues occur evenly and lets neutral cues be 50/50 for target type
 											// This works because it calculates backwards from the trial type, not forward from cue
 											// That being the case, this percentage needs to be even on both pro and anti
 											// trials in order to be non-predictive of the ensuing stimulus
@@ -1287,7 +1287,8 @@ if(monkey == helmholtz)
 			Max_saccade_time 		= 300;
 			Min_Holdtime			= 300;  // minimum time after fixation before target presentation
 			Max_Holdtime			= 800; // maximum time after fixation before target presentation		
-					
+			Min_cueTime 			= 0;
+			Max_cueTime 			= 0;
 			Go_weight				= 100.0;
 			Stop_weight				= 0.0;
 			Ignore_weight			= 0.0;
@@ -1297,9 +1298,9 @@ if(monkey == helmholtz)
 			NonSingleton_color[b_]		= 27; 
 			
 			// Set colors for the cue conditions
-			cueColors[1] 			= 2;
-			cueColors[2] 			= 5;
-			cueColors[3] 			= 3;
+			cueColors[0] 			= 2;
+			cueColors[1] 			= 5;
+			cueColors[2] 			= 3;
 			
 			Size_list[0]			= 1.5;	// size of each target individually (degrees)
 			Size_list[1]			= 1.5;
@@ -1331,9 +1332,9 @@ if(monkey == helmholtz)
 			catchV 			  = 1;
 			
 			// H dimension of color singleton options
-			stimHorizontal[0] = .7;
-			stimHorizontal[1] = 2;
-			stimHorizontal[2] = .5;
+			stimHorizontal[0] = .5;
+			stimHorizontal[1] = 1;
+			stimHorizontal[2] = 2;
 			stimHorizontal[3] = .5;
 			stimHorizontal[4] = .5;
 			stimHorizontal[5] = .5;
@@ -1342,7 +1343,7 @@ if(monkey == helmholtz)
 			
 			// V dimension of color singleton options
 			stimVertical[0] = 2;
-			stimVertical[1] = .7;
+			stimVertical[1] = 1;
 			stimVertical[2] = .5;
 			stimVertical[3] = .5;
 			stimVertical[4] = .5;
@@ -1351,8 +1352,8 @@ if(monkey == helmholtz)
 			stimVertical[7] = .5;
 			
 			// Relative probability of color singleton options
-			targDiffProbs[0] = 0;
-			targDiffProbs[1] = 1;
+			targDiffProbs[0] = 1;
+			targDiffProbs[1] = 0;
 			targDiffProbs[2] = 0;
 			targDiffProbs[3] = 0;
 			targDiffProbs[4] = 0;
@@ -1361,7 +1362,7 @@ if(monkey == helmholtz)
 			targDiffProbs[7] = 0;
 			
 			// H dimension of non-singleton
-			distH[0] = .7;
+			distH[0] = .5;
 			distH[1] = 1;
 			distH[2] = 2;
 			distH[3] = .7;
@@ -1373,7 +1374,7 @@ if(monkey == helmholtz)
 			// V dimension of non-singleton
 			distV[0] = 2;
 			distV[1] = 1;
-			distV[2] = .7;
+			distV[2] = .5;
 			distV[3] = .7;
 			distV[4] = .7;
 			distV[5] = .7;

@@ -2,7 +2,7 @@
 ; Copyright 1997-2017 Reflective Computing.  All Rights Reserved.
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
-; Mon Mar 13 10:34:56 2017
+; Mon Mar 20 14:53:40 2017
 ; DLOAD C:\TEMPO\ProcLib\ALL_PROS.dcf
 
 ; DIALOGS
@@ -46,6 +46,8 @@ DIAOBJ   2,12,1,10,84,165,156,"","Select a monkey \r\nto apply subject \r\nspeci
 DIAOBJ   2,13,2,206,89,346,125,"Monkey","dialog Select_Monkey"
 DIAOBJ   2,14,1,12,411,141,457,"","Set search\r\nstimulus properties"
 DIAOBJ   2,15,2,209,417,346,447,"Search Stims","Dialog Search_Info"
+DIAOBJ   2,16,2,208,467,345,498,"Pro/Anti Stims","Dialog PA_Vars;"
+DIAOBJ   2,17,1,12,465,149,498,"","Set Pro/Anti\r\nstimulus properties"
 
 DIAPAGE 3,"Pre_Task_Trial_Types"
 DIAPOS   3,0,0,0,-1,-1,690,64,1095,924,3
@@ -178,12 +180,15 @@ DIAOBJ   5,29,5,230,200,305,225,"","Allowed_fix_time"
 DIAOBJ   5,30,5,230,284,305,309,"","Max_Holdtime"
 DIAOBJ   5,31,5,230,497,305,524,"","Targ_hold_time"
 DIAOBJ   5,32,5,230,665,305,692,"","Fixed_trl_length"
+DIAOBJ   5,33,3,353,867,422,889,"","curr_cuetime"
 DIAOBJ   5,34,5,230,152,305,177,"","Staircase"
 DIAOBJ   5,35,5,230,369,305,396,"","Max_saccade_time"
 DIAOBJ   5,36,5,230,413,305,440,"","Max_sacc_duration"
 DIAOBJ   5,37,5,230,705,305,732,"","Trial_length"
+DIAOBJ   5,38,5,232,872,304,890,"","curr_cuetime"
 DIAOBJ   5,39,1,15,144,195,189,"","Staircase SSD (0,1)\r\n(Countermanding only)\r\n"
 DIAOBJ   5,40,1,15,409,190,441,"","Max saccade duration"
+DIAOBJ   5,41,1,10,869,138,891,"","Cue Time"
 DIAOBJ   5,42,1,15,449,190,485,"","Cancel Time\r\n(Countermanding only)"
 DIAOBJ   5,43,4,230,453,305,480,"","Cancl_time"
 DIAOBJ   5,44,1,15,248,190,280,"","Minimum Holdtime"
@@ -447,9 +452,9 @@ DIAOBJ   11,62,5,405,156,475,180,"","SSD_list[11]"
 DIAOBJ   11,63,1,200,4,415,88,"","Set the stop-signal delays\r\nin vertical retrace units.\r\n(These must be monotonically\r\nincreasing.  The number of SSDs \r\nis calculated based on blanks.)"
 
 DIAPAGE 12,"In_Task_pane"
-DIAPOS   12,0,0,972,-1,-1,709,288,1145,920,12
-DIAOBJ   12,0,2,148,489,275,517,"Quit Task","dialog Quit_Check"
-DIAOBJ   12,1,2,286,489,412,517,"Apply Changes","DSET;"
+DIAPOS   12,0,0,972,-1,-1,742,342,1178,974,12
+DIAOBJ   12,0,2,149,515,276,543,"Quit Task","dialog Quit_Check"
+DIAOBJ   12,1,2,286,515,412,543,"Apply Changes","DSET;"
 DIAOBJ   12,2,3,331,157,400,181,"","Base_Punish_time"
 DIAOBJ   12,3,3,331,41,400,65,"","Fix_win_size"
 DIAOBJ   12,4,3,331,77,400,101,"","Targ_win_size"
@@ -461,10 +466,10 @@ DIAOBJ   12,9,5,200,77,261,104,"","Targ_win_size"
 DIAOBJ   12,10,1,5,77,168,117,"","Target window size"
 DIAOBJ   12,11,1,5,117,168,157,"","Base reward time"
 DIAOBJ   12,12,1,5,157,168,197,"","Base punish time"
-DIAOBJ   12,13,1,5,41,168,81,"","Fix window size"
-DIAOBJ   12,14,1,7,5,303,41,"","Monitor and control in-task variables"
+DIAOBJ   12,13,1,59,99,222,139,"","Fix window size"
+DIAOBJ   12,14,1,2,6,298,42,"","Monitor and control in-task variables"
 DIAOBJ   12,15,1,326,3,371,27,"","(F4)"
-DIAOBJ   12,16,2,13,489,140,517,"Pause","quiet Pause = 1;\r\ndialog Resume"
+DIAOBJ   12,16,2,12,516,139,544,"Pause","quiet Pause = 1;\r\ndialog Resume"
 DIAOBJ   12,17,1,5,277,168,317,"","Set Size"
 DIAOBJ   12,18,1,6,197,172,233,"","Move timeout\r\n(training)"
 DIAOBJ   12,19,3,322,277,400,308,"","SetSize"
@@ -486,11 +491,12 @@ DIAOBJ   12,34,5,200,397,261,424,"","SingMode"
 DIAOBJ   12,35,5,200,437,261,464,"","SingCol"
 DIAOBJ   12,36,3,240,397,400,426,"","SingMode"
 DIAOBJ   12,37,3,240,437,400,466,"","SingCol"
-DIAOBJ   12,38,2,147,532,275,554,"Timing Vars","Dialog Pre_Task_Trial_Timing"
-DIAOBJ   12,39,2,24,45,152,67,"Search Stimuli","dialog Search_Info"
-DIAOBJ   12,40,2,32,60,160,82,"Button",""
-DIAOBJ   12,41,2,10,532,138,554,"Search Stimuli","dialog Search_Info"
-DIAOBJ   12,42,2,284,533,412,555,"Pro/Anti Vars","Dialog PA_Vars;"
+DIAOBJ   12,38,2,147,556,275,578,"Timing Vars","Dialog Pre_Task_Trial_Timing"
+DIAOBJ   12,39,3,279,469,407,491,"","DistCol"
+DIAOBJ   12,41,2,10,557,138,579,"Search Stimuli","dialog Search_Info"
+DIAOBJ   12,42,2,284,555,412,577,"Pro/Anti Vars","Dialog PA_Vars;"
+DIAOBJ   12,43,1,6,470,134,492,"","Distractor Color"
+DIAOBJ   12,45,5,200,473,266,490,"","DistCol"
 
 DIAPAGE 13,"Quit_Check"
 DIAPOS   13,0,0,0,-1,-1,440,320,800,500,13
@@ -525,7 +531,7 @@ DIAOBJ   14,21,5,140,220,210,244,"","fix_manual"
 DIAOBJ   14,22,3,255,220,320,244,"","fix_manual"
 
 DIAPAGE 15,"Resume"
-DIAPOS   15,0,126,721,-1,-1,706,239,886,375,15
+DIAPOS   15,0,0,972,-1,-1,706,239,886,375,15
 DIAOBJ   15,0,1,35,20,145,48,"","Task is paused."
 DIAOBJ   15,1,2,50,60,115,84,"Resume","quiet Pause = 0;\r\nDPOP"
 
@@ -591,7 +597,7 @@ DIAOBJ   21,0,2,272,15,336,37,"OK","DSET; DPOP"
 DIAOBJ   21,1,2,272,45,336,67,"Cancel","DPOP"
 
 DIAPAGE 22,"PA_Distractors"
-DIAPOS   22,0,0,972,-1,-1,403,218,1077,727,22
+DIAPOS   22,0,0,972,-1,-1,571,192,1245,701,22
 DIAOBJ   22,0,2,146,446,210,468,"OK","DSET; DPOP"
 DIAOBJ   22,1,2,325,440,389,462,"Cancel","DPOP"
 DIAOBJ   22,2,2,236,444,299,463,"Apply","DSET;"
@@ -643,7 +649,7 @@ DIAOBJ   22,47,5,180,378,246,395,"","SearchType"
 DIAOBJ   22,48,3,308,368,377,384,"","SearchType"
 
 DIAPAGE 23,"PA_Singletons"
-DIAPOS   23,0,-1,-1,-1,-1,71,231,599,657,23
+DIAPOS   23,0,-1,-1,-1,-1,480,450,1008,876,23
 DIAOBJ   23,0,2,132,363,196,385,"OK","DSET; DPOP"
 DIAOBJ   23,1,2,347,364,411,386,"Cancel","DPOP"
 DIAOBJ   23,2,2,244,366,307,385,"Apply","DSET;"
@@ -676,12 +682,14 @@ DIAOBJ   23,28,5,158,314,220,336,"","ntDifficulties"
 DIAOBJ   23,29,1,17,310,145,332,"","# Difficulties"
 
 DIAPAGE 24,"PA_Vars"
-DIAPOS   24,0,-1,-1,-1,-1,16,73,376,253,24
+DIAPOS   24,0,-1,-1,-1,-1,168,450,528,665,24
 DIAOBJ   24,0,2,272,15,336,37,"OK","DSET; DPOP"
 DIAOBJ   24,1,2,272,45,336,67,"Cancel","DPOP"
 DIAOBJ   24,2,2,8,15,136,37,"Distractor Info","Dialog PA_Distractors;"
 DIAOBJ   24,3,2,7,51,135,73,"Singleton Info","Dialog PA_Singletons;"
 DIAOBJ   24,4,2,7,89,135,111,"Location Info","Dialog PA_Locs;"
+DIAOBJ   24,5,2,7,125,130,145,"Cue Info","Dialog PA_Cue;"
+DIAOBJ   24,6,2,6,155,130,177,"Reset Counters","quiet Pro_Comp_Trl_number = 0;\r\nquiet pro_inacc_sacc = 0;\r\nquiet ProPerAcc = 0;\r\nquiet avg_pro_rt = 0;\r\nquiet cum_pro_rt = 0;\r\nquiet Anti_Comp_Trl_number = 0;\r\nquiet anti_inacc_sacc = 0;\r\nquiet AntiPerAcc = 0;\r\nquiet avg_anti_rt = 0;\r\nquiet cum_anti_rt = 0;\r\nquiet Catch_Comp_Trl_number = 0;\r\nquiet catch_inacc_sacc = 0;\r\nquiet CatchPerAcc = 0;"
 
 DIAPAGE 25,"PA_Locs"
 DIAPOS   25,0,-1,-1,-1,-1,481,188,841,368,25
@@ -693,6 +701,33 @@ DIAOBJ   25,4,1,8,18,98,38,"","Angle Offset"
 DIAOBJ   25,5,1,7,57,91,78,"","Eccentricity"
 DIAOBJ   25,6,5,125,56,176,78,"","SearchEcc"
 DIAOBJ   25,7,3,195,56,258,75,"","SearchEcc"
+
+DIAPAGE 26,"PA_Cue"
+DIAPOS   26,0,-1,-1,-1,-1,0,0,372,254,26
+DIAOBJ   26,0,2,290,15,354,37,"OK","DSET; DPOP"
+DIAOBJ   26,1,2,291,43,355,65,"Cancel","DPOP"
+DIAOBJ   26,2,1,12,15,80,35,"","Pro Color"
+DIAOBJ   26,3,1,10,41,84,60,"","Anti Color"
+DIAOBJ   26,4,1,8,70,99,91,"","Neutral Color"
+DIAOBJ   26,5,1,9,96,71,115,"","Validity"
+DIAOBJ   26,6,1,7,122,91,141,"","Neutral Freq"
+DIAOBJ   26,7,1,8,150,71,172,"","Cue Min"
+DIAOBJ   26,8,1,9,177,80,199,"","Cue Max"
+DIAOBJ   26,9,5,114,14,178,36,"","cueColors[0]"
+DIAOBJ   26,10,5,113,39,177,60,"","cueColors[2]"
+DIAOBJ   26,11,5,112,65,177,87,"","cueColors[1]"
+DIAOBJ   26,12,5,111,94,174,115,"","cueCongThresh"
+DIAOBJ   26,13,5,110,121,175,142,"","neutCueThresh"
+DIAOBJ   26,14,3,213,14,266,37,"","cueColors[0]"
+DIAOBJ   26,15,3,202,37,267,57,"","cueColors[2]"
+DIAOBJ   26,16,3,195,63,267,85,"","cueColors[1]"
+DIAOBJ   26,17,3,205,92,269,107,"","cueCongThresh"
+DIAOBJ   26,18,3,194,117,269,136,"","neutCueThresh"
+DIAOBJ   26,19,2,287,72,350,98,"Apply","DSET;"
+DIAOBJ   26,20,3,203,149,269,169,"","Min_cueTime"
+DIAOBJ   26,21,3,203,173,267,192,"","Max_cueTime"
+DIAOBJ   26,22,5,110,149,180,166,"","Min_cueTime"
+DIAOBJ   26,23,5,106,175,176,197,"","Max_cueTime"
 
 ; END OF DIALOGS
 

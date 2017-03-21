@@ -205,6 +205,9 @@ declare int 	cueColors[3];
 declare int 	cueCongThresh;
 declare int 	curr_cuetime;
 declare int 	neutCueThresh;
+declare int 	cueType;
+declare int 	Min_cueTime;
+declare int 	Max_cueTime;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;

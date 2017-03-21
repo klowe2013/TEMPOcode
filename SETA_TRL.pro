@@ -56,7 +56,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	declare hide float decide_trl_type; 	
 	declare hide float CatchNum;	
-	declare hide float per_jitter, jitter, decide_jitter, holdtime_diff, plac_diff, plac_jitter;
+	declare hide float per_jitter, jitter, decide_jitter, holdtime_diff, plac_diff, plac_jitter, cuetime_diff;
 	declare hide int fixation_color 			= 255;			// see SET_CLRS.pro
 	declare hide int cue_color 					= 249;
 	declare hide int constant nogo_correct		= 4;			// code for successfully canceled trial (see CMDTRIAL.pro)
@@ -83,7 +83,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	// We'll want to update this if we decide that a "catch" should be defined by a square difficulty...
 	// I'll put the appropriate line down in the "if" statement below, but keep it commented for now
-	CatchNum = random(100);
+	/*CatchNum = random(100);
 	if (CatchNum >= Perc_catch)
 		{
 		Catch = 0;
@@ -94,6 +94,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		Catch = 1;
 		CatchCode = 501;
 		} 
+	*/
 	
 	// -----------------------------------------------------------------------------------------------
 	// 2) Set up all vdosync pages for the upcoming trial using globals defined by user and sets_trl.pro
@@ -113,7 +114,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	targ_ecc = Eccentricity_list[targInd];
 	
 	// Send target location code    eventCode
-	Event_fifo[Set_event] = 800 + targ_angle;		// Set a strobe to identify this file as a Search session and...	
+	Event_fifo[Set_event] = 800 + targInd;		// Set a strobe to identify this file as a Search session and...	
 	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 	
 	spawnwait A_DIFFS; // selects difficulty levels for this trial
@@ -126,36 +127,57 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		{
 		Trl_type = 1;
 		TypeCode = 600;
+		Catch = 0;
+		CatchCode = 500;
 		}
 	else if ((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) > equalTol)
 		{
 		Trl_type = 2;
 		TypeCode = 601;
+		Catch = 0;
+		CatchCode = 500;
 		saccEnd = (targInd+(SetSize/2)) % SetSize;
 		}
-	
-	cueType = 2;
-	if (fixCue)
-	{
-		if (Trl_type = 1) // if pro
+	// This if statement should work because it's in an else... a negative value < -equaltol
+	// should have been caught by the first if
+	else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
 		{
-			if ((random(1000)*1000) > neutCueThresh) // if it shouldn't stay neutral...
+		Trl_type = 3;
+		TypeCode = 602;
+		Catch = 1;
+		CatchCode = 501;
+		}
+		
+	cueType = 1;
+	if (fixCue && Max_cueTime > 0)
+	{
+		if (Trl_type == 1) // if pro
+		{
+			randVal = random(1000);
+			//printf("neutral randVal = %d\n",randval);
+			if (randVal >= neutCueThresh) // if it shouldn't stay neutral...
 			{
-				if ((random(100)*100) > cueCongThresh) // if invalid
+				randVal = random(100);
+				//printf("pro/anti randVal = %d\n",randVal);
+				if (randVal > cueCongThresh) // if invalid
 				{
-					cueType = 3; // anti cue
+					cueType = 2; // anti cue
 				} else
 				{
-					cueType = 1; // pro cue
+					cueType = 0; // pro cue
 				}
 			}
 		} else if (Trl_type == 2) // if anti
 		{ 
-			if ((random(1000)*1000) > neutCueThresh) // if it shouldn't stay neutral...
+			randVal = random(1000);
+			//printf("neutral randVal = %d\n",randVal);
+			if (randVal >= neutCueThresh) // if it shouldn't stay neutral...
 			{
-				if ((random(100)*100) > cueCongThresh) // if invalid
+				randVal = random(100);
+				//printf("pro/anti randVal = %d\n",randVal);
+				if (randVal > cueCongThresh) // if invalid
 				{
-					cueType = 1; // pro cue
+					cueType = 0; // pro cue
 				} else
 				{
 					cueType = 2; // anti cue
@@ -163,6 +185,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 			}
 		}
 	}
+	//printf("Cue Color = %d\n",cueColors[cueType]);
+	
 	Event_fifo[Set_event] = 720 + cueType;										// queue strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;
 				
@@ -172,13 +196,9 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	spawnwait SET_CLRS(n_targ_pos); //selects distractor/target colors for this trial
 	
 		
-	// This if statement should work because it's in an else... a negative value < -equaltol
-	// should have been caught by the first if
-	else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
-		{
-		Catch = 1;
-		CatchCode = 501;
-		}
+	
+	
+	
 		/*catchPro = random(2);
 		if (catchPro)
 		{
@@ -194,6 +214,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		}
 		}
 	*/
+	//printf("SETA_TRL: SingDiffulty = %d\n",singDifficulty);
+	//printf("Catch = %d\n",Catch);
 	
 	
 	// Send catch code    eventCode
@@ -202,7 +224,6 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	spawnwait ANTI_PGS(curr_target,							// set above
 			singDifficulty,								// singleton difficulty - H and V set in DEFAULT.pro
-			Catch, 										// Is this a catch trial?
 			fixation_size, 								// see DEFAULT.pro and ALL_VARS.pro
 			fixation_color, 							// see SET_CLRS.pro
 			cue_color,
@@ -244,6 +265,13 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		{
 		Curr_holdtime 	= 500;
 		}
+		
+	cuetime_diff = Max_cueTime - Min_cueTime;
+	per_jitter 	= random(1001)/1000.0;
+	jitter = cuetime_diff*per_jitter;
+	
+	curr_cuetime = round(Min_cueTime + jitter);
+	
 	// -----------------------------------------------------------------------------------------------
 	// 5) Select current fixation offset SOA
 	if (soa_mode==1)

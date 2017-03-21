@@ -13,94 +13,14 @@ declare int stop_sig_color_r, stop_sig_color_g, stop_sig_color_b;
 declare int ignore_sig_color_r, ignore_sig_color_g, ignore_sig_color_b;
 declare int fixation_color_r, fixation_color_g, fixation_color_b;
 declare int target_color_r, target_color_g, target_color_b;
-declare hide int id;
 declare hide int run_anti_sess = 9;
-declare hide float chkTime;
-
+		
 declare INFOS();
 
 	process INFOS()
 			{
 			
-			if (State == run_anti_sess)
-			{
-				Event_fifo[Set_event] = StartInfos_;
-				Set_event = (Set_event + 1) % Event_fifo_N;
-				
-				// Loop and send stimulus angles and stim difficulties
-				id = 0;
-				
-				printf("SetSize = %d\n",SetSize);
-				while (id < SetSize)
-				{
-					chkTime = time();
-					
-					/*while (time() < chkTime + 1000)
-					{
-						nexttick;
-					}
-					*/
-					printf("This Angle = %d\n",5000 + Angle_list[id]);
-					printf("This Diff = %d\n",6000 + (100 * (id+1)) + distDifficulty[id]);
-					Event_fifo[Set_event] = 5000 + Angle_list[id];
-					Set_event = (Set_event + 1) % Event_fifo_N;
-					
-					Event_fifo[Set_event] = 6000 + (100 * (id+1)) + distDifficulty[id];
-					Set_event = (Set_event + 1) % Event_fifo_N;
-					
-					/*while (time() < (chkTime + 500))
-					{
-						nexttick;
-					}
-					*/
-					nexttick;
-					
-					
-					id = id + 1;
-					
-				}
-					
-				Event_fifo[Set_event] = InfosZero + Trl_Outcome;				// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				/*Event_fifo[Set_event] = InfosZero + Max_sacc_duration;			// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				Event_fifo[Set_event] = InfosZero + Max_saccade_time;			// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				Event_fifo[Set_event] = InfosZero + Punish_time;				// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				Event_fifo[Set_event] = InfosZero + Reward_Duration;			// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				Event_fifo[Set_event] = InfosZero + Reward_Offset;				// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				Event_fifo[Set_event] = InfosZero + Targ_hold_time;				// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				Event_fifo[Set_event] = InfosZero + Tone_Duration;				// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-					
-				
-				Event_fifo[Set_event] = InfosZero + (X_Gain * 100) + 1000;		// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-					
-				Event_fifo[Set_event] = InfosZero + (X_Offset * 100) + 1000;	// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-						
-				Event_fifo[Set_event] = InfosZero + (Y_Gain * 100) + 1000;		// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-					
-				Event_fifo[Set_event] = InfosZero + (Y_Offset * 100) + 1000;	// Send event and...	
-				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
-				*/
-				Event_fifo[Set_event] = EndInfos_;									// Let Matlab know that trial infos are finished streaming in...
-				Set_event = (Set_event + 1) % Event_fifo_N;							// ...incriment event queue.	
-				
-			} else if (State == run_search_sess) 
+			if (State == run_search_sess) 
 				{
 				Event_fifo[Set_event] = StartInfos_;								// Let Matlab know that trial infos are going to start streaming in...
 				Set_event = (Set_event + 1) % Event_fifo_N;							// ...incriment event queue.
@@ -224,7 +144,11 @@ declare INFOS();
 				
 				}
 
-			else
+			/*else if (State == run_anti_sess) 
+			{
+				printf("Nothing to send for anti\n");
+				// eventCodes     Here's where we would put any additional needed event codes
+			} */else if (State != run_anti_sess)
 				{
 			
 				stop_sig_color_r	= Stop_sig_color[0];

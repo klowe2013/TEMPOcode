@@ -88,7 +88,7 @@ process ABORT()
 		}	
 	else if (State == run_anti_sess)
 		{
-		spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
+		/*spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
 				go_weight,						// ...trial.  This happens once outside of the while...
 				stop_weight,					// ...loop just to set up for the first iteration. After...
 				ignore_weight,					// ...that SETC_TRL.pro will be called by END_TRL.pro.
@@ -97,6 +97,7 @@ process ABORT()
 				min_holdtime,
                 max_holdtime,
 				expo_jitter);
+		*/
 		}
 	nexttick 50; 								// this is just here to prevent vdosync buffer overflows if subject is on edge of fix window	
 	                                            

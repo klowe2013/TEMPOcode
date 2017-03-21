@@ -66,7 +66,6 @@ declare hide float 	d11_ecc;
 
 declare ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 				int singDifficulty,
-				int isCatch,
 				float fixation_size,                    										// see DEFAULT.pro and ALL_VARS.pro
 				int fixation_color,                     										// see SET_CLRS.pro
 				int cue_color,
@@ -84,7 +83,6 @@ declare ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 				int singDifficulty,
-				int isCatch,
 				float fixation_size,                    										// see DEFAULT.pro and ALL_VARS.pro
 				int fixation_color,                     										// see SET_CLRS.pro
 				int cue_color,
@@ -111,6 +109,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int   	fill        = 1;										
 	declare hide float 	targH;
 	declare hide float	targV;
+	declare hide float zeroTol = .01;
 	//declare hide int 	distDifficulty[12];
 	declare hide int 	distCode;
 	/*declare hide int randVal;
@@ -132,13 +131,14 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int   	blank       = 0;										
 	declare hide int	fixation_pd = 1;										
 	declare hide int	fixation    = 2;
-	declare hide int 	cue_pd 		= 3;
-	delcare hide int 	cue 		= 4;
-	declare hide int	plac_pd   	= 5;										
-	declare hide int	plac      	= 6;	
-	declare hide int	target_f_pd = 7;										
-	declare hide int	target_f  	= 8;
-	declare hide int	target      = 9;										
+	//declare hide int 	cue_pd 		= 3;
+	declare hide int 	cue 		= 3;
+	//declare hide int	plac_pd   	= 4;										
+	//declare hide int	plac      	= 5;	
+	declare hide int	target_f_pd = 4;										
+	declare hide int	target_f  	= 5;
+	declare hide int	target      = 6;			
+	declare hide int 	targ_only   = 7;
 	
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
@@ -169,12 +169,13 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	// Get distractor and target sizes
 	// The below should be eliminated if we put the "catch"
 	//    in the singleton difficulties, but kept for now
-	if (isCatch)
+	//printf("ANTI_PGS: Catch = %d, singDiff = %d\n",Catch,singDifficulty);
+	if (Catch)
 	{
 		targH = catchH;
 		targV = catchV;
 	}
-	else if (!isCatch)
+	else if (!Catch)
 	{
 		targH = stimHorizontal[singDifficulty];
 		targV = stimVertical[singDifficulty];
@@ -213,11 +214,13 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	//----------------------------------------------------------------------------------------------------------------------
 	// Draw pg 3
 	// print("cue with photodiode");
-	dsendf("rw %d,%d;\n",cue_pd,cue_pd); 												// draw first pg of video memory
+	
+	/*dsendf("rw %d,%d;\n",cue_pd,cue_pd); 												// draw first pg of video memory
 	dsendf("cl:\n");																			// clear screen
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
-    
+    */
+	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 4	  
 	// print("cue");
@@ -226,6 +229,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
     nexttick;
 	
+	/* See if cutting out placeholders helps us
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 5	 
 	// print("placeholders with photodiode");
@@ -288,6 +292,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	
 	
 	nexttick;
+	*/
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 7	 
@@ -347,7 +352,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
 	
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	//spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
     nexttick;
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
@@ -388,11 +393,40 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		}
 	nexttick; 
 	
+	// Draw pg 10	  
+	// print("target only");
+	dsendf("rw %d,%d;\n",targ_only,targ_only);  														// draw pg 4                                        
+	dsendf("cl:\n");																			// clear screen
+
+	if (SetSize > 0)
+		{
+		//if ((targV - targH) > zeroTol) // pro trial, leave on target
+		//{
+			spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+		//} else 
+		if ((targH - targV) > zeroTol) // anti trial, leave on opposite
+		{	
+			id = (targInd + (SetSize/2)) % SetSize;
+			spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+		}
+		}
+	if (soa_mode==1)
+		{
+		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, open, deg2pix_X, deg2pix_Y);
+		}
+	else
+		{
+		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);		
+		}
+	nexttick; 
+	
+	//printf("reached blank start\n");
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 0 (last is displayed first)	
 	// print("blank"); 																			
 	dsendf("rw %d,%d;\n",blank,blank);                                          				// draw the blank screen last so that it shows up first
 	dsendf("cl:\n");                                                                            // clear screen (that's all)
+	//printf("reached blank end\n");
 	
 	
 	}

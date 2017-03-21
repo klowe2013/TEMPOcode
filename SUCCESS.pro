@@ -157,7 +157,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 		}
 	else if (State == run_anti_sess)
 		{
-		spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
+		/*spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
 				go_weight,						// ...trial.  This happens once outside of the while...
 				stop_weight,					// ...loop just to set up for the first iteration. After...
 				ignore_weight,					// ...that SETC_TRL.pro will be called by END_TRL.pro.
@@ -166,6 +166,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 				min_holdtime,
                 max_holdtime,
 				expo_jitter);
+		*/
 		}
 	
 		

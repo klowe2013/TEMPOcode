@@ -54,13 +54,14 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide int   	blank       = 0;
 	declare hide int	fixation_pd = 1;
 	declare hide int	fixation    = 2;
-	declare hide int 	cue_pd 		= 3;
-	declare hide int 	cue 		= 4;
-	declare hide int	plac_pd   	= 5;
-	declare hide int	plac      	= 6;
-	declare hide int	target_f_pd = 7;
-	declare hide int	target_f    = 8;
-	declare hide int	target      = 9;
+	//declare hide int 	cue_pd 		= 3;
+	declare hide int 	cue 		= 3;
+	//declare hide int	plac_pd   	= 4;
+	//declare hide int	plac      	= 5;
+	declare hide int	target_f_pd = 4;
+	declare hide int	target_f    = 5;
+	declare hide int	target      = 6;
+	declare hide int 	targ_only   = 7;
 	
 	// Assign values to success and failure so they are more readable
 	declare hide int	success		 = 1;
@@ -115,15 +116,17 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	//printf(" Random Trials(%d",Rand_Comp_Trl_number);
 
 // Need to change the below to reflect Pro/Anti vars of interest...
-printf(" pro correct = %d", Pro_Comp_Trl_number);
-printf("    %d    %d",ProPerAcc, avg_pro_rt);
 printf("\n");
-printf(" anti correct = %d", Anti_Comp_Trl_number);
-printf("    %d    %d",AntiPerAcc, avg_anti_rt);
-printf("\n");
-printf(" catch correct = %d", Catch_Comp_Trl_number);
-printf("    %d",CatchPerAcc);
-printf("\n");
+printf("SUMMARY:          # Correct      %% Correct        RT\n");
+printf(" pro correct   =     %d              %d         %d\n", Pro_Comp_Trl_number,ProPerAcc, avg_pro_rt);
+//printf("    %d    %d",ProPerAcc, avg_pro_rt);
+//printf("\n");
+printf(" anti correct  =     %d              %d         %d\n", Anti_Comp_Trl_number,AntiPerAcc, avg_anti_rt);
+//printf("    %d    %d",AntiPerAcc, avg_anti_rt);
+//printf("\n");
+printf(" catch correct =     %d              %d\n", Catch_Comp_Trl_number,CatchPerAcc);
+//printf("    %d",CatchPerAcc);
+//printf("\n");
 
 /*if (SingMode == 0)
 	{
@@ -176,6 +179,9 @@ else if (SingMode == 1)
 	Event_fifo[Set_event] = TrialStart_;									// queue TrialStart_ strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
 	
+	spawnwait SETA_TRL;
+	
+	//printf("sending fixation_pd... %d\n",fixation_pd);
 	dsendf("vp %d\n",fixation_pd);											// flip the pg to the fixation stim with pd marker
 	fix_spot_time = time();  												// record the time
 	Event_fifo[Set_event] = FixSpotOn_;										// queue strobe
@@ -194,13 +200,21 @@ else if (SingMode == 1)
 		if (stage == need_fix)
 			{		
 			if (In_FixWin)													// If the eyes have entered the fixation window (before time, see below)...
-				{
+			{
 				aquire_fix_time = time();									// ...function call to time to note current time and...
 				Trl_Start_Time = aquire_fix_time;							// Global output
 				Event_fifo[Set_event] = Fixate_;							// ...queue strobe...
 				Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
-				stage = fixating_ph;											// ...advance to the next stage.
+				if (curr_cuetime > 0)
+				{
+					stage = fixating_cue;											// ...advance to the next stage.
+				} else
+				{
+					stage = fixating_targ;
+					plac_duration = 0;
 				}
+				
+			}
 			else if (time() > fix_spot_time + allowed_fix_time)				// But if time runs out...
 				{
 				Trl_Outcome = no_fix;    									// TRIAL OUTCOME ERROR (no fixation)
@@ -231,13 +245,15 @@ else if (SingMode == 1)
 				}
 			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime)	// But if the eyes are still in the window at end of holdtime...
 				{
+				//printf("Sending cue screen: %d\n",cue_pd);
 				Event_fifo[Set_event] = CueOn_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;
-				dsendf("vp %d\n",cue_pd);								// ...flip the pg to the placeholders with pd marker...	
+				//dsendf("vp %d\n",cue_pd);								// ...flip the pg to the placeholders with pd marker...	
 				dsendf("XM RFRSH:\n"); 										// ...wait one vetical retrace...
 				dsendf("vp %d\n",cue);									// ...flip the pg to the placeholders without pd marker.
 				//dsendf("wm %d\n", plac_duration); // set as a variable in ALLVARS and add a random jitter
-				stage = fixating_ph;
+				stage = fixating_targ;
+				plac_duration = 0;
 				}	
 			else if (StimDone == 0 && StimTm == 1 && In_FixWin && time() > aquire_fix_time + (curr_holdtime - 150))	// But if the eyes are still in the window at end of holdtime...
 				{ 
@@ -246,7 +262,7 @@ else if (SingMode == 1)
 				}
 			}
 	// STAGE fixating placeholders (the subject is looking at the fixation point waiting for placeholder onset)		
-		else if (stage == fixating_ph)
+		/*else if (stage == fixating_ph)
 			{
 			if (!In_FixWin)													// If the eyes stray out of the fixation window...
 				{
@@ -282,6 +298,7 @@ else if (SingMode == 1)
 					StimDone = 1;
 				}
 			}
+		*/
 	//--------------------------------------------------------------------------------------------
 	// STAGE fixating target(the subject is looking at the fixation point waiting for target onset)					
 	else if (stage == fixating_targ)
@@ -296,13 +313,20 @@ else if (SingMode == 1)
 				printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
 				trl_running = 0;											// ...and terminate the trial.
 				}	
-			else if (In_FixWin)	
+			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime + curr_cuetime)	
 				{
 				Event_fifo[Set_event] = Target_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;
 				dsendf("vp %d\n",target_f_pd);							// ...flip the pg to target, fixation, pd
 				targ_time = time(); 									// ...record the time...
 				
+				/*while (time() < (targ_time+200))
+				{
+					nexttick;
+				}
+				*/
+				//printf("Showing target_f: %d\n",target_f);
+				//printf("search_fix_time = %d\n",search_fix_time);
 				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
 				dsendf("vp %d\n",target_f);								// ...and flip the pg to target plus fixation
 				dsendf("wm %d\n",search_fix_time);                 //declared at beginning of file - wait until fixation offset to respond
@@ -388,6 +412,8 @@ else if (SingMode == 1)
 						Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
 						printf("rt = %d\n",saccade_time - targ_time - search_fix_time - plac_duration);				// ...tell the user whats up...
 						current_rt = saccade_time - targ_time - search_fix_time - plac_duration;
+						dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+						dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
 						stage = in_flight;											// ...and advance to the next stage.
 						
 							if (saccade_time - fix_off_time < search_fix_time + plac_duration)
@@ -437,6 +463,7 @@ else if (SingMode == 1)
 				time() > fix_off_time + search_fix_time + plac_duration + max_saccade_time)				// ...and a saccade was supposed to be made.
 				{
 				Trl_Outcome = no_saccade;           						// TRIAL OUTCOME ERROR - made saccade on catch trial
+				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
 				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
 				Event_fifo[Set_event] = CatchIncorrectNG_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;
@@ -444,13 +471,14 @@ else if (SingMode == 1)
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
 				lastsearchoutcome = failure;
 				printf("Error (no saccade)\n");								// ...tell the user whats up...
-				//spawn SVR_BELL();
+				spawn SVR_BELL();
 				trl_running = 0;											// ...and terminate the trial.
 				}			
 			else if (Catch == 1 && In_FixWin && 
 				time() > fix_off_time + search_fix_time + plac_duration + catch_hold_time)
 				{
 				Trl_Outcome = nogo_correct;           						// Catch trial success
+				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
 				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
 				Event_fifo[Set_event] = CatchCorrect_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;

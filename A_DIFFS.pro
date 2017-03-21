@@ -44,7 +44,9 @@ process A_DIFFS()
 		thisVal = targDiffProbs[it]*100;
 		cumTProbs[it] = (thisVal/sumProbs)+lastVal; // Add this percentage*100
 		lastVal = cumTProbs[it]; // CDF so far = lastVal
+		//printf("cumTProbs[it] = %d\n",cumTProbs[it]);
 		it = it+1;
+		
 	}
 	nexttick;
 	
@@ -66,8 +68,8 @@ process A_DIFFS()
 	//printf("singDifficulty = %d\n",singDifficulty);
 	
 	// Send target location code       eventCode
-	Event_fifo[Set_event] = 6000 + (100*targInd) + singDifficulty;		// Set a strobe to identify this file as a Search session and...	
-	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+	//Event_fifo[Set_event] = 6000 + (100*targInd) + singDifficulty;		// Set a strobe to identify this file as a Search session and...	
+	//Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 	
 	
 	if (SearchType == 2)
@@ -77,7 +79,13 @@ process A_DIFFS()
 		id = 0;
 		while (id < SetSize)
 		{
-			distDifficulty[id] = oppDiff;
+			if (id == targInd)
+			{
+				distDifficulty[id] = singDifficulty;
+			} else
+			{
+				distDifficulty[id] = oppDiff;
+			}
 			id = id+1;
 		}
 	} else
@@ -151,8 +159,9 @@ process A_DIFFS()
 				
 			}
 			// Send distractor location and difficulty code       eventCode
-			Event_fifo[Set_event] = 6000 + (100*id) + distDifficulty[id];		// Set a strobe to identify this file as a Search session and...	
-			Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+			//Event_fifo[Set_event] = 6000 + (100*id) + distDifficulty[id];		// Set a strobe to identify this file as a Search session and...	
+			//Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+			nexttick;
 			
 			id = id+1;
 		}
