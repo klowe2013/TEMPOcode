@@ -46,7 +46,10 @@ process END_TRL(int trl_outcome)
 		}
 	else if (Catch == 0) // If its not a cathc trial...
 		{
-		Reward_duration = Base_Reward_time;				//GLOBAL for use in INFOS.pro
+		
+		Reward_duration = Base_Reward_time-(Base_Reward_time*rewdDiscount);				//GLOBAL for use in INFOS.pro
+		printf("Reward Duration = %d\n",Reward_duration);
+		printf("rewdDiscount = %d\n",rewdDiscount);
 		Success_tone = Success_Tone_medR;               //GLOBAL for use in INFOS.pro
 	
 		Punish_time = Base_Punish_time;					//GLOBAL for use in INFOS.pro
@@ -118,12 +121,39 @@ process END_TRL(int trl_outcome)
 			{
 				Pro_Comp_Trl_number = Pro_Comp_Trl_number + 1;
 				ProPerAcc = (Pro_Comp_Trl_number/(Pro_Comp_Trl_number+pro_inacc_sacc))*100;
+				if (isCong == 1)
+				{
+					Pro_Cong_Trl_number = Pro_Cong_Trl_number + 1;
+					ProCongAcc = (Pro_Cong_Trl_number/(Pro_Cong_Trl_number+pro_cong_inacc))*100;
+				} else if (isCong == 0)
+				{
+					Pro_ICong_Trl_number = Pro_ICong_Trl_number + 1;
+					ProICongAcc = (Pro_ICong_Trl_number/(Pro_ICong_Trl_number+pro_icong_inacc))*100;
+				} else if (isCong == 2)
+				{
+					Pro_CCong_Trl_number = Pro_CCong_Trl_number + 1;
+					ProCCongAcc = (Pro_CCong_Trl_number/(Pro_CCong_Trl_number+pro_ccong_inacc))*100;
+				}
+				
 				cum_pro_rt = cum_pro_rt + current_rt;
 				avg_pro_rt = cum_pro_rt/Pro_Comp_Trl_number;
 			} else if (Trl_type == 2) // antisaccade
 			{
 				Anti_Comp_Trl_number = Anti_Comp_Trl_number + 1;
 				AntiPerAcc = (Anti_Comp_Trl_number/(Anti_Comp_Trl_number+anti_inacc_sacc))*100;
+				if (isCong == 0)
+				{
+					Anti_Cong_Trl_number = Anti_Cong_Trl_number + 1;
+					AntiCongAcc = (Anti_Cong_Trl_number/(Anti_Cong_Trl_number+anti_cong_inacc))*100;
+				} else if (isCong == 1)
+				{
+					Anti_ICong_Trl_number = Anti_ICong_Trl_number + 1;
+					AntiICongAcc = (Anti_ICong_Trl_number/(Anti_ICong_Trl_number+anti_icong_inacc))*100;
+				} else if (isCong == 2)
+				{
+					Anti_CCong_Trl_number = Anti_CCong_Trl_number + 1;
+					AntiCCongAcc = (Anti_CCong_Trl_number/(Anti_CCong_Trl_number+anti_ccong_inacc))*100;
+				}
 				cum_anti_rt = cum_anti_rt + current_rt;
 				avg_anti_rt = cum_anti_rt/Anti_Comp_Trl_number;
 			}
@@ -219,10 +249,36 @@ process END_TRL(int trl_outcome)
 			{
 				pro_inacc_sacc = pro_inacc_sacc + 1;
 				ProPerAcc = (Pro_Comp_Trl_number/(Pro_Comp_Trl_number + pro_inacc_sacc))*100;
+				if (isCong == 1)
+				{
+					pro_cong_inacc = pro_cong_inacc + 1;
+					ProCongAcc = (Pro_Cong_Trl_number/(Pro_Cong_Trl_number + pro_cong_inacc))*100;
+				} else if (isCong == 0)
+				{
+					pro_icong_inacc = pro_icong_inacc + 1;
+					ProICongAcc = (Pro_ICong_Trl_number/(Pro_ICong_Trl_number + pro_icong_inacc))*100;
+				} else if (isCong == 2)
+				{
+					pro_ccong_inacc = pro_ccong_inacc + 1;
+					ProCCongAcc = (Pro_CCong_Trl_number/(Pro_CCong_Trl_number + pro_ccong_inacc))*100;
+				}
 			} else if (Trl_type == 2) // anti
 			{
 				anti_inacc_sacc = anti_inacc_sacc + 1;
 				AntiPerAcc = (Anti_Comp_Trl_number/(Anti_Comp_Trl_number + anti_inacc_sacc))*100;
+				if (isCong == 0)
+				{
+					anti_cong_inacc = anti_cong_inacc + 1;
+					AntiCongAcc = (Anti_Cong_Trl_number/(Anti_Cong_Trl_number + anti_cong_inacc))*100;
+				} else if (isCong == 1)
+				{
+					anti_icong_inacc = anti_icong_inacc + 1;
+					AntiICongAcc = (Anti_ICong_Trl_number/(Anti_ICong_Trl_number + anti_icong_inacc))*100;
+				} else if (isCong == 2)
+				{
+					anti_ccong_inacc = anti_ccong_inacc + 1;
+					AntiCCongAcc = (Anti_CCong_Trl_number/(Anti_CCong_Trl_number + anti_ccong_inacc))*100;
+				}
 			}
 			/*
 				if (SingMode == 0)

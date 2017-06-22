@@ -67,13 +67,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int it;
 	declare hide int lastVal;
 	declare hide int sumProbs;
-	declare hide int cumTarg[8];
-	declare hide int randVal;
-	declare hide int lastVal;
-	declare hide int thisVal;
-	declare hide int sumLoc;
+	
 	//declare hide int ii;
-	declare hide int break;
 		
 	// -----------------------------------------------------------------------------------------------
 	// Update block; trls per block set in DEFAULT.pro
@@ -114,40 +109,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	spawnwait SET_LOCS();
 	nexttick;
 	
-	it = 0;
-	sumLoc = 0;
-	while (it < SetSize) 
-	{
-		//printf("congProb[%d] = %d\n",it,congProb[it]);
-		sumLoc = sumLoc+targProb[it];
-		it = it+1;
-	}
-	nexttick;
-	
-	it = 0;
-	lastVal = 0;
-	thisVal = 0;
-	while (it < SetSize)
-	{
-		thisVal = targProb[it]*100;
-		cumTarg[it] = (thisVal/sumLoc)+lastVal;
-		lastVal = cumTarg[it];
-		it = it+1;
-	}
-	randVal = random(100);
-	targInd = 0;
-	break = 0;
-	while (randVal >= cumTarg[targInd] && break == 0)
-	{
-		targInd = targInd+1;
-		if (targInd == SetSize)
-		{
-			targInd = SetSize-1;
-			break = 1;
-		}
-	}
-		
-	//targInd = random(SetSize);
+	targInd = random(SetSize);
 	targ_angle = Angle_list[targInd];
 	targ_ecc = Eccentricity_list[targInd];
 	
@@ -156,7 +118,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 	
 	spawnwait A_DIFFS; // selects difficulty levels for this trial
-	//printf("\n\nAfter A_DIFFS, singDiff = %d\n\n",singDifficulty);
+	
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
 	
 	// Now, let's test whether this difficulty is a pro or anti trial
@@ -166,14 +128,14 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		Trl_type = 1;
 		TypeCode = 600;
 		Catch = 0;
-		//CatchCode = 500;
+		CatchCode = 500;
 		}
 	else if ((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) > equalTol)
 		{
 		Trl_type = 2;
 		TypeCode = 601;
 		Catch = 0;
-		//CatchCode = 500;
+		CatchCode = 500;
 		saccEnd = (targInd+(SetSize/2)) % SetSize;
 		}
 	// This if statement should work because it's in an else... a negative value < -equaltol
@@ -183,7 +145,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		Trl_type = 3;
 		TypeCode = 602;
 		Catch = 1;
-		//CatchCode = 501;
+		CatchCode = 501;
 		}
 		
 	cueType = 1;
@@ -257,8 +219,8 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	
 	// Send catch code    eventCode
-	//Event_fifo[Set_event] = CatchCode;		// Set a strobe to identify this file as a Search session and...	
-	//Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
+	Event_fifo[Set_event] = CatchCode;		// Set a strobe to identify this file as a Search session and...	
+	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 	
 	spawnwait ANTI_PGS(curr_target,							// set above
 			singDifficulty,								// singleton difficulty - H and V set in DEFAULT.pro

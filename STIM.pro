@@ -13,6 +13,8 @@ process STIM(int channel)
 	declare hide int on   = 1;	
 	declare hide int off  = 0;	
 	
+	//printf("STIM.pro Reached\n");
+	
 	mio_dig_set(channel,on);		// Start sending the TTL
 	wait(2);						// Wait one ms
 	mio_dig_set(channel,off);		// Stop sending the TTL

@@ -27,6 +27,24 @@ declare float 	cum_anti_rt = 0;
 declare float 	Catch_Comp_Trl_number = 0;
 declare float 	catch_inacc_sacc = 0;
 declare float 	CatchPerAcc = 0;
+declare float	Pro_Cong_Trl_number = 0;
+declare float	pro_cong_inacc = 0;
+declare float 	ProCongAcc = 0;
+declare float	Pro_ICong_Trl_number = 0;
+declare float	pro_icong_inacc = 0;
+declare float 	ProICongAcc = 0;
+declare float	Pro_CCong_Trl_number = 0;
+declare float	pro_ccong_inacc = 0;
+declare float 	ProCCongAcc = 0;
+declare float	Anti_Cong_Trl_number = 0;
+declare float	anti_cong_inacc = 0;
+declare float 	AntiCongAcc = 0;
+declare float	Anti_ICong_Trl_number = 0;
+declare float	anti_icong_inacc = 0;
+declare float 	AntiICongAcc = 0;
+declare float	Anti_CCong_Trl_number = 0;
+declare float	anti_ccong_inacc = 0;
+declare float 	AntiCCongAcc = 0;
 
 
 //----------------------------------------------------------------------------------------------------------------
@@ -208,6 +226,11 @@ declare int 	neutCueThresh;
 declare int 	cueType;
 declare int 	Min_cueTime;
 declare int 	Max_cueTime;
+declare float 	rewdDiscount = 0;
+declare int 	oppColor[3];
+declare int 	lumOffset;
+declare int 	isCong;
+declare int 	targProb[8];
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;

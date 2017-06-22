@@ -603,6 +603,7 @@ process DEFAULT(int state,
 			Eccentricity_list[7]	= 15.6;
 			Eccentricity_list[8]	= 15.6;
 			
+			
 			Fix_win_size = 0;
 			Targ_win_size = 2.5;
 			
@@ -802,7 +803,7 @@ if(monkey == helmholtz)
 		// distance from center of subjects eyeball to screen
 		if(room == 28)
 			{
-			Subj_dist	= 440.0;
+			Subj_dist	= 430.0;
 			TrainingStill = 0;	//0 = body monitor off	
 			}
 		else if (room == 29)
@@ -1245,8 +1246,8 @@ if(monkey == helmholtz)
 			TargOrt					= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
 			SearchEcc				= 6; //entricity in degrees; use to make fixed eccentricity 
 			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
-			SingCol					= 1; // 0 = red - see SET_CLRS.pro
-			DistCol 				= 0; // 1 = green
+			SingCol					= 0; // 0 = red - see SET_CLRS.pro
+			DistCol 				= 1; // 1 = green
 			PercSingTrl				= 50; //Percentage of trials where singleton is present, see LOC_RAND.pro for code
 			soa_mode				= 0;  //fixation response soa; 1=on, 0=off 
 			
@@ -1268,7 +1269,7 @@ if(monkey == helmholtz)
 			ndDifficulties 			= 3;
 			ntDifficulties 			= 3;
 			doCongruency 			= 0;
-			angleOffset				= -15;
+			angleOffset				= 0;
 			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
 			max_plactime			= 700;
 			min_plactime			= 1000;
@@ -1281,10 +1282,10 @@ if(monkey == helmholtz)
 											// That being the case, this percentage needs to be even on both pro and anti
 											// trials in order to be non-predictive of the ensuing stimulus
 			
-			targ_hold_time			= 200;
+			targ_hold_time			= 400;
 			Max_sacc_duration		= 50;
 			Min_saccade_time		= 70;
-			Max_saccade_time 		= 300;
+			Max_saccade_time 		= 1000;
 			Min_Holdtime			= 300;  // minimum time after fixation before target presentation
 			Max_Holdtime			= 800; // maximum time after fixation before target presentation		
 			Min_cueTime 			= 0;
@@ -1292,10 +1293,13 @@ if(monkey == helmholtz)
 			Go_weight				= 100.0;
 			Stop_weight				= 0.0;
 			Ignore_weight			= 0.0;
-							
+			Inter_trl_int			= 2000;	// how long between trials (only works if Fixed_trl_length == 0)
+//					
 			NonSingleton_color[r_]		= 35;	
 			NonSingleton_color[g_]		= 33;	
 			NonSingleton_color[b_]		= 27; 
+			
+			lumOffset = 0;
 			
 			// Set colors for the cue conditions
 			cueColors[0] 			= 2;
@@ -1325,7 +1329,16 @@ if(monkey == helmholtz)
 			Angle_list[5]			= 225;
 			Angle_list[6]			= 180; //9:00
 			Angle_list[7]			= 135;			
-					
+			
+			targProb[0]			= 1; //12:00	
+			targProb[1]			= 1;
+			targProb[2]			= 1; //3:00
+			targProb[3]			= 1;
+			targProb[4]			= 1; //6:00
+			targProb[5]			= 1;
+			targProb[6]			= 1; //9:00
+			targProb[7]			= 1;			
+						
 			catchDifficulty   = 5;
 			catchDistDiff 	  = 1;
 			catchH 			  = 1;
@@ -1353,8 +1366,8 @@ if(monkey == helmholtz)
 			
 			// Relative probability of color singleton options
 			targDiffProbs[0] = 1;
-			targDiffProbs[1] = 0;
-			targDiffProbs[2] = 0;
+			targDiffProbs[1] = 1;
+			targDiffProbs[2] = 1;
 			targDiffProbs[3] = 0;
 			targDiffProbs[4] = 0;
 			targDiffProbs[5] = 0;
@@ -1383,7 +1396,7 @@ if(monkey == helmholtz)
 			
 			// Relative probability of non-singleton options
 			distDiffProbs[0] = 1;
-			distDiffProbs[1] = 0;
+			distDiffProbs[1] = 1;
 			distDiffProbs[2] = 1;
 			distDiffProbs[3] = 0;
 			distDiffProbs[4] = 0;

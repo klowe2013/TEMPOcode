@@ -40,8 +40,8 @@ declare INFOS();
 						nexttick;
 					}
 					*/
-					printf("This Angle = %d\n",5000 + Angle_list[id]);
-					printf("This Diff = %d\n",6000 + (100 * (id+1)) + distDifficulty[id]);
+					//printf("This Angle = %d\n",5000 + Angle_list[id]);
+					//printf("This Diff = %d\n",6000 + (100 * (id+1)) + distDifficulty[id]);
 					Event_fifo[Set_event] = 5000 + Angle_list[id];
 					Set_event = (Set_event + 1) % Event_fifo_N;
 					
@@ -63,6 +63,9 @@ declare INFOS();
 				Event_fifo[Set_event] = InfosZero + Trl_Outcome;				// Send event and...	
 				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
 						
+				Event_fifo[Set_event] = 500 + lumOffset;
+				Set_event = (Set_event + 1) % Event_fifo_N;
+			
 				/*Event_fifo[Set_event] = InfosZero + Max_sacc_duration;			// Send event and...	
 				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
 						

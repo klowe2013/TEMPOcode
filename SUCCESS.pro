@@ -134,7 +134,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 				 expo_jitter,
 				 expo_jitter_soa);
 		}
-	else if (State == run_gonogo_sess)
+	/*else if (State == run_gonogo_sess)
 		{
 		spawn	SETG_TRL(n_targ_pos,				// Select variables for the first mem guided...					
 				min_holdtime,           		// ...trial.  This happens once outside of the while...
@@ -144,7 +144,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 				max_soa,
 				expo_jitter_soa);
 		}
-		
+	*/	
 	else if (State == run_delayed_sess)
 		{
 		spawn	SETD_TRL(n_targ_pos,				// Select variables for the first mem guided...					
@@ -155,8 +155,8 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 				max_soa,
 				expo_jitter_soa);
 		}
-	else if (State == run_anti_sess)
-		{
+	//else if (State == run_anti_sess)
+		//{
 		/*spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
 				go_weight,						// ...trial.  This happens once outside of the while...
 				stop_weight,					// ...loop just to set up for the first iteration. After...
@@ -167,7 +167,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
                 max_holdtime,
 				expo_jitter);
 		*/
-		}
+		//}
 	
 		
 	if(State == run_search_sess)

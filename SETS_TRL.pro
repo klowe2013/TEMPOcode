@@ -221,8 +221,8 @@ process SETS_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	// -----------------------------------------------------------------------------------------------
 	// 7) Choose whether to stim
 	//StimTm = Random(2); //allows us to randomize the time stim is delivered; see task stages in SCHTRIAL.pro
-	//StimTm = 1; //Single stim time
-	StimTm = 0; //stim off
+	StimTm = 1; //Single stim time
+	//StimTm = 0; //stim off
 	//StimTm = 5; //For prolonged stim protocol
 	// -----------------------------------------------------------------------------------------------
 	// 8) Choose Eccentricity

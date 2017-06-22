@@ -53,7 +53,7 @@ declare SEND_TTL(int value);
 	// 4 digit event codes can be represented with 14 bits (of 16 available by TDT)
 	// A solution? bit-shift the value so that the event code takes ups bits 2-15, which should be decodable...
 	
-	shiftVal = value << 1;
+	shiftVal = value;// << 1;
 	
 	dioSetA(output, shiftVal & 0xFF);
 	dioSetB(output, (shiftVal >> 8) | 0x80);

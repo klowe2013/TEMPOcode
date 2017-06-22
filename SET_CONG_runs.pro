@@ -87,7 +87,7 @@ process SET_CONG()
 	// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 	// exclusively use alternative 2), then if randVal = 0 then the first option
 	// will be spuriously selected...
-	while (randVal >= cumCong[isCong])
+	while (randVal > cumCong[isCong])
 	{
 		isCong = isCong+1;
 	}
@@ -187,7 +187,7 @@ process SET_CONG()
 		//    let's randomly select one of them
 		randVal = random(100);
 		myInd = 0;
-		while (randVal >= cumDProbs[myInd])
+		while (randVal > cumDProbs[myInd])
 		{
 			myInd = myInd+1;
 		}

@@ -9,6 +9,8 @@ declare hide int Trl_Outcome;			// Global output used in END_TRL
 declare hide int Trl_Start_Time;		// Global output used in END_TRL
 declare hide int LastSearchOutcome;		// Global output used in END_TRL
 
+#include C:/TEMPO/ProcLib/SETA_TRL.pro
+
 declare ANTITR(allowed_fix_time,		// see ALL_VARS.pro and DEFAULT.pro
 				curr_holdtime, 			// see SETC_TRL.pro
 				trl_type, 				// see SETC_TRL.pro
@@ -117,14 +119,14 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 
 // Need to change the below to reflect Pro/Anti vars of interest...
 printf("\n");
-printf("SUMMARY:          # Correct      %% Correct        RT\n");
-printf(" pro correct   =     %d              %d         %d\n", Pro_Comp_Trl_number,ProPerAcc, avg_pro_rt);
+printf("SUMMARY:        # Correct (C/I/S)    %% Corr (C/I/S)    RT\n");
+printf(" pro correct   = %d(%d/%d/%d)         %d(%d/%d/%d)    %d\n", Pro_Comp_Trl_number,Pro_Cong_Trl_number,Pro_ICong_Trl_number,Pro_CCong_Trl_number,ProPerAcc,ProCongAcc,ProICongAcc,ProCCongAcc, avg_pro_rt);
 //printf("    %d    %d",ProPerAcc, avg_pro_rt);
 //printf("\n");
-printf(" anti correct  =     %d              %d         %d\n", Anti_Comp_Trl_number,AntiPerAcc, avg_anti_rt);
+printf(" anti correct  = %d(%d/%d/%d)         %d(%d/%d/%d)    %d\n", Anti_Comp_Trl_number,Anti_Cong_Trl_number,Anti_ICong_Trl_number,Anti_CCong_Trl_number,AntiPerAcc,AntiCongAcc,AntiICongAcc,AntiCCongAcc, avg_anti_rt);
 //printf("    %d    %d",AntiPerAcc, avg_anti_rt);
 //printf("\n");
-printf(" catch correct =     %d              %d\n", Catch_Comp_Trl_number,CatchPerAcc);
+printf(" catch correct =     %d                %d\n", Catch_Comp_Trl_number,CatchPerAcc);
 //printf("    %d",CatchPerAcc);
 //printf("\n");
 
@@ -179,7 +181,15 @@ else if (SingMode == 1)
 	Event_fifo[Set_event] = TrialStart_;									// queue TrialStart_ strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
 	
-	spawnwait SETA_TRL;
+	spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
+				go_weight,						// ...trial.  This happens once outside of the while...
+				stop_weight,					// ...loop just to set up for the first iteration. After...
+				ignore_weight,					// ...that SETC_TRL.pro will be called by END_TRL.pro.
+				staircase,
+				n_SSDs,
+				min_holdtime,
+                max_holdtime,
+				expo_jitter);
 	
 	//printf("sending fixation_pd... %d\n",fixation_pd);
 	dsendf("vp %d\n",fixation_pd);											// flip the pg to the fixation stim with pd marker
@@ -412,8 +422,8 @@ else if (SingMode == 1)
 						Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
 						printf("rt = %d\n",saccade_time - targ_time - search_fix_time - plac_duration);				// ...tell the user whats up...
 						current_rt = saccade_time - targ_time - search_fix_time - plac_duration;
-						dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
-						dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+						//dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+						//dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
 						stage = in_flight;											// ...and advance to the next stage.
 						
 							if (saccade_time - fix_off_time < search_fix_time + plac_duration)
@@ -502,6 +512,12 @@ else if (SingMode == 1)
 								
 				Event_fifo[Set_event] = Correct_sacc;					// ...queue strobe for Neuro Explorer
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.					
+				
+				rewdDiscount = ((aquire_targ_time-saccade_time) - 50)/(max_sacc_duration - 50);
+				if (rewdDiscount < 0)
+				{
+					rewdDiscount = 0;
+				}
 				}
 			else if (time() > saccade_time + max_sacc_duration)				// But, if the eyes are out of the target window and time runs out...
 				{

@@ -65,7 +65,7 @@ process ABORT()
 				 expo_jitter_soa);
 		}
 		
-	else if (State == run_gonogo_sess)
+	/*else if (State == run_gonogo_sess)
 		{
 		spawnwait SETG_TRL(n_targ_pos,				// Select variables for the first mem guided...					
 				min_holdtime,           		// ...trial.  This happens once outside of the while...
@@ -75,7 +75,7 @@ process ABORT()
 				max_soa,
 				expo_jitter_soa);
 		}	
-		
+	*/	
 	else if (State == run_delayed_sess)
 		{
 		spawnwait SETD_TRL(n_targ_pos,				// Select variables for the first mem guided...					
@@ -86,8 +86,8 @@ process ABORT()
 				max_soa,
 				expo_jitter_soa);
 		}	
-	else if (State == run_anti_sess)
-		{
+	//else if (State == run_anti_sess)
+		//{
 		/*spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
 				go_weight,						// ...trial.  This happens once outside of the while...
 				stop_weight,					// ...loop just to set up for the first iteration. After...
@@ -98,7 +98,7 @@ process ABORT()
                 max_holdtime,
 				expo_jitter);
 		*/
-		}
+		//}
 	nexttick 50; 								// this is just here to prevent vdosync buffer overflows if subject is on edge of fix window	
 	                                            
 	

@@ -168,6 +168,7 @@ else if (SingMode == 1)
 	oSetAttribute(object_fix, aVISIBLE); 									// turn on the fixation point in animated graph
 	oSetAttribute(object_targ, aINVISIBLE); 									// turn on the fixation point in animated graph
 	
+	//printf("StimTm = %d\n",StimTm);
 	while (trl_running)														// trials ending will set trl_running = 0
 		{	
 		
@@ -229,8 +230,9 @@ else if (SingMode == 1)
 					stage = fixating_targ;
 					}
 				}	
-			else if (StimDone == 0 && StimTm == 1 && In_FixWin && time() > aquire_fix_time + (curr_holdtime - 150))	// But if the eyes are still in the window at end of holdtime...
+			else if (StimCond == 0 && StimDone == 0 && StimTm == 1 && In_FixWin && time() > aquire_fix_time + (curr_holdtime - 150))	// But if the eyes are still in the window at end of holdtime...
 				{ 
+					//printf("About to Stim on Line 236\n");
 					spawn STIM(stim_channel);
 					StimDone = 1;
 				}

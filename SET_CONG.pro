@@ -38,7 +38,7 @@ process SET_CONG()
 	declare hide int thisVal;
 	declare hide int randVal;
 	declare float 		equalTol = .01;
-	declare hide int isCong;
+	//declare hide int isCong;
 	declare hide int nRel;
 	declare hide int sumProbs;
 	declare hide int sumCong;
@@ -97,7 +97,7 @@ process SET_CONG()
 		// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 		// exclusively use alternative 2), then if randVal = 0 then the first option
 		// will be spuriously selected...
-		while (randVal >= cumCong[isCong])
+		while (randVal > cumCong[isCong])
 		{
 			//printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
 			isCong = isCong+1;
@@ -251,7 +251,7 @@ process SET_CONG()
 			//    let's randomly select one of them
 			randVal = random(100);
 			myInd = 0;
-			while (randVal >= cumDProbs[myInd])
+			while (randVal > cumDProbs[myInd])
 			{
 				myInd = myInd+1;
 			}
@@ -393,7 +393,7 @@ process SET_CONG()
 			//    let's randomly select one of them
 			randVal = random(100);
 			myInd = 0;
-			while (randVal >= cumDProbs[myInd])
+			while (randVal > cumDProbs[myInd])
 			{
 				myInd = myInd+1;
 			}
@@ -440,7 +440,7 @@ process SET_CONG()
 		// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 		// exclusively use alternative 2), then if randVal = 0 then the first option
 		// will be spuriously selected...
-		while (randVal >= cumDProbs[oppDiff])
+		while (randVal > cumDProbs[oppDiff])
 		{
 			oppDiff = oppDiff+1;
 		}

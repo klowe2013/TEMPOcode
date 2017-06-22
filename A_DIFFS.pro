@@ -19,10 +19,10 @@ process A_DIFFS()
 	declare hide float 	cumTProbs[ntDifficulties];
 	declare hide float  cumDProbs[ndDifficulties];
 	declare float 		equalTol = .01;
-	declare hide int isCong;
+	//declare hide int isCong;
 	declare hide int sumCong;
 	declare hide float cumCong[3];
-	
+	declare hide int break;
 	
 	// The below attempts to add probabilistic stuff for target
 	// Get sum of relevant relative probabilities
@@ -42,6 +42,7 @@ process A_DIFFS()
 	while (it < ntDifficulties)
 	{
 		thisVal = targDiffProbs[it]*100;
+		//printf("it = %d, ",it);
 		cumTProbs[it] = (thisVal/sumProbs)+lastVal; // Add this percentage*100
 		lastVal = cumTProbs[it]; // CDF so far = lastVal
 		//printf("cumTProbs[it] = %d\n",cumTProbs[it]);
@@ -58,14 +59,33 @@ process A_DIFFS()
 	// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 	// exclusively use alternative 2), then if randVal = 0 then the first option
 	// will be spuriously selected...
-	while (randVal >= cumTProbs[singDifficulty])
+	if (randVal > 49)
+	{
+		randVal = 100;
+	} else 
+	{
+		randVal = 0;
+	}
+	
+	break = 0;
+	while (randVal >= cumTProbs[singDifficulty] && break == 0)
 	{
 		singDifficulty = singDifficulty+1;
+		if (singDifficulty == ntDifficulties)
+		{
+			singDifficulty = ntDifficulties-1;
+			break = 1;
+		}
 	}
+	/*if (singDifficulty > ntDifficulties)
+	{
+		singDifficulty = ntDifficulties;
+	}
+	*/
 	// Loop should have broken when randVal is in the range of values assigned to a particular
 	// CDF/difficulty level. When it breaks, get the appropriate pro/anti mapping
 	nexttick;
-	//printf("singDifficulty = %d\n",singDifficulty);
+	//printf("randVal = %d, singDifficulty = %d\n",randVal,singDifficulty);
 	
 	// Send target location code       eventCode
 	//Event_fifo[Set_event] = 6000 + (100*targInd) + singDifficulty;		// Set a strobe to identify this file as a Search session and...	
@@ -75,7 +95,23 @@ process A_DIFFS()
 	if (SearchType == 2)
 	{
 		spawnwait SET_CONG();
+		nexttick;
 		//printf("oppDiff = %d\n",oppDiff);
+		if ((distV[oppDiff] - distH[oppDiff]) > equalTol)
+			{
+			isCong = 0;
+			}
+		else if ((distH[oppDiff] - distV[oppDiff]) > equalTol)
+			{
+			isCong = 1;
+			}
+		// This if statement should work because it's in an else... a negative value < -equaltol
+		// should have been caught by the first if
+		else if (((distH[oppDiff] - distV[oppDiff]) < equalTol) || ((distV[oppDiff] - distH[oppDiff]) < equalTol))
+			{
+			isCong = 2;
+			}
+		nexttick;
 		id = 0;
 		while (id < SetSize)
 		{
@@ -91,9 +127,23 @@ process A_DIFFS()
 	} else
 	{
 		spawnwait SET_CONG();
-						
+		nexttick;
+		if ((distV[oppDiff] - distH[oppDiff]) > equalTol)
+			{
+			isCong = 0;
+			}
+		else if ((distH[oppDiff] - distV[oppDiff]) > equalTol)
+			{
+			isCong = 1;
+			}
+		// This if statement should work because it's in an else... a negative value < -equaltol
+		// should have been caught by the first if
+		else if (((distH[oppDiff] - distV[oppDiff]) < equalTol) || ((distV[oppDiff] - distH[oppDiff]) < equalTol))
+			{
+			isCong = 2;
+			}
 		//printf("in A_DIFFS - oppDiff = %d",oppDiff);
-		
+		nexttick;
 		id = 0;
 		while (id < SetSize)
 		{
@@ -152,9 +202,15 @@ process A_DIFFS()
 				// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 				// exclusively use alternative 2), then if randVal = 0 then the first option
 				// will be spuriously selected...
-				while (randVal >= cumDProbs[distDifficulty[id]])
+				break = 0;
+				while (randVal >= cumDProbs[distDifficulty[id]] && break == 0)
 				{
 					distDifficulty[id] = distDifficulty[id]+1;
+					if (distDifficulty[id] == ndDifficulties)
+					{
+						distDifficulty[id] = ndDifficulties-1;
+						break = 1;
+					}
 				}
 				
 			}

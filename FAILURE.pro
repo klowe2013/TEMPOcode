@@ -92,7 +92,7 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 				 expo_jitter,
 				 expo_jitter_soa);
 		}
-	else if (State == run_gonogo_sess)
+	/*else if (State == run_gonogo_sess)
 		{
 		spawn	SETG_TRL(n_targ_pos,				// Select variables for the first mem guided...					
 				min_holdtime,           		// ...trial.  This happens once outside of the while...
@@ -103,7 +103,7 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 				expo_jitter_soa);
 		}
 		
-	else if (State == run_delayed_sess)
+	*/else if (State == run_delayed_sess)
 		{
 		spawn	SETD_TRL(n_targ_pos,				// Select variables for the first mem guided...					
 				min_holdtime,           		// ...trial.  This happens once outside of the while...
@@ -114,8 +114,8 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 				expo_jitter_soa);
 		}	
 		
-	else if (State == run_anti_sess)
-		{
+	//else if (State == run_anti_sess)
+		//{
 		/*spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
 				go_weight,						// ...trial.  This happens once outside of the while...
 				stop_weight,					// ...loop just to set up for the first iteration. After...
@@ -126,9 +126,9 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
                 max_holdtime,
 				expo_jitter);
 		*/
-		}
+		//}
 	
-	if(LastStopOutcome != 2)										// quick way to check if last trial was a stop trial
+	if(LastStopOutcome != 2 && State != run_anti_sess)										// quick way to check if last trial was a stop trial
 		{
 		spawn UPD8_INH(curr_ssd, 									// update the inh graph
 				laststopoutcome,

@@ -103,6 +103,11 @@ process SET_CLRS(n_targ_pos)
 			NonSingleton_color[g_]		= 33;	
 			NonSingleton_color[b_]		= 255;
 			}
+		
+		oppColor[r_] = NonSingleton_color[r_] + lumOffset;
+		oppColor[g_] = NonSingleton_color[g_] + lumOffset;
+		oppColor[b_] = NonSingleton_color[b_] + lumOffset;
+		
 		nexttick;
 		// now let's set cue color
 		if (cueColors[cueType] == 0) // Red
@@ -188,5 +193,10 @@ process SET_CLRS(n_targ_pos)
 	dsendf("cm 249 %d %d %d;\n",					// set the color of the fixation point to 255 (leaves room for many target colors)
 						Cue_color[r_],			// GLOBAL ALERT; Fixation_color is an array so it cannot be passed
 	                    Cue_color[g_],
-						Cue_color[b_]);						
+						Cue_color[b_]);			
+
+	dsendf("cm 248 %d %d %d;\n",					// set the color of the fixation point to 255 (leaves room for many target colors)
+						oppColor[r_],			// GLOBAL ALERT; Fixation_color is an array so it cannot be passed
+	                    oppColor[g_],
+						oppColor[b_]);									
 	}

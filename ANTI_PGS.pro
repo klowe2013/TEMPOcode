@@ -15,10 +15,14 @@
 // modified by kaleb.a.lowe@vanderbilt.edu February 2017
 
 
+#include C:/TEMPO/ProcLib/DRW_SQR.pro
+#include C:/TEMPO/ProcLib/DRW_RECT.pro
+
 declare hide float 	Size;   																	// Global output will be sent as stobes...        										
 declare hide int   	Color;	
 declare hide int  	singColor;
-declare hide int 	distColor;							
+declare hide int 	distColor;	
+declare hide int 	oppCol;						
 declare hide float 	Eccentricity; 
 declare hide float 	Angle;   
 
@@ -147,6 +151,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	color        = 250;//curr_target + 1;	// Figure out the attributes of the current target 
 	singColor 	= 251;
 	distColor  = 250;
+	oppCol 		= 248;
 	
 	angle			= targ_angle; 		
 		//printf("In ANTI_PGS: angle = %d, index = %d",targ_angle,targInd);
@@ -311,7 +316,14 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 				{
+				if (id == ((targInd + SetSize/2) % SetSize))
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				}
+				else
+				{
 				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				}
 				}
 			
 			id = id+1;
@@ -341,7 +353,14 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				if (id == ((targInd + SetSize/2) % SetSize))
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				}
+				else
+				{
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				}
 				}
 			
 			id = id+1;
@@ -373,8 +392,13 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 			{
+				if (id == ((targInd + SetSize/2) % SetSize))
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				}
+				else
+				{
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
 				}
 			}
 			id = id+1;
@@ -407,7 +431,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		if ((targH - targV) > zeroTol) // anti trial, leave on opposite
 		{	
 			id = (targInd + (SetSize/2)) % SetSize;
-			spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], color, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
 		}
 		}
 	if (soa_mode==1)

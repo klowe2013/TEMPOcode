@@ -137,11 +137,11 @@ declare int fix_manual = 1;				//auto fixation task = 1
 //#include C:/TEMPO/ProcLib/SETC_TRL.pro	// sets up all of the input to run a countermanding trial
 #include C:/TEMPO/ProcLib/SETMGTRL.pro
 //#include C:/TEMPO/ProcLib/SETM_TRL.pro
-#include C:/TEMPO/ProcLib/SETG_TRL.pro  // sets up all input to run a gonogo trial
+//#include C:/TEMPO/ProcLib/SETG_TRL.pro  // sets up all input to run a gonogo trial
 #include C:/TEMPO/ProcLib/SETD_TRL.pro  // sets up all input to run a delayed saccade trial
 #include C:/TEMPO/ProcLib/SETS_TRL.pro  // sets up all input to run a search trial
 #include C:/TEMPO/ProcLib/SETA_TRL.pro 	// sets up all input to run a pro/anti trial
-#include C:/TEMPO/ProcLib/GNGTRIAL.pro	// runs a single gonogo guided trial based on input
+//#include C:/TEMPO/ProcLib/GNGTRIAL.pro	// runs a single gonogo guided trial based on input
 #include C:/TEMPO/ProcLib/DELTRIAL.pro 	// runs a single delayed saccade trial based on input
 #include C:/TEMPO/ProcLib/UPD8_INH.pro	// updates inhibition function for cmanding
 #include C:/TEMPO/ProcLib/UPD8_SOA.pro  
@@ -155,7 +155,7 @@ declare int fix_manual = 1;				//auto fixation task = 1
 //#include C:/TEMPO/ProcLib/CMANDING.pro	// countermanding control structure
 //#include C:/TEMPO/ProcLib/MEMORY.pro	// mem guided sacc task control structure
 #include C:/TEMPO/ProcLib/MGUIDE.pro
-#include C:/TEMPO/ProcLib/GONOGO.pro    // gonogo sacc task control structure
+//#include C:/TEMPO/ProcLib/GONOGO.pro    // gonogo sacc task control structure
 #include C:/TEMPO/ProcLib/DELAYED.pro   // delayed guided sacc task control structure
 #include C:/TEMPO/ProcLib/SEARCH.pro	// SEARCH control structure
 
@@ -247,7 +247,7 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 		if (State == run_gonogo_sess)	// user wants to run the go/nogo task
 			{                           
 			OK = 0;                     
-			spawn goNOgo();             // start go/nogo task
+			//spawn goNOgo();             // start go/nogo task
 			idling = 0;                 // stop idling
 			}
 			
