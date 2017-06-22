@@ -231,6 +231,9 @@ declare int 	oppColor[3];
 declare int 	lumOffset;
 declare int 	isCong;
 declare int 	targProb[8];
+declare int  	leaveOther = 0;
+declare int 	extinguishTime = 0;
+declare int 	helpDelay;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;

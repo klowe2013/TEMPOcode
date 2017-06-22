@@ -424,14 +424,24 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 	if (SetSize > 0)
 		{
-		//if ((targV - targH) > zeroTol) // pro trial, leave on target
-		//{
+		if ((targV - targH) > zeroTol) // pro trial, leave on target
+		{
 			spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
-		//} else 
+			if (leaveOther == 2) //if we should leave the anti stim on even in pro trials...
+			{
+				id = (targInd + (SetSize/2)) % SetSize;
+				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);  
+			}
+		} else 
 		if ((targH - targV) > zeroTol) // anti trial, leave on opposite
 		{	
 			id = (targInd + (SetSize/2)) % SetSize;
 			spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			if (leaveOther > 0) // if we don't want to extinguish the pro stim
+			{
+				spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			}
+				
 		}
 		}
 	if (soa_mode==1)

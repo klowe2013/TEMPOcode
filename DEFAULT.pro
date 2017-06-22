@@ -1284,6 +1284,7 @@ if(monkey == helmholtz)
 			
 			targ_hold_time			= 400;
 			Max_sacc_duration		= 50;
+			helpDelay 				= 50;
 			Min_saccade_time		= 70;
 			Max_saccade_time 		= 1000;
 			Min_Holdtime			= 300;  // minimum time after fixation before target presentation
