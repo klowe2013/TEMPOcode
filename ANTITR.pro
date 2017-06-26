@@ -103,6 +103,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	// Have to be reset on every iteration since 
 	// variable declaration only occurs at load time
 	trl_running 		= 1;
+	declare hide int isExtinguished = 0;
 	stage 				= need_fix;
 	
 	// Tell the user what's up
@@ -539,10 +540,12 @@ else if (SingMode == 1)
 				printf("Error (inaccurate saccade)\n");						// ...tell the user whats up...
 				trl_running = 0; 											// ...and terminate the trial.
 				}
-			else if ((time() > saccade_time + helpDelay) && extinguishTime == 3)
+			else if ((time() > saccade_time + helpDelay) && extinguishTime == 3 && !isExtinguished)
 			{
 				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
-				dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+				dsendf("vp %d\n",targ_only);
+				Event_fifo[Set_event] = Error_sacc;				// Flip the pg to the blank screen...
+				Set_event = (Set_event + 1) % Event_fifo_N;
 			}
 			}
 		

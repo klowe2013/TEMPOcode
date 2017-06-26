@@ -66,6 +66,12 @@ declare INFOS();
 				Event_fifo[Set_event] = 500 + lumOffset;
 				Set_event = (Set_event + 1) % Event_fifo_N;
 			
+				Event_fifo[Set_event] = 400 + leaveOther;
+				Set_event = (Set_event + 1) % Event_fifo_N;
+				
+				Event_fifo[Set_event] = 410 + extinguishTime;
+				Set_event = (Set_event + 1) % Event_fifo_N;
+			
 				/*Event_fifo[Set_event] = InfosZero + Max_sacc_duration;			// Send event and...	
 				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue.
 						

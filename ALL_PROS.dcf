@@ -2,7 +2,7 @@
 ; Copyright 1997-2017 Reflective Computing.  All Rights Reserved.
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
-; Wed May 24 09:55:48 2017
+; Mon Jun 26 13:54:52 2017
 ; DLOAD C:\TEMPO\ProcLib\ALL_PROS.dcf
 
 ; DIALOGS
@@ -597,10 +597,10 @@ DIAOBJ   21,0,2,272,15,336,37,"OK","DSET; DPOP"
 DIAOBJ   21,1,2,272,45,336,67,"Cancel","DPOP"
 
 DIAPAGE 22,"PA_Distractors"
-DIAPOS   22,0,0,972,-1,-1,571,192,1245,742,22
-DIAOBJ   22,0,2,147,489,211,511,"OK","DSET; DPOP"
-DIAOBJ   22,1,2,326,485,390,507,"Cancel","DPOP"
-DIAOBJ   22,2,2,239,488,302,507,"Apply","DSET;"
+DIAPOS   22,0,0,972,-1,-1,660,269,1334,976,22
+DIAOBJ   22,0,2,147,634,211,656,"OK","DSET; DPOP"
+DIAOBJ   22,1,2,312,633,376,655,"Cancel","DPOP"
+DIAOBJ   22,2,2,228,634,291,653,"Apply","DSET;"
 DIAOBJ   22,3,3,404,29,454,50,"","distDiffProbs[0]"
 DIAOBJ   22,4,3,423,62,456,83,"","distDiffProbs[1]"
 DIAOBJ   22,5,3,422,87,455,112,"","distDiffProbs[2]"
@@ -653,6 +653,15 @@ DIAOBJ   22,51,3,304,401,382,423,"","lumOffset"
 DIAOBJ   22,52,3,312,434,383,460,"","DistCol"
 DIAOBJ   22,53,5,216,443,256,461,"","DistCol"
 DIAOBJ   22,54,1,26,446,154,468,"","Color"
+DIAOBJ   22,55,1,12,492,140,514,"","Extinguish?"
+DIAOBJ   22,56,5,200,488,254,508,"","leaveOther"
+DIAOBJ   22,57,3,266,486,394,508,"","leaveOther"
+DIAOBJ   22,58,1,43,517,171,539,"","Option?"
+DIAOBJ   22,59,5,201,514,256,538,"","extinguishTime"
+DIAOBJ   22,60,3,325,514,389,529,"","extinguishTime"
+DIAOBJ   22,61,1,40,541,168,563,"","Help Time"
+DIAOBJ   22,62,5,211,539,255,563,"","helpDelay"
+DIAOBJ   22,63,3,309,539,392,561,"","helpDelay"
 
 DIAPAGE 23,"PA_Singletons"
 DIAPOS   23,0,-1,-1,-1,-1,591,368,1119,804,23
