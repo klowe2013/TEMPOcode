@@ -95,7 +95,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	
 	// This variable makes the while loop work
 	declare hide int 	trl_running;
-	
+	declare hide int isExtinguished;
 		// Stim complete?
 	declare hide int 	StimDone;
 	StimDone = 0;
@@ -103,7 +103,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	// Have to be reset on every iteration since 
 	// variable declaration only occurs at load time
 	trl_running 		= 1;
-	declare hide int isExtinguished = 0;
+	isExtinguished = 0;
 	stage 				= need_fix;
 	
 	// Tell the user what's up
