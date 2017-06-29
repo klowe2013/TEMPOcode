@@ -479,7 +479,13 @@ else if (SingMode == 1)
 				{
 				Trl_Outcome = no_saccade;           						// TRIAL OUTCOME ERROR - made saccade on catch trial
 				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
-				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);
+				} else
+				{
+					dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				}
 				Event_fifo[Set_event] = CatchIncorrectNG_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -532,7 +538,12 @@ else if (SingMode == 1)
 			else if (time() > saccade_time + max_sacc_duration)				// But, if the eyes are out of the target window and time runs out...
 				{
 				Trl_Outcome = sacc_out;   									// TRIAL OUTCOME ERROR (innacurrate saccade)
-				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+				} else
+					dsendf("vp %d\n",blank);
+				}
 				Event_fifo[Set_event] = Error_sacc;					// ...queue strobe for Neuro Explorer
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -558,8 +569,13 @@ else if (SingMode == 1)
 			if (!In_TargWin)												// If the eyes left the target window...
 				{			
 				Trl_Outcome = broke_targ;									// TRIAL OUTCOME ERROR (broke target fixation)
-				
-				dsendf("vp %d\n",blank);
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);
+				} else
+				{
+					dsendf("vp %d\n",blank);
+				}
 				Event_fifo[Set_event] = BreakTFix_;					// ...queue strobe for Neuro Explorer
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				// Flip the pg to the blank screen...
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...

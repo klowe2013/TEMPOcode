@@ -28,6 +28,7 @@ declare hide constant BreakTFix_		= 2760;
 declare hide constant EarlySaccade_		= 2761;
 declare hide constant Reward_ 			= 2727;
 declare hide constant Tone_				= 2001;
+declare hide constant PunishEnd_ 		= 2002;
 declare hide constant Error_tone		= 776;  //Strobe for Neuro Explorer
 declare hide constant Reward_tone		= 777;	//Strobe for Neuro Explorer
 declare hide constant Error_sacc		= 887;  //Strobe for Neuro Explorer

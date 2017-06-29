@@ -48,12 +48,35 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 	Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue...
 	
 	
+	if (fixed_trl_length)											// Did you want a fixed trial length?
+		{                                                           
+		while(time() < trl_start_time + trial_length + punish_time) // Then figure out how much time has elapsed since trial start...
+			{                                                       
+			nexttick;                                               // ...and continue to wait until time is up + timeout.
+			}                                                       
+		}                                                           
+	else                                                            // Did you want a fixed intertrial interval?
+		{                                                           
+		while (time() < trl_end_time + punish_time) // Then watch the time since trial end...
+			{                                                       
+			nexttick;                                               // ...and wait until time is up + timeout.
+			}
+			dsendf("vp %d\n",0);
+			Event_fifo[Set_event] = PunishEnd_;
+			Set_event = (Set_event + 1) % Event_fifo_N;
+		while (time() < trl_end_time + inter_trl_int + punish_time) // Then watch the time since trial end...
+			{                                                       
+			nexttick;                                               // ...and wait until time is up + timeout.
+			}
+		}
+	
 	spawnwait INFOS();												// ...queue a big ole` pile-o-strobes for plexon
 	nexttick 10;													// Give TEMPO a chance to catch its breath before attempting.. 
                                                                     // ...RDX communication with vdosync.
 	                                                                // NOTE: if you add a bunch more strobes to INFOS.pro and you...
 	                                                                // start getting buffer overflow errors increase the number of nextticks.
-	
+																	// Impose the correct intertrial interval and timeout based on user input
+		
 	/*if (State == run_cmd_sess)
 		{
 		spawn SETC_TRL(n_targ_pos,			
@@ -135,19 +158,5 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 				decide_ssd);
 		}
 				
-																	// Impose the correct intertrial interval and timeout based on user input
-	if (fixed_trl_length)											// Did you want a fixed trial length?
-		{                                                           
-		while(time() < trl_start_time + trial_length + punish_time) // Then figure out how much time has elapsed since trial start...
-			{                                                       
-			nexttick;                                               // ...and continue to wait until time is up + timeout.
-			}                                                       
-		}                                                           
-	else                                                            // Did you want a fixed intertrial interval?
-		{                                                           
-		while (time() < trl_end_time + inter_trl_int + punish_time) // Then watch the time since trial end...
-			{                                                       
-			nexttick;                                               // ...and wait until time is up + timeout.
-			}		                                                
-		}
+	
 	}

@@ -1301,6 +1301,8 @@ if(monkey == helmholtz)
 			NonSingleton_color[b_]		= 27; 
 			
 			lumOffset = 0;
+			ghost = 1;
+			leaveStimsPunish = 1;
 			
 			// Set colors for the cue conditions
 			cueColors[0] 			= 2;
