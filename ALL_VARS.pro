@@ -69,7 +69,7 @@ declare float 	cum_rand_rt_DP;
 declare float 	avg_rand_rt_DP;
 declare float 	graph_rand_rt;
 declare int		Correct_trls;
-declare float	Consec_corr;	
+declare float	Consec_corr;
 declare int		Block_number;
 declare int		Trls_per_block;			// for one directional reward paradigm
 
@@ -137,8 +137,8 @@ declare int		PercSingTrl; // sets percentage of trials where singleton is presen
 //declare	int		TrainOrt;
 declare int 	sVarsSet;
 declare int		TargOrt;
-declare int		TargOrt1; //specific to singleton search mode sets T1 
-declare int		TargOrt2; //specific to singleton search mode sets T2 
+declare int		TargOrt1; //specific to singleton search mode sets T1
+declare int		TargOrt2; //specific to singleton search mode sets T2
 declare int 	TD_Select; //Select Target Distractor relationship for singleton search mode (i.e., which is target and which is distractor)
 //declare int 	TargID_Select; //Select target type from trial to trial at random in singleton search mode
 declare int 	DistOrt;
@@ -162,8 +162,6 @@ declare float   min_plactime;
 declare	int StimInterval;
 declare	int StimCond;
 declare	int LastStim;
-declare	int Npulse;
-declare	int PulseGap;
 
 ////////// Ultrasound Vars /////////
 
@@ -182,7 +180,7 @@ declare float	Fixation_size;			// size of the fixatoin point (degrees)
 declare int		Set_Tones;				// sets up the tones to either high or low based on user input
 declare int		Success_Tone_bigR;		// positive secondary reinforcer in Hz (large reward)
 declare int		Success_Tone_medR;		// positive secondary reinforcer in Hz (medium reward)
-declare int		Success_Tone_smlR;		// positive secondary reinforcer in Hz (small reward)		
+declare int		Success_Tone_smlR;		// positive secondary reinforcer in Hz (small reward)
 declare int		Failure_Tone_smlP;		// negative secondary reinforcer in Hz (short timeout)
 declare int		Failure_Tone_medP;		// negative secondary reinforcer in Hz (medium timeout)
 declare int		Failure_Tone_bigP;		// negative secondary reinforcer in Hz (long timeout)
@@ -293,11 +291,3 @@ declare int Failure_tone;				//GLOBAL OUTPUT FOR INFOS.pro will be set by END_TR
 // Flash Variables
 declare float IFI;
 declare float flashTime;
-
-
-
-
-
-
-
-
