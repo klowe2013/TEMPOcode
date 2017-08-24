@@ -1231,8 +1231,6 @@ if(monkey == helmholtz)
 			/// Ultrasound vars /////
 			VarEcc					= 0; // 0 = off, 1 = on; variable eccentricity from list line 137 LOC_RAND.pro
 			LatStruct				= 1; // For US detection task: 0 = search items only at lateral positions; 1 = normal search, all locations
-			Npulse					= 600; //number of pulses sent
-			PulseGap				= 1000; //gap between pulses
 			StimInterval			= 60000; //10 minutes = 600000ms
 			StimCond				= 0; //0 = stim starting block 1 (min 0), 1 = stim starting block 2 (min 10)
 
@@ -1920,8 +1918,6 @@ if(monkey == gauss)
 			/// Ultrasound vars /////
 			VarEcc					= 0; // 0 = off, 1 = on; variable eccentricity from list line 137 LOC_RAND.pro
 			LatStruct				= 1; // For US detection task: 0 = search items only at 4 corners; 1 = normal search, all locations
-			Npulse					= 600; //number of pulses sent
-			PulseGap				= 1000; //gap between pulses
 			StimInterval			= 600000; //10 minutes = 600000ms
 			StimCond				= 1; //0 = stim starting block 1 (min 0), 1 = stim starting block 2 (min 10)
 
