@@ -8,7 +8,7 @@ declare hide constant FixSpotOn_		= 2301;
 declare hide constant Fixate_			= 2660;
 declare hide constant CueOn_ 			= 2661;
 declare hide constant PlacOn_			= 2320;
-declare hide constant Target_			= 2651; 
+declare hide constant Target_			= 2651;
 declare hide constant FixSpotOff_		= 2300;
 declare hide constant StopSignal_		= 2653;
 declare hide constant TrialStart_		= 1666;
@@ -64,7 +64,7 @@ declare hide constant TargetWindow_		= 2771;
 /* MUST CHECK ALL THAT FOLLOWS IN TRANSLATED VARIABLES (MY VERSION DIED WITHOUT NETWORK) */
 declare hide constant Staircase_ 		= 2772;
 declare hide constant Neg2Reinforcement_= 2773; //?????
-declare hide constant Feedback_ 		= 2774; //????? 
+declare hide constant Feedback_ 		= 2774; //?????
 declare hide constant RewardSize_ 		= 2927;
 declare hide constant TrialInBlock 		= 2928;
 // declare hide constant SendStimInfo_ 	= 7000; // MUST CHANGE. TOO BIG
@@ -76,6 +76,3 @@ declare hide constant StimFailed_ 		= 667;
 declare hide constant StartInfos_		= 2998;
 declare hide constant EndInfos_			= 2999;
 declare hide float 	  InfosZero			= 3000.0;
-
-
-
