@@ -361,7 +361,7 @@ declare INFOS();
 				Event_fifo[Set_event] = InfosZero + Block_number;				// Send event and... <-- added by DCG
 				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue
 
-				Event_fifo[Set_event] = InfosZero + StimTm + 1000;				// Send event and... <-- added by DCG
+				Event_fifo[Set_event] = InfosZero + StimCond + 1000;				// Send event and... <-- added by DCG
 				Set_event = (Set_event + 1) % Event_fifo_N;						// ...incriment event queue
 				//---------------------------------------------------------------------------------------------------------------------------------------
 
