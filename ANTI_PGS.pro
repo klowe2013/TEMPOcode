@@ -154,8 +154,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	oppCol 		= 248;
 	
 	angle			= targ_angle; 		
-		//printf("In ANTI_PGS: angle = %d, index = %d",targ_angle,targInd);
-		//printf("\n");
+	//printf("In ANTI_PGS: angle = %d, index = %d",targ_angle,targInd);
+	//printf("\n");
 		
 	eccentricity	= targ_ecc;	
 										
@@ -330,8 +330,9 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			nexttick;
 			}
 		}
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
-
+	//spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, 0, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	
 	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
     nexttick;
 	
@@ -368,7 +369,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			}
 		}
 		
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	//spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, 0, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
 	
 	//spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
@@ -422,18 +424,62 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	dsendf("rw %d,%d;\n",targ_only,targ_only);  														// draw pg 4                                        
 	dsendf("cl:\n");																			// clear screen
 
+	//printf("\n\nDistCol = %d in ANTI_PGS\n\n",distCol);
 	if (SetSize > 0)
 		{
-		//if ((targV - targH) > zeroTol) // pro trial, leave on target
-		//{
-			spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
-		//} else 
-		if ((targH - targV) > zeroTol) // anti trial, leave on opposite
+		if (((targV - targH) > zeroTol) || (basicPopOut==1))// pro trial, leave on target
+		{
+			id = 0;
+			while (id < SetSize)
+			{
+				if (Angle_list[id] == targ_angle)
+				{
+					spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				} else if (id ==  (targInd + (SetSize/2)) % SetSize)
+				{
+					if (leaveOther==2)//if we should leave the anti stim on even in pro trials...
+					{
+						spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);  
+					} else if (ghost == 1)
+					{
+						spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, open, deg2pix_X, deg2pix_Y);  
+					}
+					
+				} else if (ghost == 1)
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, open, deg2pix_X, deg2pix_Y);  
+				}
+				id = id+1;
+				nexttick;
+			}
+		} else if ((targH - targV) > zeroTol) // anti trial, leave on opposite
 		{	
-			id = (targInd + (SetSize/2)) % SetSize;
-			spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			id = 0;
+			while (id < SetSize)
+			{
+				if (id == (targInd + (SetSize/2)) % SetSize)
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				} else if (Angle_list[id] == targ_angle)
+				{
+					if (leaveOther > 0)  // if we don't want to extinguish the pro stim
+					{
+						spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+					} else if (ghost == 1)
+					{
+						spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, open, deg2pix_X, deg2pix_Y);          	// draw target
+					}
+				} else if (ghost == 1)
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, open, deg2pix_X, deg2pix_Y);  
+				}
+				id = id+1;
+				nexttick;
+			}	
 		}
+				
 		}
+		
 	if (soa_mode==1)
 		{
 		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, open, deg2pix_X, deg2pix_Y);

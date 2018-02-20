@@ -82,7 +82,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide int constant nogo_wrong	= 8;	// error noncanceled trial
 	declare hide int constant body_move		= 12;	// error body movement (for training stillness)
 	declare hide int constant too_fast		= 14;	// low RT while in training to slow down.
-	                                        
+	declare hide int constant late_correct  = 15; 		// Eventually found the target but not on first saccade            
 	// Timing variables which will be used to time task
 	declare hide float 	fix_spot_time; 					
 	declare hide float  targ_time;
@@ -95,7 +95,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	
 	// This variable makes the while loop work
 	declare hide int 	trl_running;
-	
+	declare hide int isExtinguished;
 		// Stim complete?
 	declare hide int 	StimDone;
 	StimDone = 0;
@@ -103,6 +103,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	// Have to be reset on every iteration since 
 	// variable declaration only occurs at load time
 	trl_running 		= 1;
+	isExtinguished = 0;
 	stage 				= need_fix;
 	
 	// Tell the user what's up
@@ -422,11 +423,15 @@ else if (SingMode == 1)
 						Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
 						printf("rt = %d\n",saccade_time - targ_time - search_fix_time - plac_duration);				// ...tell the user whats up...
 						current_rt = saccade_time - targ_time - search_fix_time - plac_duration;
-						//dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
-						//dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+						
+						if (extinguishTime == 1)
+						{
+							dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+							dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+						}
 						stage = in_flight;											// ...and advance to the next stage.
 						
-							if (saccade_time - fix_off_time < search_fix_time + plac_duration)
+						/*	if (saccade_time - fix_off_time < search_fix_time + plac_duration)
 								{
 								Trl_Outcome = too_fast; 								// TRIAL OUTCOME TOO FAST (too fast while being trained to slow down)
 								dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
@@ -437,7 +442,8 @@ else if (SingMode == 1)
 								lastsearchoutcome = failure;
 								printf("Error (too fast)\n");							// ...tell the user whats up...
 								trl_running = 0;										// ...and terminate the trial.
-								} 
+								}
+						*/
 /* 						}
 					else // if placeholders not present, its just normal search and no need to account for placeholder duration
 						{	
@@ -474,7 +480,13 @@ else if (SingMode == 1)
 				{
 				Trl_Outcome = no_saccade;           						// TRIAL OUTCOME ERROR - made saccade on catch trial
 				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
-				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);
+				} else
+				{
+					dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				}
 				Event_fifo[Set_event] = CatchIncorrectNG_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -507,6 +519,12 @@ else if (SingMode == 1)
 				
 			if (In_TargWin)													// If the eyes get into the target window...
 				{
+				if (extinguishTime == 2)
+				{
+					dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+					dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+					//printf("Catch=%d, extTime=%d, inTargWinReached\n",Catch,extinguishTime);
+				}
 				aquire_targ_time = time();									// ...record the time...
 				stage = on_target;											// ...and advance to the next stage of the trial.
 								
@@ -522,7 +540,13 @@ else if (SingMode == 1)
 			else if (time() > saccade_time + max_sacc_duration)				// But, if the eyes are out of the target window and time runs out...
 				{
 				Trl_Outcome = sacc_out;   									// TRIAL OUTCOME ERROR (innacurrate saccade)
-				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+				} else
+				{
+					dsendf("vp %d\n",blank);
+				}
 				Event_fifo[Set_event] = Error_sacc;					// ...queue strobe for Neuro Explorer
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -530,6 +554,15 @@ else if (SingMode == 1)
 				printf("Error (inaccurate saccade)\n");						// ...tell the user whats up...
 				trl_running = 0; 											// ...and terminate the trial.
 				}
+			else if ((time() > saccade_time + helpDelay) && extinguishTime == 3 && !isExtinguished)
+			{
+				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+				dsendf("vp %d\n",targ_only);
+				Event_fifo[Set_event] = StimHelp_;				// Flip the pg to the blank screen...
+				Set_event = (Set_event + 1) % Event_fifo_N;
+				isExtinguished = 1;
+				//printf("Catch=%d, extTime=%d, inTargWinReached\n",Catch,extinguishTime);
+			}
 			}
 		
 		
@@ -541,8 +574,13 @@ else if (SingMode == 1)
 			if (!In_TargWin)												// If the eyes left the target window...
 				{			
 				Trl_Outcome = broke_targ;									// TRIAL OUTCOME ERROR (broke target fixation)
-				
-				dsendf("vp %d\n",blank);
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);
+				} else
+				{
+					dsendf("vp %d\n",blank);
+				}
 				Event_fifo[Set_event] = BreakTFix_;					// ...queue strobe for Neuro Explorer
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				// Flip the pg to the blank screen...
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -554,9 +592,13 @@ else if (SingMode == 1)
 				&&  time() > aquire_targ_time + targ_hold_time)				// ...and the target hold time is up...
 				{
 
-		
-					Trl_Outcome = go_correct;								//TRIAL OUTCOME CORRECT (correct go trial)
-					Correct_trls = Correct_trls + 1;						// ...set a global for 1DR...
+					if (isExtinguished == 1) {
+						Trl_Outcome = late_correct;
+					} else
+					{
+						Trl_Outcome = go_correct;								//TRIAL OUTCOME CORRECT (correct go trial)
+						Correct_trls = Correct_trls + 1;						// ...set a global for 1DR...
+					}
 					Event_fifo[Set_event] = Correct_;						// ...queue strobe...
 					Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue...
 					lastsearchoutcome = success;

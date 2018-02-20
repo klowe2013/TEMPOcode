@@ -183,6 +183,7 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 	declare hide int run_search_sess	= 7;
 	declare hide int run_vm_sess 		= 8;
 	declare hide int run_anti_sess 		= 9;
+	declare hide int run_color_pop 		= 10;
 	
 	seed1(timeus());					// randomly seed the number generator
 	normal(1);							// call the normal distribution to replenish queue after seeding
@@ -271,6 +272,12 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 			idling = 0;					// stop idling
 			}					
 		if (State == run_anti_sess)
+			{
+			OK = 0;
+			spawn PROANTI();
+			idling = 0;
+			}
+		if (State == run_color_pop)
 			{
 			OK = 0;
 			spawn PROANTI();

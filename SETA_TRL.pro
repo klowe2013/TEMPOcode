@@ -84,22 +84,6 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		}	
 
 	// -----------------------------------------------------------------------------------------------
-	// 1) Set up catch trial based on Perc_catch parameter in DEFAULT.pro
-	
-	// We'll want to update this if we decide that a "catch" should be defined by a square difficulty...
-	// I'll put the appropriate line down in the "if" statement below, but keep it commented for now
-	/*CatchNum = random(100);
-	if (CatchNum >= Perc_catch)
-		{
-		Catch = 0;
-		CatchCode = 500;
-		}
-	else	
-		{
-		Catch = 1;
-		CatchCode = 501;
-		} 
-	*/
 	
 	// -----------------------------------------------------------------------------------------------
 	// 2) Set up all vdosync pages for the upcoming trial using globals defined by user and sets_trl.pro
@@ -161,7 +145,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	// Now, let's test whether this difficulty is a pro or anti trial
 	saccEnd = targInd;
-	if ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) > equalTol)
+	if (((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) > equalTol) || (basicPopOut==1))
 		{
 		Trl_type = 1;
 		TypeCode = 600;
@@ -185,7 +169,35 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		Catch = 1;
 		//CatchCode = 501;
 		}
+	
+	// 1) Set up catch trial based on Perc_catch parameter in DEFAULT.pro
 		
+	// We'll want to update this if we decide that a "catch" should be defined by a square difficulty...
+	// I'll put the appropriate line down in the "if" statement below, but keep it commented for now
+	if (basicPopOut == 1)
+	{
+		
+		CatchNum = random(100);
+		//printf("CatchNum = %d, Perc_catch = %d\n",CatchNum,Perc_catch);
+		if (CatchNum >= Perc_catch)
+			{
+			Catch = 0;
+			CatchCode = 500;
+			Trl_type = 1;
+			TypeCode = 600;
+			printf("CatchNum > Perc_Catch, Catch=%d\n",Catch);
+			}
+		else	
+			{
+			Catch = 1;
+			CatchCode = 501;
+			Trl_type = 3;
+			TypeCode = 602;
+			printf("CatchNum < Perc_Catch, Catch=%d\n",Catch);
+			} 
+	}
+	//printf("\n\nCatch = %d\n\n");	
+	
 	cueType = 1;
 	if (fixCue && Max_cueTime > 0)
 	{

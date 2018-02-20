@@ -74,8 +74,9 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	size         = Size_list[curr_target];   													// Figure out the attributes of the current target 
 	angle        = Angle_list[curr_target]; 													// THESE USER DEFINED GLOBALS ARE ARRAYS SO 
 	eccentricity = Eccentricity_list[curr_target];												// THEY CANNOT BE PASSED INTO PROCESSES
-	color        = random(8);																// zero is reserved for black.  see SET_CLRS.pro							
-													
+	//color        = random(8);																// zero is reserved for black.  see SET_CLRS.pro							
+	color = 255;
+	
 	stim_ecc_x = cos(angle) * eccentricity;														// find the center of the box in x and y space based on the angle and eccentricity...
 	stim_ecc_y = sin(angle) * eccentricity * -1;												
 	oMove(object_targ, stim_ecc_x*deg2pix_X, stim_ecc_y*deg2pix_Y);								// ...and move the animated graph object there.
@@ -88,7 +89,6 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	pd_angle = rad2deg(atan (opposite / adjacent));
 	pd_angle = pd_angle + 180; 																	//change this for different quadrent or write some code for flexibility
 	
-	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 1
 	// print("fixation with photodiode");
@@ -96,7 +96,8 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	dsendf("cl:\n");																			// clear screen
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
-    
+    nexttick;
+	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 2	  
 	// print("fixation");
@@ -110,19 +111,17 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("target with photodiode");
 	dsendf("rw %d,%d;\n",target_pd,target_pd);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
-	
-	if (!sacctarg)
-	{
+	//if (!sacctarg)
+	//{
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
-	
-	}
+	/*}
 	else if (sacctarg)
 	{
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, open, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 	
-	}
+	}*/
 //	if (!Classic)																				// if we are doing stop-signal 2.0 (not classic)
 //		{
 //		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, open, deg2pix_X, deg2pix_Y); // draw fixation point
@@ -135,6 +134,7 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("target");
 	dsendf("rw %d,%d;\n",target,target);  														// draw pg 4                                        
 	dsendf("cl:\n");																			// clear screen
+	
 	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);         	// draw target
 //	if (!Classic)																				// if we are doing stop-signal 2.0 (not classic)
 //		{
@@ -146,7 +146,8 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// Draw pg 5 
 	// print("signal with photodiode");
 	dsendf("rw %d,%d;\n",signal_pd,signal_pd);    												// draw pg 5                                      
-	dsendf("cl:\n");																			// clear screen
+	dsendf("cl:\n");		// clear screen
+	nexttick;
 	//spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);         	// draw target
 	//if (Classic)
 	if (nogosoa == 1)
@@ -172,6 +173,7 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("signal");
 	dsendf("rw %d,%d;\n",signal,signal);   														// draw pg 6                                       					
 	dsendf("cl:\n");																			// clear screen
+	nexttick;
 //	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 	if (nogosoa == 1)
 	{

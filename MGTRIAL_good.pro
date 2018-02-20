@@ -41,11 +41,10 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	// Number the trial stages to make them easier to read below
 	declare hide int 	need_fix  	= 1;
 	declare hide int 	fixating  	= 2;
-	declare hide int 	targ_off	= 3;
-	declare hide int 	targ_on   	= 4;
-	declare hide int	fix_off		= 5;
-	declare hide int 	in_flight 	= 6;
-	declare hide int 	on_target 	= 7;	
+	declare hide int 	targ_on   	= 3;
+	declare hide int	fix_off		= 4;
+	declare hide int 	in_flight 	= 5;
+	declare hide int 	on_target 	= 6;	
 	declare hide int 	stage;
 	
 	// Number the stimuli pages to make reading easier
@@ -184,14 +183,13 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				
 			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime)	// But if the eyes are still in the window at end of holdtime...
 				{
-				dsendf("XM RFRSH:\n"); 										// ...wait one vetical retrace...
 				dsendf("vp %d\n",target_pd);								// ...flip the pg to the target with pd marker...	
 				targ_time = time(); 										// ...record the time...
 				Event_fifo[Set_event] = Target_;						// Queue strobe...
 				Set_event = (Set_event + 1) % Event_fifo_N;
 				dsendf("XM RFRSH:\n"); 										// ...wait one vetical retrace...
 				dsendf("vp %d\n",target);	
-				//dsendf("vp %d\n",fixation);									// ...flip the pg to the target without pd marker.
+				dsendf("vp %d\n",fixation);									// ...flip the pg to the target without pd marker.
 				
 //				if (trl_type == stop_trl ||									// If it is a stop or ignore trial present the signal.
 //				trl_type == ignore_trl)										// This happens here so that no overhead intervenes between commands.
@@ -220,37 +218,11 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 //					}														// If it is a stop trial the target just never comes up in the animated graph.
 				sacctarg = 1;
 				oSetAttribute(object_targ, aVISIBLE); 						// ...show target in animated graph...	
-				stage = targ_off;											// Advance to the next trial stage.				
+				stage = targ_on;											// Advance to the next trial stage.				
 				}
 			}
 			
-		else if (stage == targ_off)
-			{
-			if (!In_FixWin)
-				{
-//				printf("                          soa = %d\n",round(curr_soa * (1000.0/Refresh_rate)));
-				printf("                          premature rt = %d\n",time() - targ_time);
-				Trl_Outcome = early_sacc;									// TRIAL OUTCOME ERROR (sacc before cued to do so)
-				LastStopOutcome = no_change;
-				dsendf("vp %d\n",blank);
-				dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
-				Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...
-				Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...
-				Set_event = (Set_event + 1) % Event_fifo_N;				
-				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
-				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
-				printf("Error (early saccade)\n");							// ...tell the user whats up...
-				sacctarg = 0;
-				trl_running = 0;											// ...and terminate the trial.
-				}
-			else if (In_FixWin && time() > targ_time+targ_on_time)
-				{
-				dsendf("vp %d\n",fixation);									// ...flip the pg to the target without pd marker.
-				Event_fifo[Set_event] = TargetOff_;
-				Set_event = (Set_event + 1) % Event_fifo_N;
-				stage = targ_on;
-				}
-			}
+			
 
 	//--------------------------------------------------------------------------------------------
 	// STAGE targ_on (the target has been presented but the subject is still fixating)		
@@ -293,6 +265,7 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				time() > targ_time + curr_soa)	 							// ...and the stim onset asychrony passes...
 				{
 //				printf("                          soa = %d\n",round(curr_soa * (1000.0/Refresh_rate)));
+				
 				
 				if (trl_type == stop_trl ||									// If it is a stop or ignore trial present the signal.
 				trl_type == ignore_trl)										// This happens here so that no overhead intervenes between commands.

@@ -2,6 +2,10 @@
 //
 // written by david.c.godlove@vanderbilt.edu 	January, 2011; modified by joshua.d.cosman@vanderbilt.edu, July 2013
 
+// Room selection
+declare int Room;
+
+// Trial counters
 declare int		Trl_number;
 declare int		Comp_Trl_number;
 declare float	Rand_Comp_Trl_number_DP; 	//search specific - gives correct number of dist pres trials; see END_TRL.pro
@@ -231,6 +235,23 @@ declare int 	oppColor[3];
 declare int 	lumOffset;
 declare int 	isCong;
 declare int 	targProb[8];
+declare int  	leaveOther = 0;
+declare int 	extinguishTime = 0;
+declare int 	helpDelay;
+declare int 	leaveStimsPunish;
+declare int 	ghost;
+declare int 	nEccs;
+declare int 	dynamicColor;
+declare int	 	eccProbs[8];
+declare int 	eccList[8];
+declare int 	basicPopOut;
+declare int 	nPerRun;
+declare int 	nThisRun;
+declare int 	switchColors = 1;
+declare int 	countIncorrect;
+declare int 	colorProbs[5];
+declare int 	distColProbs[5];
+declare int 	nClrs;
 
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;
@@ -281,6 +302,8 @@ declare int		Trial_length;			// fixed at this value (only works if Fixed_trl_len
 declare int		Inter_trl_int;			// how long between trials (only works if Fixed_trl_length == 0)
 declare int 	Exp_juice;				// Exponential juice reward duration by reaction time
 declare int 	nogosoa;
+declare int 	targ_on_time;
+
 //------------------------------------------------------------------------------------------------------------------
 // Globals needed for multiple processes which must be declared here to avoid dependancy conflicts
 declare int Reward_duration;			//GLOBAL OUTPUT FOR INFOS.pro will be set by END_TRL.pro

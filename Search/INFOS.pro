@@ -16,14 +16,15 @@ declare int target_color_r, target_color_g, target_color_b;
 declare hide int id;
 declare hide int run_anti_sess = 9;
 declare hide int run_color_pop = 10;
+declare hide int run_pop_prime = 11;
 declare hide float chkTime;
 
 declare INFOS();
 
 	process INFOS()
 			{
-			//printf("State=%d\n",State);
-			if ((State == run_anti_sess) || (State == run_color_pop))
+			
+			if ((State == run_anti_sess) || (State == run_color_pop) || (State == run_pop_prime))
 			{
 				Event_fifo[Set_event] = StartInfos_;
 				Set_event = (Set_event + 1) % Event_fifo_N;

@@ -3,7 +3,7 @@
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
 ; Wed Jul 23 17:05:16 2014
-; CLOAD ALL_PROS_SCH.pcf
+; CLOAD ALL_PROS_CMD.pcf
 
 ; tempow 13.1 Set 45.14   'SCHALLgC1134' connected to 'tempo3'
 ; KPED 12.1 Set 45
@@ -146,7 +146,7 @@ CCHANINFO 0
 ECHANINFO 0
 
 
-PLOAD ALL_PROS_SCH.pro
+PLOAD ALL_PROS_CMD.pro
 
 ; DATABASES=40
 

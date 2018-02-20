@@ -1459,9 +1459,9 @@ if(monkey == helmholtz)
 			}
 			
 		// Basic Color Popout
-		if ((task == run_color_pop) || task == run_pop_prime)
+		if (task == run_color_pop)
 			{
-			//rintf("task = %d... Setting Color Pop Defaults\n",task);
+			printf("task = %d... Setting Color Pop Defaults\n",task);
 			Trls_per_block 			= 100;
 			Base_Punish_time		= 2000;
 			Catch_Rew               = 1; // 1 = full base reward; allows us to set how much we divide base reward by on catch trials relative to target trials
@@ -1489,32 +1489,11 @@ if(monkey == helmholtz)
 			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
 			SingCol					= 0; // 0 = red - see SET_CLRS.pro
 			DistCol 				= 1; // 1 = green
+			dynamicColor 			= 0;
 			nPerRun 				= 5;
 			nThisRun 				= 0;	
 			PercSingTrl				= 50; //Percentage of trials where singleton is present, see LOC_RAND.pro for code
-			soa_mode				= 1;  //fixation response soa; 1=on, 0=off 
-			
-			colorProbs[0] = 1;
-			colorProbs[1] = 1;
-			colorProbs[2] = 0;
-			colorProbs[3] = 0;
-			colorProbs[4] = 0;
-			nClrs = 5;
-			
-			distColProbs[0] = 1;
-			distColProbs[1] = 1;
-			distColProbs[2] = 0;
-			distColProbs[3] = 0;
-			distColProbs[4] = 0;
-			
-			
-			if (task == run_color_pop)
-			{
-				dynamicColor 			= 0;
-			} else if (task == run_pop_prime)
-			{
-				dynamicColor 			= 2;
-			}
+			soa_mode				= 0;  //fixation response soa; 1=on, 0=off 
 			
 			// Multiple Eccentricities stuff
 			nEccs = 8;
@@ -1545,7 +1524,7 @@ if(monkey == helmholtz)
 			Perc_catch				= 0; //percent catch trials
 			TargetType				= 1; //1 = L, 2 = T
 			PlacPres				= 1; //1 = no placeholders,  2 = placeholders
-			SetSize					= 8; //SS1 = 1, SS2 = 2, etc. up to set size 12;
+			SetSize					= 4; //SS1 = 1, SS2 = 2, etc. up to set size 12;
 			// Select Search task and Target/Distractor for Singleton Search
 			SearchType				= 2; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
 			TargOrt1				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT 
@@ -1711,11 +1690,258 @@ if(monkey == helmholtz)
 			
 			
 			// Are SOAs even relevant here? Let's take another look later
-			SOA_list[0] = 0;
-			SOA_list[1] = 0;
-			SOA_list[2] = 0;
-			SOA_list[3] = 0;
+			SOA_list[0] = 300;
+			SOA_list[1] = 450;
+			SOA_list[2] = 600;
+			SOA_list[3] = 750;
 			}
+		// Priming of popout
+		if (task == run_pop_prime)
+			{
+			printf("State = %d\n",task);
+			spawnwait DEFAULT(run_color_pop, monkey, room);
+			nexttick;
+			dynamicColor 			= 2;
+			nPerRun 				= 5;
+					
+			
+			/*Trls_per_block 			= 100;
+			Base_Punish_time		= 2000;
+			Catch_Rew               = 1; // 1 = full base reward; allows us to set how much we divide base reward by on catch trials relative to target trials
+			basicPopOut = 1;
+			
+			//// Probability cueing vars /////
+			ProbCue					= 0; // 1= prob cue on, 0 = prob cue off
+			ProbSide				= 1; // 0=right; 1=left more probable target location
+			/// Ultrasound vars /////
+			VarEcc					= 0; // 0 = off, 1 = on; variable eccentricity from list line 137 LOC_RAND.pro
+			LatStruct				= 1; // For US detection task: 0 = search items only at lateral positions; 1 = normal search, all locations  
+			Npulse					= 600; //number of pulses sent  
+			PulseGap				= 1000; //gap between pulses
+			StimInterval			= 600000; //10 minutes = 600000ms
+			StimCond				= 0; //0 = stim starting block 1 (min 0), 1 = stim starting block 2 (min 10)
+			
+			////////// Training-specific variables - allow user to use fixed distractor locations and identities
+			ArrStruct	 			= 1; // 1=structured arrays, 0=contextual cueing
+			//TrainOrt 				= 1;
+			TargTrainSet			= 1; //1=random loc, 2= fixed pos. 1, 3 = fixed pos 2., etc. up to max location number
+			DistOrt					= 1; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
+			TargOrt					= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT  
+			SearchEcc				= 6; //entricity in degrees; use to make fixed eccentricity 
+			SingMode				= 1; //0=classic search, 1=singleton present/capture task, 2=variable singleton mode
+			SingCol					= 0; // 0 = red - see SET_CLRS.pro
+			DistCol 				= 1; // 1 = green
+			dynamicColor 			= 2;
+			nPerRun 				= 5;
+			nThisRun 				= 0;	
+			PercSingTrl				= 50; //Percentage of trials where singleton is present, see LOC_RAND.pro for code
+			soa_mode				= 0;  //fixation response soa; 1=on, 0=off 
+			
+			// Multiple Eccentricities stuff
+			nEccs = 8;
+			
+			eccList[0] = 3;
+			eccList[1] = 4;
+			eccList[2] = 5;
+			eccList[3] = 6;
+			eccList[4] = 7;
+			eccList[5] = 8;
+			eccList[6] = 9;
+			eccList[7] = 10;
+			
+			eccProbs[0] = 0;
+			eccProbs[1] = 0;
+			eccProbs[2] = 0;
+			eccProbs[3] = 1;
+			eccProbs[4] = 0;
+			eccProbs[5] = 0;
+			eccProbs[6] = 0;
+			eccProbs[7] = 0;
+			
+			
+			///////// Use this variable to manipulate predictability of Fixation / Search ISI
+			FixJitter			    = 0;  // 0 = random fixation-search ISI; 1 = Fixed; see sets_trl.pro
+			//////////
+			
+			catch_hold_time			= 800;
+			Perc_catch				= 0; //percent catch trials
+			TargetType				= 1; //1 = L, 2 = T
+			PlacPres				= 1; //1 = no placeholders,  2 = placeholders
+			SetSize					= 4; //SS1 = 1, SS2 = 2, etc. up to set size 12;
+			// Select Search task and Target/Distractor for Singleton Search
+			SearchType				= 2; //Hetero = 1, Homo = 2, Homo Random = 3, 4 Singleton search mode (target/dist swap trial to trial)
+			TargOrt1				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT 
+			TargOrt2				= 2; //T/L - 1=UP, 2=INV, 3=LEFT, 4=RIGHT
+			
+			// Difficulties
+			ndDifficulties 			= 3;
+			ntDifficulties 			= 3;
+			doCongruency 			= 0;
+			angleOffset				= 0;
+			//search_fix_time			= 0; //equiv to SOA - amount of time the fixation point stays on after target onset; fix off = go signal
+			max_plactime			= 700;
+			min_plactime			= 1000;
+			fixCue 					= 1;
+			cueCongThresh 			= 100; // Completely congruent
+			//curr_cuetime 			= 500;  // How long to present cue
+			neutCueThresh 			= 333; // How often we should make the cue neutral while cuing trials
+											// 333 makes pro, neutral, and anti cues occur evenly and lets neutral cues be 50/50 for target type
+											// This works because it calculates backwards from the trial type, not forward from cue
+											// That being the case, this percentage needs to be even on both pro and anti
+											// trials in order to be non-predictive of the ensuing stimulus
+			nexttick;
+			
+			targ_hold_time			= 400;
+			Max_sacc_duration		= 50;
+			helpDelay 				= 50;
+			Min_saccade_time		= 70;
+			Max_saccade_time 		= 1000;
+			Min_Holdtime			= 300;  // minimum time after fixation before target presentation
+			Max_Holdtime			= 800; // maximum time after fixation before target presentation		
+			Min_cueTime 			= 0;
+			Max_cueTime 			= 0;
+			Go_weight				= 100.0;
+			Stop_weight				= 0.0;
+			Ignore_weight			= 0.0;
+			Inter_trl_int			= 2000;	// how long between trials (only works if Fixed_trl_length == 0)
+//					
+			
+			NonSingleton_color[r_]		= 35;	
+			NonSingleton_color[g_]		= 33;	
+			NonSingleton_color[b_]		= 27; 
+			
+			lumOffset = 0;
+			ghost = 0;
+			leaveStimsPunish = 0;
+			
+			// Set colors for the cue conditions
+			cueColors[0] 			= 2;
+			cueColors[1] 			= 5;
+			cueColors[2] 			= 3;
+			
+			Size_list[0]			= 1.5;	// size of each target individually (degrees)
+			Size_list[1]			= 1.5;
+			Size_list[2]			= 1.5;
+			Size_list[3]			= 1.5;
+			Size_list[4]			= 1.5;
+			Size_list[5]			= 1.5;
+			Size_list[6]			= 1.5;
+			Size_list[7]			= 1.5;
+			Size_list[8]			= 1.5;
+			Size_list[9]			= 1.5;
+			Size_list[10]			= 1.5;
+			Size_list[11]			= 1.5;			
+			
+								
+			// angle of each location individually (degrees) - only used for training/structured array mode
+			Angle_list[0]			= 90; //12:00	
+			Angle_list[1]			= 45;
+			Angle_list[2]			= 0; //3:00
+			Angle_list[3]			= 315;
+			Angle_list[4]			= 270; //6:00
+			Angle_list[5]			= 225;
+			Angle_list[6]			= 180; //9:00
+			Angle_list[7]			= 135;			
+			
+			targProb[0]			= 1; //12:00	
+			targProb[1]			= 1;
+			targProb[2]			= 1; //3:00
+			targProb[3]			= 1;
+			targProb[4]			= 1; //6:00
+			targProb[5]			= 1;
+			targProb[6]			= 1; //9:00
+			targProb[7]			= 1;			
+						
+			catchDifficulty   = 5;
+			catchDistDiff 	  = 1;
+			catchH 			  = 1;
+			catchV 			  = 1;
+			
+			// H dimension of color singleton options
+			stimHorizontal[0] = 1;
+			stimHorizontal[1] = 1;
+			stimHorizontal[2] = 1;
+			stimHorizontal[3] = .5;
+			stimHorizontal[4] = .5;
+			stimHorizontal[5] = .5;
+			stimHorizontal[6] = .5;
+			stimHorizontal[7] = .5;
+			
+			// V dimension of color singleton options
+			stimVertical[0] = 1;
+			stimVertical[1] = 1;
+			stimVertical[2] = 1;
+			stimVertical[3] = .5;
+			stimVertical[4] = .5;
+			stimVertical[5] = .5;
+			stimVertical[6] = .5;
+			stimVertical[7] = .5;
+			
+			// Relative probability of color singleton options
+			targDiffProbs[0] = 1;
+			targDiffProbs[1] = 0;
+			targDiffProbs[2] = 0;
+			targDiffProbs[3] = 0;
+			targDiffProbs[4] = 0;
+			targDiffProbs[5] = 0;
+			targDiffProbs[6] = 0;
+			targDiffProbs[7] = 0;
+			
+			// H dimension of non-singleton
+			distH[0] = 1;
+			distH[1] = 1;
+			distH[2] = 1;
+			distH[3] = .7;
+			distH[4] = .7;
+			distH[5] = .7;
+			distH[6] = .7;
+			distH[7] = .7;
+			
+			// V dimension of non-singleton
+			distV[0] = 1;
+			distV[1] = 1;
+			distV[2] = 1;
+			distV[3] = .7;
+			distV[4] = .7;
+			distV[5] = .7;
+			distV[6] = .7;
+			distV[7] = .7;
+			
+			// Relative probability of non-singleton options
+			distDiffProbs[0] = 1;
+			distDiffProbs[1] = 0;
+			distDiffProbs[2] = 0;
+			distDiffProbs[3] = 0;
+			distDiffProbs[4] = 0;
+			distDiffProbs[5] = 0;
+			distDiffProbs[6] = 0;
+			distDiffProbs[7] = 0;
+			
+			// Set congruent/incongruent relative probabilities
+			congProb[0] = 0;  // This will be congruent
+			congProb[1] = 0;  // This will be incongruent
+			congProb[2] = 1;  // This will be square
+			
+			// Here, we put in a section that says: if the singleton is square,
+			//    on what percent of trials (if doing congruency) should it be what difficulty?
+			catchDiffPerc[0] = 1;
+			catchDiffPerc[1] = 0;
+			catchDiffPerc[2] = 0;
+			catchDiffPerc[3] = 0;
+			catchDiffPerc[4] = 0;
+			catchDiffPerc[5] = 0;
+			catchDiffPerc[6] = 0;
+			catchDiffPerc[7] = 0;
+			
+			
+			// Are SOAs even relevant here? Let's take another look later
+			SOA_list[0] = 300;
+			SOA_list[1] = 450;
+			SOA_list[2] = 600;
+			SOA_list[3] = 750;
+		*/
+			}
+		
 		
 		// FIXATION TASK SPECIFIC----------------------------------------------------------------------------
 		

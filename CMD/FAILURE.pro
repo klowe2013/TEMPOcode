@@ -77,7 +77,7 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 	                                                                // start getting buffer overflow errors increase the number of nextticks.
 																	// Impose the correct intertrial interval and timeout based on user input
 		
-	/*if (State == run_cmd_sess)
+	if (State == run_cmd_sess)
 		{
 		spawn SETC_TRL(n_targ_pos,			
 					go_weight,				
@@ -90,7 +90,8 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 					expo_jitter);  
 		
 		}
-	else */ if (State == run_search_sess)
+	/*
+	else if (State == run_search_sess)
 		{
 		Consec_corr = 0; //reset consecutive correct counter
 		spawnwait SETS_TRL(n_targ_pos,			
@@ -102,7 +103,8 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 					min_holdtime,                   
 					max_holdtime,                   
 					expo_jitter);  
-		}	
+		}
+	*/
 	else if (State == run_mg_sess)
 		{
 		spawn SETMGTRL(n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for explanations of these globals
@@ -115,7 +117,7 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 				 expo_jitter,
 				 expo_jitter_soa);
 		}
-	/*else if (State == run_gonogo_sess)
+	else if (State == run_gonogo_sess)
 		{
 		spawn	SETG_TRL(n_targ_pos,				// Select variables for the first mem guided...					
 				min_holdtime,           		// ...trial.  This happens once outside of the while...
@@ -126,7 +128,7 @@ process FAILURE(int trial_length,									// see DEFAULT.pro and ALL_VARS.pro fo
 				expo_jitter_soa);
 		}
 		
-	*/else if (State == run_delayed_sess)
+	else if (State == run_delayed_sess)
 		{
 		spawn	SETD_TRL(n_targ_pos,				// Select variables for the first mem guided...					
 				min_holdtime,           		// ...trial.  This happens once outside of the while...

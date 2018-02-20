@@ -28,7 +28,7 @@ process DRW_SQR(float size, float angle, float eccentricity, int color, int fill
 	// find the center of the box in x and y space based on the angle and eccentricity
 	stim_ecc_x = cos(angle) * eccentricity;
 	stim_ecc_y = sin(angle) * eccentricity;
-
+	nexttick;
 	// find locations of upper left and lower right corners based on location of center and size
 	half_size = size/2;
 	ulx       = round((stim_ecc_x - half_size)*conversion_X);
@@ -38,6 +38,7 @@ process DRW_SQR(float size, float angle, float eccentricity, int color, int fill
 
 	
 	// send video sync command to draw desired square
+	nexttick;
 	dsendf("co %d;\n",color);
 	
 	if(fill == 0)

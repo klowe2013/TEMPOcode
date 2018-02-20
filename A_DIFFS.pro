@@ -59,14 +59,14 @@ process A_DIFFS()
 	// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 	// exclusively use alternative 2), then if randVal = 0 then the first option
 	// will be spuriously selected...
-	if (randVal > 49)
+	/*if (randVal > 49)
 	{
 		randVal = 100;
 	} else 
 	{
 		randVal = 0;
 	}
-	
+	*/
 	break = 0;
 	while (randVal >= cumTProbs[singDifficulty] && break == 0)
 	{

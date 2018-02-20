@@ -9,6 +9,20 @@ process SET_CLRS(n_targ_pos)
 	{
 	declare hide int color_num,r_, g_, b_;
 	declare hide int run_anti_sess = 9;
+	declare hide int run_color_pop = 10;
+	declare hide int run_pop_prime = 11;
+	
+	declare hide int ic;
+	declare hide int sumProbs;
+	declare hide int lastVal;
+	declare hide int thisVal;
+	declare hide int cumCProbs[5];
+	declare hide int clrInd;
+	declare hide int break;
+	declare hide int randVal;
+	declare hide int firstProb;
+	declare hide int distColPick[5];
+	
 	r_ = 0; g_ = 1; b_ = 2;
 	
 	color_num = 0;
@@ -38,6 +52,153 @@ process SET_CLRS(n_targ_pos)
 		// }
 	
 	// Following code is specific to search task singleton color
+	/*if (dynamicColor == 1 && State == run_anti_sess)
+	{
+		SingCol = random(2);
+		if (SingCol == 0)
+		{
+			DistCol = 1;
+		} else if (SingCol == 1)
+		{
+			DistCol = 0;
+		}
+	}
+	*/
+	// New section below allows for runs of "nPerRun" with the same color
+	if ((State==run_anti_sess) || (State==run_color_pop) || (State==run_pop_prime))
+	{
+		if (dynamicColor < 2)
+		{
+			ic = 0;
+			sumProbs = 0;
+			firstProb = 0;
+			while (ic < nClrs)
+			{
+				sumProbs = sumProbs+colorProbs[ic];
+				distColPick[ic] = distColProbs[ic];
+				ic = ic+1;
+				if (colorProbs[ic-1] > 0 && firstProb == 0)
+				{
+					firstProb = ic;
+				}
+			}
+			nexttick;
+			
+			// turn relative probabilities into CDF*100
+			ic = 0;
+			lastVal = 0;
+			thisVal = 0;
+			while (ic < nClrs)
+			{
+				thisVal = colorProbs[ic]*100;
+				cumCProbs[ic] = (thisVal/sumProbs)+lastVal;
+				//printf("cumCProbs[ic] = %d\n",cumCProbs[ic]);
+				lastVal = cumCProbs[ic];
+				ic = ic+1;
+			}
+			nexttick;
+			// Select random value
+			randVal = random(100);
+			if (randVal == 0)
+			{
+				clrInd = firstProb-1;
+			} else
+			{
+				clrInd = 0;
+				break = 0;
+				while (randVal >= cumCProbs[clrInd] && break == 0)
+				{
+					clrInd = clrInd+1;
+					if (clrInd == nClrs)
+					{
+						clrInd = nClrs - 1;
+						break = 1;
+					}
+				}
+			}
+			SingCol = clrInd;
+			
+			distColPick[singCol] = 0;
+			ic = 0;
+			sumProbs = 0;
+			firstProb = 0;
+			while (ic < nClrs)
+			{
+				sumProbs = sumProbs+distColPick[ic];
+				ic = ic+1;
+				if (distColPick[ic-1] > 0 && firstProb == 0)
+				{
+					firstProb = ic;
+				}
+			}
+			nexttick;
+			
+			// turn relative probabilities into CDF*100
+			ic = 0;
+			lastVal = 0;
+			thisVal = 0;
+			while (ic < nClrs)
+			{
+				thisVal = distColPick[ic]*100;
+				cumCProbs[ic] = (thisVal/sumProbs)+lastVal;
+				//printf("cumCProbs[ic] = %d\n",cumCProbs[ic]);
+				lastVal = cumCProbs[ic];
+				ic = ic+1;
+			}
+			nexttick;
+			// Select random value
+			randVal = random(100);
+			if (randVal == 0)
+			{
+				clrInd = firstProb-1;
+			} else
+			{
+				clrInd = 0;
+				break = 0;
+				while (randVal >= cumCProbs[clrInd] && break == 0)
+				{
+					clrInd = clrInd+1;
+					if (clrInd == nClrs)
+					{
+						clrInd = nClrs - 1;
+						break = 1;
+					}
+				}
+			}
+			DistCol = clrInd;
+			//SingCol = random(2);
+		}
+		else if (dynamicColor==2)
+		{
+			if (nThisRun==0)
+			{
+				if (switchColors == 1)
+				{
+					if (SingCol == 0)
+					{
+					SingCol = 1;
+					}
+					else if (SingCol == 1)
+					{
+					SingCol = 0;
+					}
+				}
+			}
+			if (SingCol == 0)
+			{
+				DistCol = 1;
+			} else if (SingCol == 1)
+			{
+				DistCol = 0;
+			}
+		}
+		
+	}
+	
+	if (Catch==1)
+	{
+		SingCol = DistCol;
+	}
 	
 	if (SingCol == 0) // Red
 		{
@@ -71,8 +232,9 @@ process SET_CLRS(n_targ_pos)
 		}
 	
 	// Now set non-singleton
-	if (State == run_anti_sess)
+	if ((State == run_anti_sess) || (State == run_color_pop) || (State == run_pop_prime))
 	{
+		
 		if (DistCol == 0) // Red
 			{
 			NonSingleton_color[r_]		= 63;	

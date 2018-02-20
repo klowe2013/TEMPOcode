@@ -87,12 +87,6 @@ declare int fix_manual = 1;				//auto fixation task = 1
 
 #include C:/TEMPO/ProcLib/RIGDEC.pro  // declares a bunch of rig specific global variables
 #include C:/TEMPO/ProcLib/RIGSETUP.pro // Assigns variables
-//#include C:/TEMPO/ProcLib/Room23/RIGSETUP.pro  // assigns a bunch of rig specific global variables
-//#include C:/TEMPO/ProcLib/Room28/RIGSETUP.pro  // assigns a bunch of rig specific global variables
-//#include C:/TEMPO/ProcLib/Room29/RIGSETUP.pro  // assigns a bunch of rig specific global variables
-//#include C:/TEMPO/ProcLib/Room30/RIGSETUP.pro  // assigns a bunch of rig specific global variables
-
-
 #include C:/TEMPO/ProcLib/EVENTDEF.pro	// event code definitions
 #include C:/TEMPO/ProcLib/ALL_VARS.pro	// declares global variables needed to run protocols
 #include C:/TEMPO/ProcLib/DEFAULT.pro	// sets all globals to their appropriate defaults for countermanding
@@ -115,11 +109,11 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/WATCHBOD.pro	// monitors body movement on each process cycle
 #include C:/TEMPO/ProcLib/SVR_BELL.pro	// sounds speaker on server
 #include C:/TEMPO/ProcLib/SVR_BEL2.pro	// sounds speaker on server (different)
-//#include C:/TEMPO/ProcLib/CMDTRIAL.pro	// runs a single countermanding trial based on input
+#include C:/TEMPO/ProcLib/CMDTRIAL.pro	// runs a single countermanding trial based on input
 #include C:/TEMPO/ProcLib/MGTRIAL.pro
-#include C:/TEMPO/ProcLib/SCHTRIAL.pro
+//#include C:/TEMPO/ProcLib/SCHTRIAL.pro
 //#include C:/TEMPO/ProcLib/VMAPTRIAL.pro
-#include C:/TEMPO/ProcLib/ANTITR.pro
+//#include C:/TEMPO/ProcLib/ANTITR.pro
 #include C:/TEMPO/ProcLib/REP_ORT.pro   // simple process for selecting repeated display orientations prior to trial
 #include C:/TEMPO/ProcLib/RAND_ORT.pro	// simple process for selecting random display orientation prior to trial
 #include C:/TEMPO/ProcLib/LOC_REP.pro	// simple process for selecting repeated display locations prior to trial
@@ -139,42 +133,40 @@ declare int fix_manual = 1;				//auto fixation task = 1
 #include C:/TEMPO/ProcLib/FLS_PGS.pro	// setup flash stimuli
 //#include C:/TEMPO/ProcLib/LSCH_PGS.pro	// setup search windows - L
 //#include C:/TEMPO/ProcLib/TSCH_PGS.pro	// setup search windows - T
-//#include C:/TEMPO/ProcLib/CMD_PGS.pro	// setup countermanding windows
-#include C:/TEMPO/ProcLib/ANTI_PGS.pro
-//#include C:/TEMPO/ProcLib/SETC_TRL.pro	// sets up all of the input to run a countermanding trial
+#include C:/TEMPO/ProcLib/CMD_PGS.pro	// setup countermanding windows
+//#include C:/TEMPO/ProcLib/ANTI_PGS.pro
+#include C:/TEMPO/ProcLib/SETC_TRL.pro	// sets up all of the input to run a countermanding trial
 #include C:/TEMPO/ProcLib/SETMGTRL.pro
 //#include C:/TEMPO/ProcLib/SETM_TRL.pro
-//#include C:/TEMPO/ProcLib/SETG_TRL.pro  // sets up all input to run a gonogo trial
+#include C:/TEMPO/ProcLib/SETG_TRL.pro  // sets up all input to run a gonogo trial
 #include C:/TEMPO/ProcLib/SETD_TRL.pro  // sets up all input to run a delayed saccade trial
-#include C:/TEMPO/ProcLib/SETS_TRL.pro  // sets up all input to run a search trial
-#include C:/TEMPO/ProcLib/SETA_TRL.pro 	// sets up all input to run a pro/anti trial
-//#include C:/TEMPO/ProcLib/GNGTRIAL.pro	// runs a single gonogo guided trial based on input
+//#include C:/TEMPO/ProcLib/SETS_TRL.pro  // sets up all input to run a search trial
+//#include C:/TEMPO/ProcLib/SETA_TRL.pro 	// sets up all input to run a pro/anti trial
+#include C:/TEMPO/ProcLib/GNGTRIAL.pro	// runs a single gonogo guided trial based on input
 #include C:/TEMPO/ProcLib/DELTRIAL.pro 	// runs a single delayed saccade trial based on input
 #include C:/TEMPO/ProcLib/UPD8_INH.pro	// updates inhibition function for cmanding
 #include C:/TEMPO/ProcLib/UPD8_SOA.pro  
-#include C:/TEMPO/ProcLib/UPD8_SCH.pro	// updates search performance RT
+//#include C:/TEMPO/ProcLib/UPD8_SCH.pro	// updates search performance RT
 #include C:/TEMPO/ProcLib/SET_LOCS.pro 
-#include C:/TEMPO/ProcLib/Search/INFOS.pro		// queue up all trial event codes for strobing to plexon
-
-#include C:/TEMPO/ProcLib/Search/ABORT.pro
-#include C:/TEMPO/ProcLib/Search/SUCCESS.pro
-#include C:/TEMPO/ProcLib/Search/FAILURE.pro
-
+#include C:/TEMPO/ProcLib/CMD/INFOS.pro		// queue up all trial event codes for strobing to plexon
+#include C:/TEMPO/ProcLib/CMD/ABORT.pro
+#include C:/TEMPO/ProcLib/CMD/SUCCESS.pro
+#include C:/TEMPO/ProcLib/CMD/FAILURE.pro
 #include C:/TEMPO/ProcLib/END_TRL.pro	// ends a trial based on outcome
 #include C:/TEMPO/ProcLib/KEY_REWD.pro	// needed to give reward manually from keyboard (stupid)
 #include C:/TEMPO/ProcLib/KEY_TARG.pro	// see above
 #include C:/TEMPO/ProcLib/FIXATION.pro	// fixation control structure
-//#include C:/TEMPO/ProcLib/CMANDING.pro	// countermanding control structure
+#include C:/TEMPO/ProcLib/CMANDING.pro	// countermanding control structure
 //#include C:/TEMPO/ProcLib/MEMORY.pro	// mem guided sacc task control structure
 #include C:/TEMPO/ProcLib/MGUIDE.pro
-//#include C:/TEMPO/ProcLib/GONOGO.pro    // gonogo sacc task control structure
+#include C:/TEMPO/ProcLib/GONOGO.pro    // gonogo sacc task control structure
 #include C:/TEMPO/ProcLib/DELAYED.pro   // delayed guided sacc task control structure
-#include C:/TEMPO/ProcLib/SEARCH.pro	// SEARCH control structure
+//#include C:/TEMPO/ProcLib/SEARCH.pro	// SEARCH control structure
 
 #include C:/TEMPO/ProcLib/FLSHSCRN.pro	// for gross VEPs
 #include C:/TEMPO/ProcLib/QUE_TTL.pro	// makes a ring buffer for sending TTL events
 
-#include C:/TEMPO/ProcLib/PROANTI.pro 	// Pro/Anti Task
+//#include C:/TEMPO/ProcLib/PROANTI.pro 	// Pro/Anti Task
 #include C:/TEMPO/ProcLib/SET_LOCS.pro
 //#include C:/TEMPO/ProcLib/ANTI_DIFFS.pro
 
@@ -186,8 +178,6 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 										// ...idle loop.  It will make sure everything is off...
 										// ...and all necessary variables are reset before...
 										// ...starting the task over or starting a new task.
-	
-	
 	declare hide int off = 0;
 	declare hide int idling;
 	declare hide int run_cmd_sess 		= 1;	// state 1 is countermanding
@@ -200,15 +190,13 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 	declare hide int run_vm_sess 		= 8;
 	declare hide int run_anti_sess 		= 9;
 	declare hide int run_color_pop 		= 10;
-	declare hide int run_pop_prime 		= 11;
-	
-	declare hide int checkBits 			= 20;
 	
 	declare hide int roomSelect;
 	
 	seed1(timeus());					// randomly seed the number generator
 	normal(1);							// call the normal distribution to replenish queue after seeding
 	idling = 1;							// makes the while loop run
+					  
 	roomSelect = 1;
 	
 	
@@ -249,7 +237,7 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 	mio_fout(off);						// make sure the speaker is off
 	dsend("vi 256;");					// make sure vdosync is in correct config
 	dsend("ca");						// flush all vdosync memory
-	
+			
 	spawn SET_COOR(scr_width,			// set up screen coordinates based on globals defined in RIGSETUP.pro	
 				scr_height,
 				subj_dist,
@@ -272,8 +260,6 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 	printf("flushing video memory please wait...\n");
 	wait 5000; 							// it can take up to 5 seconds to clear all vdo sync memory (pg 7-37)
 	printf("done!\n");
-	
-	
 	system("dialog Choose_Task");		// Pop up choose task dialog
 	
 		
@@ -283,10 +269,9 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 		
 		if (State == run_cmd_sess)		// user wants to run the countermanding task
 			{
-			printf("Countermanding not supported by ALL_PROS_SCH. Please select another option\n");
-			State = 0;
-			system("dpop Pre_Task_Main");
-			system("dialog Choose_Task");
+			OK = 0;
+			spawn CMANDING();			// start countermanding
+			idling = 0;					// stop idling
 			}
 			
 		if (State == run_fix_sess)		// user wants to run the fixation task
@@ -305,10 +290,9 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 			
 		if (State == run_gonogo_sess)	// user wants to run the go/nogo task
 			{                           
-			printf("Go/NoGo not supported by ALL_PROS_SCH. Please select another option\n");
-			State = 0;
-			system("dpop Pre_Task_Main");
-			system("dialog Choose_Task");
+			OK = 0;                     
+			spawn goNOgo();             // start go/nogo task
+			idling = 0;                 // stop idling
 			}
 			
 		if (State == run_flash_sess)	// user wants to run the flash protocol
@@ -326,35 +310,24 @@ process IDLE() enabled					// When the clock is started the task is not yet runn
 			}
 		if (State == run_search_sess)	// user wants to run the delayed sacc task
 			{
-			OK = 0;
-			spawn SEARCH();			// start delayed sacc task
-			idling = 0;					// stop idling
+			printf("Search not supported by ALL_PROS_CMD. Please select another option\n");
+			State = 0;
+			system("dpop Pre_Task_Main");
+			system("dialog Choose_Task");
 			}					
 		if (State == run_anti_sess)
 			{
-			OK = 0;
-			spawn PROANTI();
-			idling = 0;
+			printf("Pro/Anti not supported by ALL_PROS_CMD. Please select another option\n");
+			State = 0;
+			system("dpop Pre_Task_Main");
+			system("dialog Choose_Task");
 			}
 		if (State == run_color_pop)
 			{
-			OK = 0;
-			spawn PROANTI();
-			idling = 0;
-			}
-		if (State == run_pop_prime)
-			{
-			//printf("State = %d...\n",State);
-			OK = 0;
-			spawn PROANTI();
-			idling = 0;
-			}
-		if (State == checkBits)
-			{
-			//printf("State = %d\n",State);
-			spawnwait BITSWEEP();
-			system("dialog Choose_Task");
+			printf("Color Popout not supported by ALL_PROS_SCH. Please select another option\n");
 			State = 0;
+			system("dpop Pre_Task_Main");
+			system("dialog Choose_Task");
 			}
 		nexttick;						// if no task is specified idle for another process... 
 										// ...cycle and then check again.

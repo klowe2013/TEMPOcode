@@ -17,6 +17,8 @@ declare PROANTI();
 process PROANTI()     
 	{
 	declare hide int run_anti_sess = 9;
+	declare hide int run_color_pop = 10;
+	//declare hide int run_pop_prime = 11;
 	declare hide int run_idle		 = 0;
 	declare hide int on   = 1;	
 	declare hide int off  = 0;	
@@ -35,13 +37,13 @@ process PROANTI()
 	RepPerAcc				= 0;
 	Correct_trls 			= 0;
 	Consec_corr				= 0;
-	if (Last_task != run_anti_sess)			// Only do this if we have gone into another task or if this is first run of day.
+	if (Last_task != State)//run_anti_sess)			// Only do this if we have gone into another task or if this is first run of day.
 		{
 		system("dialog Select_Monkey");
 		spawnwait DEFAULT(State,				// Set all globals to their default values.
 						Monkey,					
 						Room);				
-		Last_task = run_anti_sess;
+		Last_task = State;//run_anti_sess;
 		}
 		
 	dsend("DM RFRSH");                			// This code sets up a vdosync macro definition to wait a specified ...
@@ -55,7 +57,7 @@ process PROANTI()
 		}
 	dsend("EM RFRSH");
 	
-	
+	//printf("State=%d\n",State);
 	
 	while(!OK)									
 		{
@@ -66,10 +68,17 @@ process PROANTI()
 						Monkey,						
 						Room);	
 			Set_monkey = 0;
+			//printf("State = %d, dynamicColor = %d\n",State,dynamicColor);
+			/*if (State == run_pop_prime)
+				{
+					dynamicColor 			= 2;
+					nPerRun 				= 5;
+					printf("dynamicColor = %d\n",dynamicColor);
+				}*/
 			}
 		}
 	
-	//spawnwait GOODVARS(State);
+		//spawnwait GOODVARS(State);
 	
 	spawnwait SET_PA();						// sets up search RT graph
 					
@@ -101,7 +110,7 @@ process PROANTI()
 	spawn WATCHMTH;								// start watching the mouth motion detector if present
 	spawn WATCHBOD;								// start watching motion detector for body if present
 	
-	while (state == run_anti_sess)				// while the user has not yet terminated the countermanding task
+	while ((state == run_anti_sess) || (state==run_color_pop) || (state == run_pop_prime))				// while the user has not yet terminated the countermanding task
 		{
 		 // check if prolonged stimulation should happen prior trial	 
  		 //if (StimTm == 5 && time() > (LastStim + StimInterval)) // for blocked, non-task stimulation
