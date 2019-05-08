@@ -43,6 +43,7 @@ process SET_CONG()
 	declare hide int sumProbs;
 	declare hide int sumCong;
 	declare hide int myInd;
+	declare hide int break;
 	declare hide float cumCong[3];
 	declare hide float  cumDProbs[ndDifficulties];
 	declare hide int relInds[ndDifficulties];
@@ -97,10 +98,16 @@ process SET_CONG()
 		// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 		// exclusively use alternative 2), then if randVal = 0 then the first option
 		// will be spuriously selected...
-		while (randVal > cumCong[isCong])
+		break = 0;
+		while (randVal > cumCong[isCong] && break == 0)
 		{
 			//printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
 			isCong = isCong+1;
+			if (isCong == 3)
+			{
+				isCong = 2;
+				break = 1;
+			}
 		}
 		//printf("cumCong[%d] = %d",isCong,cumCong[isCong]);
 		//printf("isCong = %d",isCong);
@@ -393,9 +400,15 @@ process SET_CONG()
 			//    let's randomly select one of them
 			randVal = random(100);
 			myInd = 0;
-			while (randVal > cumDProbs[myInd])
+			break = 0;
+			while (randVal > cumDProbs[myInd] && break == 0)
 			{
 				myInd = myInd+1;
+				if (myInd == ndDifficulties)
+				{
+					myInd = ndDifficulties;
+					break = 1;
+				}
 			}
 		
 		// We've now picked the appropriate index INTO THE RELEVANT INDICES. So let's assign the Distractor ID

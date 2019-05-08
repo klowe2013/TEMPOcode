@@ -46,10 +46,17 @@ process DRW_T(float angle, float eccentricity, int color, float orientation, int
 	stim_ecc_x = cos(angle) * eccentricity;
 	stim_ecc_y = sin(angle) * eccentricity;
 
+	
+	
 	// find locations of upper left and lower right corners based on location of center and size
 	half_length = llength/2;
 	half_width = lwidth/2;
-
+	
+	if (referenceEcc > 0)
+	{
+		half_length = half_length*(1+((eccentricity-referenceEcc)*scaleFactor));
+		half_width = half_width*(1+((eccentricity-referenceEcc)*scaleFactor));
+	}
 if (orientation == 1) //Upright T 
 	{
 	THx1       = ((stim_ecc_x - half_length)*conversion_X);

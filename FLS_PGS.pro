@@ -35,6 +35,11 @@ process FLS_PGS(float scr_width,                        										// see RIGSETU
 	declare hide int   	blank	= 0;										
 	declare hide int	flash	= 1;										
 	
+	// Give the color a number
+	declare hide int 	flash_color = 251;
+	declare hide int 	white_color = 246;
+	
+	spawnwait SET_CLRS(1);
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Calculate screen coordinates for stimuli on this trial								
@@ -42,8 +47,8 @@ process FLS_PGS(float scr_width,                        										// see RIGSETU
 	
 	opposite = ((scr_height/2)-pd_bottom);														// Figure out angle and eccentricity of photodiode marker in pixels
 	adjacent = ((scr_width/2)-pd_left);                                                         // NOTE: I am assuming your pd is in the lower left quadrant of your screen
-	pd_eccentricity = sqrt((opposite * opposite) + (adjacent * adjacent));
-	pd_angle = rad2deg(atan (opposite / adjacent));
+	pd_eccentricity = 200;//sqrt((opposite * opposite) + (adjacent * adjacent));
+	pd_angle = 90 + rad2deg(atan (opposite / adjacent));
 	pd_angle = pd_angle + 180; 																	//change this for different quadrent or write some code for flexibility
 	
 	
@@ -52,8 +57,10 @@ process FLS_PGS(float scr_width,                        										// see RIGSETU
 	// print("fixation with photodiode");
 	dsendf("rw %d,%d;\n",flash,flash); 															// draw first pg of video memory
 	dsendf("cl:\n");																			// clear screen
-	spawnwait DRW_SQR(40.0, 0.0, 0.0, 15, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
-	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+	//spawnwait DRW_SQR(40.0, 0.0, 0.0, 15, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
+	//spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, flash_color, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,white_color,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 0 (last is displayed first)	

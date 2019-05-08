@@ -38,8 +38,8 @@ process KEY_REWD()
 		tone_durr = Tone_Duration;
 		}
 	
-	Event_fifo[Set_event] = ExtraReward_;
-	Set_event = (Set_event + 1) % Event_fifo_N;
+	//Event_fifo[Set_event] = ExtraReward_;
+	//Set_event = (Set_event + 1) % Event_fifo_N;
 	
 	spawn JUICE(juice_channel,juice_duration);
 	spawn TONE(tone_freq,tone_durr);

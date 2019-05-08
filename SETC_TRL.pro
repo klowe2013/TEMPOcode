@@ -59,6 +59,7 @@ process SETC_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int constant go_correct		= 7;			// code for correct saccade on a go trial (see CMDTRIAL.pro)
 	declare hide int ii;
 	
+	//printf("Setting C Trial...\n");
 	
 	// -----------------------------------------------------------------------------------------------
 	// Update block; trls per block set in DEFAULT.pro
@@ -68,6 +69,12 @@ process SETC_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		Correct_trls = 0;										// reset the block counter
 		}													// 	COULD WEIGHT THIS IF NEED BE (see logic below)
 	
+	// 1) Pick new target
+	if (!DR1_flag || trl_outcome ==nogo_correct || trl_outcome == go_correct)
+		{
+		curr_target = random(8);
+		}
+		
 	
 	// -----------------------------------------------------------------------------------------------
 	// 2) Pick a trial type

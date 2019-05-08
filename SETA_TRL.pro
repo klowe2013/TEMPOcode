@@ -15,6 +15,8 @@
 //
 // written by joshua.d.cosman@vanderbilt.edu 	July, 2013
 
+// 190110 - KL Added diffColorPerc to pro/anti task to manipulate the proportion of easy/hard trials for target/distractor similarity
+
 //#include C:/TEMPO/ProcLib/TSCH_PGS.pro						// sets all pgs of video memory up for the impending trial
 //#include C:/TEMPO/ProcLib/LSCH_PGS.pro						// sets all pgs of video memory up for the impending trial 
 #include C:/TEMPO/ProcLib/ANTI_PGS.pro
@@ -56,7 +58,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	declare hide float decide_trl_type; 	
 	declare hide float CatchNum;	
-	declare hide float per_jitter, jitter, decide_jitter, holdtime_diff, plac_diff, plac_jitter, cuetime_diff;
+	declare hide float per_jitter, jitter, decide_jitter, holdtime_diff, plac_diff, plac_jitter, cuetime_diff, catch_diff;
 	declare hide int fixation_color 			= 255;			// see SET_CLRS.pro
 	declare hide int cue_color 					= 249;
 	declare hide int constant nogo_correct		= 4;			// code for successfully canceled trial (see CMDTRIAL.pro)
@@ -74,6 +76,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int sumLoc;
 	//declare hide int ii;
 	declare hide int break;
+	declare hide int doStim;
 		
 	// -----------------------------------------------------------------------------------------------
 	// Update block; trls per block set in DEFAULT.pro
@@ -84,22 +87,6 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		}	
 
 	// -----------------------------------------------------------------------------------------------
-	// 1) Set up catch trial based on Perc_catch parameter in DEFAULT.pro
-	
-	// We'll want to update this if we decide that a "catch" should be defined by a square difficulty...
-	// I'll put the appropriate line down in the "if" statement below, but keep it commented for now
-	/*CatchNum = random(100);
-	if (CatchNum >= Perc_catch)
-		{
-		Catch = 0;
-		CatchCode = 500;
-		}
-	else	
-		{
-		Catch = 1;
-		CatchCode = 501;
-		} 
-	*/
 	
 	// -----------------------------------------------------------------------------------------------
 	// 2) Set up all vdosync pages for the upcoming trial using globals defined by user and sets_trl.pro
@@ -108,6 +95,76 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	//spawnwait RAND_ORT;	// sets orientations of random stimuli
 	
 	//spawnwait A_LOCS; // updates angles and eccentricities - assumes we want equal spacing
+	
+	// Set variables if there is a block change
+	if (blockNo != lastBlock && enforceBlocks == 1)
+	{
+		/* This segment does 1x2, 2x1, and 2x2 blocks
+		if (blockNo == 1)
+		{
+			diffColorPerc = 0;
+			targDiffProbs[0] = 4;
+			targDiffProbs[2] = 3;
+			targDiffProbs[4] = 3;
+			lastBlock = 1;
+		} else if (blockNo == 2)
+		{
+			diffColorPerc = 50;
+			targDiffProbs[0] = 2;
+			targDiffProbs[2] = 0;
+			targDiffProbs[4] = 3;
+			lastBlock = 2;
+		} else if (blockNo == 3)
+		{
+			diffColorPerc = 100;
+			targDiffProbs[0] = 4;
+			targDiffProbs[2] = 3;
+			targDiffProbs[4] = 3;
+			lastBlock = 3;
+		} else if (blockNo == 4)
+		{
+			diffColorPerc = 50;
+			targDiffProbs[0] = 2;
+			targDiffProbs[2] = 3;
+			targDiffProbs[4] = 0;
+			lastBlock = 4;
+		} else if (blockNo == 5)
+		{
+			diffColorPerc = 50;
+			targDiffProbs[0] = 4;
+			targDiffProbs[2] = 3;
+			targDiffProbs[4] = 3;
+			lastBlock = 5;
+		}
+		*/
+		// This section does 0x2 (both AR, set size 1), 2x0 (both colors, easy AR only and no catch) and full 2x2
+		if (blockNo == 1) // Full task
+		{
+			diffColorPerc = 50;
+			targDiffProbs[0] = 4;
+			targDiffProbs[2] = 3;
+			targDiffProbs[4] = 3;
+			SetSize = 8;
+			lastBlock = 1;
+		} else if (blockNo == 2) // Set size 1
+		{
+			diffColorPerc = 50;
+			targDiffProbs[0] = 4;
+			targDiffProbs[2] = 3;
+			targDiffProbs[4] = 3;
+			SetSize = 1;
+			lastBlock = 2;
+		} else if (blockNo == 3) // No no-go trials
+		{
+			diffColorPerc = 50;
+			targDiffProbs[0] = 0;
+			targDiffProbs[2] = 3;
+			targDiffProbs[4] = 3;
+			SetSize = 8;
+			lastBlock = 3;
+		}		
+			
+	}
 	
 	
 	// Refresh angles/eccentricities
@@ -152,40 +209,92 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	targ_ecc = Eccentricity_list[targInd];
 	
 	// Send target location code    eventCode
-	Event_fifo[Set_event] = 800 + targInd;		// Set a strobe to identify this file as a Search session and...	
-	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue.
 	
 	spawnwait A_DIFFS; // selects difficulty levels for this trial
 	//printf("\n\nAfter A_DIFFS, singDiff = %d\n\n",singDifficulty);
 	// Now that locations have been set, figure out Set up a pro or anti trial and saccade endpoint
 	
 	// Now, let's test whether this difficulty is a pro or anti trial
-	saccEnd = targInd;
-	if ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) > equalTol)
-		{
-		Trl_type = 1;
-		TypeCode = 600;
-		Catch = 0;
-		//CatchCode = 500;
-		}
-	else if ((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) > equalTol)
-		{
-		Trl_type = 2;
-		TypeCode = 601;
-		Catch = 0;
-		//CatchCode = 500;
-		saccEnd = (targInd+(SetSize/2)) % SetSize;
-		}
-	// This if statement should work because it's in an else... a negative value < -equaltol
-	// should have been caught by the first if
-	else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
-		{
+	randVal = random(100);
+	if (randVal < Perc_catch)
+	{
 		Trl_type = 3;
 		TypeCode = 602;
 		Catch = 1;
-		//CatchCode = 501;
+		colorCatch = 1;
+	} else
+	{
+		saccEnd = targInd;
+		colorCatch = 0;
+		if (((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) > equalTol) || (basicPopOut==1))
+		{
+			if (vertIsPro==1 || basicPopOut==1)
+			{
+				Trl_type = 1;
+				TypeCode = 600;
+				Catch = 0;
+				//CatchCode = 500;
+			} else
+			{
+				Trl_type =2;
+				TypeCode = 601;
+				Catch = 0;
+				saccEnd = (targInd+(SetSize/2)) % SetSize;
+			}
+		} else if ((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) > equalTol)
+		{
+			if (vertIsPro==1)
+			{
+				Trl_type = 2;
+				TypeCode = 601;
+				Catch = 0;
+				//CatchCode = 500;
+				saccEnd = (targInd+(SetSize/2)) % SetSize;
+			} else
+			{
+				Trl_type = 1;
+				TypeCode = 600;
+				Catch = 0;
+			}
 		}
+		// This if statement should work because it's in an else... a negative value < -equaltol
+		// should have been caught by the first if
+		else if (((stimHorizontal[singDifficulty] - stimVertical[singDifficulty]) < equalTol) || ((stimVertical[singDifficulty] - stimHorizontal[singDifficulty]) < equalTol))
+			{
+			Trl_type = 3;
+			TypeCode = 602;
+			Catch = 1;
+			//CatchCode = 501;
+			}
+	}
+	// 1) Set up catch trial based on Perc_catch parameter in DEFAULT.pro
 		
+	// We'll want to update this if we decide that a "catch" should be defined by a square difficulty...
+	// I'll put the appropriate line down in the "if" statement below, but keep it commented for now
+	if (basicPopOut == 1)
+	{
+		
+		CatchNum = random(100);
+		//printf("CatchNum = %d, Perc_catch = %d\n",CatchNum,Perc_catch);
+		if (CatchNum >= Perc_catch)
+			{
+			Catch = 0;
+			CatchCode = 500;
+			Trl_type = 1;
+			TypeCode = 600;
+			printf("CatchNum > Perc_Catch, Catch=%d\n",Catch);
+			}
+		else	
+			{
+			Catch = 1;
+			CatchCode = 501;
+			Trl_type = 3;
+			TypeCode = 602;
+			printf("CatchNum < Perc_Catch, Catch=%d\n",Catch);
+			} 
+	}
+	//printf("\n\nCatch = %d\n\n");	
+	
 	cueType = 1;
 	if (fixCue && Max_cueTime > 0)
 	{
@@ -225,12 +334,45 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	}
 	//printf("Cue Color = %d\n",cueColors[cueType]);
 	
-	Event_fifo[Set_event] = 720 + cueType;										// queue strobe
-	Set_event = (Set_event + 1) % Event_fifo_N;
 				
 	nexttick;
 	
+	// Determine if this should be a hard color trial
+	if (enforceColorDifficulty==1)
+	{
+		//thisTrialColorHard = random(2);
+		randVal = random(1000);
+		if (randVal >= (diffColorPerc*10))
+		{
+			thisTrialColorHard = 0;
+		} else
+		{
+			thisTrialColorHard = 1;
+		}
+	} else
+	{
+		thisTrialColorHard = 0;
+	}
+	
 	// Set up colors
+	
+	if (manualSingCol == 1)
+	{
+		if (enforceColorDifficulty==1)
+		{
+			if (thisTrialColorHard==1)
+			{
+				DistCol = hardSingDistMap[SingCol];
+			} else if (thisTrialColorHard == 0)
+			{
+				DistCol = easySingDistMap[SingCol];
+			}
+		}
+	} else
+	{
+		spawnwait PA_CLRS();
+	}
+	
 	spawnwait SET_CLRS(n_targ_pos); //selects distractor/target colors for this trial
 	
 		
@@ -292,7 +434,15 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	// 4) Select current holdtime
 	
 	holdtime_diff 	= max_holdtime - min_holdtime;			// Min and Max holdtime defined in DEFAULT.pro
-	per_jitter 		= random(1001) / 1000.0;				// random number 0-100 (percentages)	
+	if (expo_jitter)
+	{
+		decide_jitter = (random(1001))/1000.0;
+		per_jitter = exp(-1.0*(decide_jitter/.025));
+	}
+	else
+	{
+		per_jitter 		= random(1001) / 1000.0;				// random number 0-100 (percentages)	
+	}
 	jitter 			= holdtime_diff * per_jitter;			// multiply range of holdtime differences by percentage above
 	
 	if (FixJitter == 0) 
@@ -329,12 +479,40 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	plac_duration 	= round(min_plactime + plac_jitter);	// gives randomly jittered holdtime between min and max holdtime 
 
+	// Set catch hold time
+	catch_diff = max_catch_hold - min_catch_hold;
+	if (expo_jitter)
+	{
+		decide_jitter = (random(1001))/1000.0;
+		per_jitter = exp(-1.0*(decide_jitter/.025));
+	}
+	else
+	{
+		per_jitter 		= random(1001) / 1000.0;				// random number 0-100 (percentages)	
+	}
+	jitter 			= catch_diff * per_jitter;			// multiply range of holdtime differences by percentage above
+	catch_hold_time = min_catch_hold + jitter;
+	if (fixedSaccTime)
+	{
+		Max_saccade_time = min_catch_hold;
+	}
+	
 	
 	// -----------------------------------------------------------------------------------------------
 	// 7) Choose whether to stim
-	//StimTm = Random(2); //allows us to randomize the time stim is delivered; see task stages in SCHTRIAL.pro
+	//doStim = random(2);
+	//StimTm = doStim*2;//Random(2); //allows us to randomize the time stim is delivered; see task stages in SCHTRIAL.pro
+	doStim = random(1000)/10;
+	if (doStim <= PercStim)
+	{
+		StimTm = 2;
+	} else
+	{
+		StimTm = 0;
+	}
+	
 	//StimTm = 1; //Single stim time
-	StimTm = 0; //stim off
+	//StimTm = 0; //stim off
 	//StimTm = 5; //For prolonged stim protocol
 	// -----------------------------------------------------------------------------------------------
 	// 8) Choose Eccentricity

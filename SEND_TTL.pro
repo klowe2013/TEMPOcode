@@ -53,20 +53,56 @@ declare SEND_TTL(int value);
 	// 4 digit event codes can be represented with 14 bits (of 16 available by TDT)
 	// A solution? bit-shift the value so that the event code takes ups bits 2-15, which should be decodable...
 	
+	//dioSetA(output, shiftVal & 0xFF);
+	//dioSetB(output, (shiftVal >> 8) | 0x80);
+	shiftVal = 0;
+	if (Room == 30)
+	{
+		dioSetA(output, ~(shiftVal & 0xFF));
+		dioSetB(output, ~(((shiftVal + 2^15) >> 8) & 0xFF));
+	}
+	else
+	{
+		dioSetA(output, shiftVal & 0xFF);
+		dioSetB(output, (shiftVal >> 8) | 0x80);
+	}
+	
+	spawnwait WAIT_MU(100);
+	
 	shiftVal = value;// << 1;
+	if (Room == 30)
+	{
+		dioSetA(output, ~(shiftVal & 0xFF));
+		dioSetB(output, ~(((shiftVal + 2^15) >> 8) & 0xFF));
+	}
+	else
+	{
+		dioSetA(output, shiftVal & 0xFF);
+		dioSetB(output, (shiftVal >> 8) | 0x80);
+	}
 	
-	dioSetA(output, shiftVal & 0xFF);
-	dioSetB(output, (shiftVal >> 8) | 0x80);
+	spawnwait WAIT_MU(100);
 	
+	shiftVal = 0;// << 1;
+	if (Room == 30)
+	{
+		dioSetA(output, ~(shiftVal & 0xFF));
+		dioSetB(output, ~(((shiftVal + 2^15) >> 8) & 0xFF));
+	}
+	else
+	{
+		dioSetA(output, shiftVal & 0xFF);
+		dioSetB(output, (shiftVal >> 8) | 0x80);
+	}
 	//The commented section is the ideal form, without this shifting nonsense
 	//dioSetA(output, value & 0xFF);				// load the low 8 bits on port A
 	//dioSetB(output, (value >> 8) | 0x80); //& 0x3F);				// load the high 8 bits on port B
 	
 	
-	spawnwait WAIT_MU(100);							// wait 100 micro seconds to avoid losing events
+	//spawnwait WAIT_MU(100);							// wait 100 micro seconds to avoid losing events
 		
-	dioSetA(output, ~0xFF);
-	dioSetB(output, ~0xFF);
+	//dioSetA(output, ~0xFF);
+	//dioSetB(output, ~0xFF);
 	} 
 
 	

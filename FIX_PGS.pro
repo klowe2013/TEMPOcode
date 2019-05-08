@@ -19,7 +19,8 @@ process FIX_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide float 	size;   																	// Global output will be sent as stobes...        										
 	declare hide float 	angle;        																// ...by INFOS.pro at trial end.
 	declare hide float 	eccentricity; 
-	declare hide int   	color;									
+	declare hide int   	color;
+	declare hide int 	bgColor;
 										
 	declare hide float	stim_ecc_x;										
 	declare hide float	stim_ecc_y;										
@@ -37,7 +38,8 @@ process FIX_PGS(int curr_target, 																// set SETC_TRL.pro
 	angle        = Angle_list[curr_target]; 													// THESE USER DEFINED GLOBALS ARE ARRAYS SO 
 	eccentricity = Eccentricity_list[curr_target];												// THEY CANNOT BE PASSED INTO PROCESSES
 	color        = curr_target + 1;																// zero is reserved for black.  see SET_CLRS.pro							
-													
+	bgColor = 247;
+	
 	stim_ecc_x = cos(angle) * eccentricity;														// find the center of the box in x and y space based on the angle and eccentricity...
 	stim_ecc_y = sin(angle) * eccentricity * -1;												
 	oMove(object_targ, stim_ecc_x*deg2pix_X, stim_ecc_y*deg2pix_Y);								// ...and move the animated graph object there.
@@ -51,6 +53,7 @@ process FIX_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("target");
 	dsendf("rw %d,%d;\n",target,target); 														// draw first pg of video memory
 	dsendf("cl:\n");																			// clear screen
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
     
 	
@@ -59,6 +62,7 @@ process FIX_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("blank"); 																			
 	dsendf("rw %d,%d;\n",blank,blank);                                          				// draw the blank screen last so that it shows up first
 	dsendf("cl:\n");                                                                            // clear screen (that's all)
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	
 	
 	}

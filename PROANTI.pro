@@ -17,6 +17,8 @@ declare PROANTI();
 process PROANTI()     
 	{
 	declare hide int run_anti_sess = 9;
+	declare hide int run_color_pop = 10;
+	//declare hide int run_pop_prime = 11;
 	declare hide int run_idle		 = 0;
 	declare hide int on   = 1;	
 	declare hide int off  = 0;	
@@ -26,6 +28,7 @@ process PROANTI()
 	Trl_number				= 1;
 	Rand_Comp_Trl_number	= 0;
 	Rep_Comp_Trl_number		= 0;
+	Comp_Trl_number			= 0;
 	Rand_Comp_Trl_DP		= 0;
 	Rand_Comp_Trl_DA		= 0;
 	Block_number			= 1;
@@ -35,13 +38,13 @@ process PROANTI()
 	RepPerAcc				= 0;
 	Correct_trls 			= 0;
 	Consec_corr				= 0;
-	if (Last_task != run_anti_sess)			// Only do this if we have gone into another task or if this is first run of day.
+	if (Last_task != State) //run_anti_sess)			// Only do this if we have gone into another task or if this is first run of day.
 		{
 		system("dialog Select_Monkey");
 		spawnwait DEFAULT(State,				// Set all globals to their default values.
 						Monkey,					
 						Room);				
-		Last_task = run_anti_sess;
+		Last_task = State;//run_anti_sess;
 		}
 		
 	dsend("DM RFRSH");                			// This code sets up a vdosync macro definition to wait a specified ...
@@ -55,7 +58,7 @@ process PROANTI()
 		}
 	dsend("EM RFRSH");
 	
-	
+	//printf("State=%d\n",State);
 	
 	while(!OK)									
 		{
@@ -66,10 +69,17 @@ process PROANTI()
 						Monkey,						
 						Room);	
 			Set_monkey = 0;
+			//printf("State = %d, dynamicColor = %d\n",State,dynamicColor);
+			/*if (State == run_pop_prime)
+				{
+					dynamicColor 			= 2;
+					nPerRun 				= 5;
+					printf("dynamicColor = %d\n",dynamicColor);
+				}*/
 			}
 		}
 	
-	//spawnwait GOODVARS(State);
+		//spawnwait GOODVARS(State);
 	
 	spawnwait SET_PA();						// sets up search RT graph
 					
@@ -101,10 +111,11 @@ process PROANTI()
 	spawn WATCHMTH;								// start watching the mouth motion detector if present
 	spawn WATCHBOD;								// start watching motion detector for body if present
 	
-	while (state == run_anti_sess)				// while the user has not yet terminated the countermanding task
+	while ((state == run_anti_sess) || (state==run_color_pop) || (state == run_pop_prime))				// while the user has not yet terminated the countermanding task
 		{
 		 // check if prolonged stimulation should happen prior trial	 
  		 //if (StimTm == 5 && time() > (LastStim + StimInterval)) // for blocked, non-task stimulation
+		 /*
 		 if (time() > (LastStim + StimInterval))	// for blocked, on-task stimulation	 
 			{
 			LastStim = time();
@@ -130,12 +141,12 @@ process PROANTI()
 				StimCond = 1;	
 				pcnt = 0;
 				printf("Stim Time%d",StimTm);
-/* 				while (pcnt < Npulse) // Provides TTL stim parameters for blocked, pre-task stimulation; here, this stims continuously based on DEFAULT.pro settings
+ 				while (pcnt < Npulse) // Provides TTL stim parameters for blocked, pre-task stimulation; here, this stims continuously based on DEFAULT.pro settings
 					{
 					spawn STIM(stim_channel);
 					wait(PulseGap);
 					pcnt = pcnt+1;
-					} */
+					} 
 					
 				//StimTm = 1;	// for trial-based, blocked stimulation vs. non-stimulation
 				
@@ -143,7 +154,7 @@ process PROANTI()
 				Set_event = (Set_event + 1) % Event_fifo_N;	
 				} 			
 			} 
-			 
+		*/	 
 		 
 		 //Spawn the trial
 		 spawnwait ANTITR(allowed_fix_time, 	// run a trial with variables defined in SETC_TRL.pro
@@ -181,8 +192,8 @@ process PROANTI()
 	
 	oSetGraph(gleft,aCLEAR);					// clear the left graph
 	
-	oDestroy(object_repeat);						// destroy all RT graph objects
-	oDestroy(object_random);						
+	//oDestroy(object_repeat);						// destroy all RT graph objects
+	//oDestroy(object_random);						
 
 	
 	oSetGraph(gleft,aCLEAR);					// clear the right graph

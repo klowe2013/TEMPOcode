@@ -41,10 +41,12 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	// Number the trial stages to make them easier to read below
 	declare hide int 	need_fix  	= 1;
 	declare hide int 	fixating  	= 2;
-	declare hide int 	targ_on   	= 3;
-	declare hide int	fix_off		= 4;
-	declare hide int 	in_flight 	= 5;
-	declare hide int 	on_target 	= 6;	
+	declare hide int 	targ_off	= 3;
+	declare hide int 	targ_on   	= 4;
+	declare hide int	fix_off		= 5;
+	declare hide int 	in_flight 	= 6;
+	declare hide int 	on_target 	= 7;
+	declare hide int 	fix_break_test	= 8;
 	declare hide int 	stage;
 	
 	// Number the stimuli pages to make reading easier
@@ -84,6 +86,9 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide float 	stop_sig_time;
 	declare hide float	aquire_targ_time;	
 	declare hide float	fix_off_time;
+	declare hide float fix_break_time;
+	
+	
 	// This variable makes the while loop work
 	declare hide int 	trl_running;
 	
@@ -112,10 +117,15 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	Event_fifo[Set_event] = TrialStart_;									// queue TrialStart_ strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
 	dsendf("vp %d\n",fixation_pd);											// flip the pg to the fixation stim with pd marker
+	while (!pdIsOn)
+	{
+		nexttick;
+	}
+	
 	fix_spot_time = time();  												// record the time
 	Event_fifo[Set_event] = FixSpotOn_;										// queue strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
-	dsendf("XM RFRSH:\n"); 													// wait one vertical retrace
+	//dsendf("XM RFRSH:\n"); 													// wait one vertical retrace
 	dsendf("vp %d\n",fixation);												// flip the pg to the fixation stim without pd marker
 	oSetAttribute(object_fix, aVISIBLE); 									// turn on the fixation point in animated graph
 	
@@ -147,7 +157,23 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				}			
 			}
 			
-			
+		else if (stage == fix_break_test)
+			{
+				if (!In_FixWin && time() > fix_break_time + fix_tolerance)
+				{
+					Trl_Outcome = broke_fix;									// TRIAL OUTCOME ERROR (broke fixation)
+					LastStopOutcome = no_change;								// Don't change SSD
+					dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+					oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+					oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+					printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
+					trl_running = 0;											// ...and terminate the trial.
+				} else if (In_FixWin)
+				{
+					stage = fixating;
+					aquire_fix_time = time();
+				}
+			}	
 
 	//--------------------------------------------------------------------------------------------
 	// STAGE fixating (the subject is looking at the fixation point waiting for target onset)		
@@ -155,6 +181,9 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 			{
 			if (!In_FixWin)													// If the eyes stray out of the fixation window...
 				{
+				fix_break_time = time();
+				stage = fix_break_test;
+				/*
 				Trl_Outcome = broke_fix;									// TRIAL OUTCOME ERROR (broke fixation)
 				LastStopOutcome = no_change;								// Don't change SSD
 				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
@@ -162,6 +191,7 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
 				printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
 				trl_running = 0;											// ...and terminate the trial.
+				*/
 				}
 				
 				
@@ -183,13 +213,25 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				
 			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime)	// But if the eyes are still in the window at end of holdtime...
 				{
+				//dsendf("XM RFRSH:\n"); 										// ...wait one vetical retrace...
 				dsendf("vp %d\n",target_pd);								// ...flip the pg to the target with pd marker...	
+				while (pdIsOn == 0)
+				{
+					//printf("Checking PD Target...\n");
+					if (!In_FixWin)
+					{
+						fix_break_time = time();
+						stage = fix_break_test;
+					}
+					nexttick;
+				}
+				
 				targ_time = time(); 										// ...record the time...
 				Event_fifo[Set_event] = Target_;						// Queue strobe...
 				Set_event = (Set_event + 1) % Event_fifo_N;
-				dsendf("XM RFRSH:\n"); 										// ...wait one vetical retrace...
+				//dsendf("XM RFRSH:\n"); 										// ...wait one vetical retrace...
 				dsendf("vp %d\n",target);	
-				dsendf("vp %d\n",fixation);									// ...flip the pg to the target without pd marker.
+				//dsendf("vp %d\n",fixation);									// ...flip the pg to the target without pd marker.
 				
 //				if (trl_type == stop_trl ||									// If it is a stop or ignore trial present the signal.
 //				trl_type == ignore_trl)										// This happens here so that no overhead intervenes between commands.
@@ -218,11 +260,37 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 //					}														// If it is a stop trial the target just never comes up in the animated graph.
 				sacctarg = 1;
 				oSetAttribute(object_targ, aVISIBLE); 						// ...show target in animated graph...	
-				stage = targ_on;											// Advance to the next trial stage.				
+				stage = targ_off;											// Advance to the next trial stage.				
 				}
 			}
 			
-			
+		else if (stage == targ_off)
+			{
+			if (!In_FixWin)
+				{
+//				printf("                          soa = %d\n",round(curr_soa * (1000.0/Refresh_rate)));
+				printf("                          premature rt = %d\n",time() - targ_time);
+				Trl_Outcome = early_sacc;									// TRIAL OUTCOME ERROR (sacc before cued to do so)
+				LastStopOutcome = no_change;
+				dsendf("vp %d\n",blank);
+				dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
+				Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...
+				Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...
+				Set_event = (Set_event + 1) % Event_fifo_N;				
+				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+				printf("Error (early saccade)\n");							// ...tell the user whats up...
+				sacctarg = 0;
+				trl_running = 0;											// ...and terminate the trial.
+				}
+			else if (In_FixWin && time() > targ_time+targ_on_time)
+				{
+				dsendf("vp %d\n",fixation);									// ...flip the pg to the target without pd marker.
+				Event_fifo[Set_event] = TargetOff_;
+				Set_event = (Set_event + 1) % Event_fifo_N;
+				stage = targ_on;
+				}
+			}
 
 	//--------------------------------------------------------------------------------------------
 	// STAGE targ_on (the target has been presented but the subject is still fixating)		
@@ -235,9 +303,9 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				Trl_Outcome = early_sacc;									// TRIAL OUTCOME ERROR (sacc before cued to do so)
 				LastStopOutcome = no_change;
 				dsendf("vp %d\n",blank);
-				dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
+				//dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
 				Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...
-				Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...
+				//Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...
 				Set_event = (Set_event + 1) % Event_fifo_N;				
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
@@ -266,16 +334,26 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				{
 //				printf("                          soa = %d\n",round(curr_soa * (1000.0/Refresh_rate)));
 				
-				
 				if (trl_type == stop_trl ||									// If it is a stop or ignore trial present the signal.
 				trl_type == ignore_trl)										// This happens here so that no overhead intervenes between commands.
 				{
 
 					dsendf("vp %d\n",signal_pd);										// Flip the pg to the blank screen with the photodiode marker...
+					while (!pdIsOn)
+					{
+						if (!In_FixWin)
+						{
+							fix_break_time = time();
+							stage = fix_break_test;
+						}
+						nexttick;
+					
+					}
+					
 					fix_off_time = time();										// ...and record the time that the fixation point was extinguished.
 					Event_fifo[Set_event] = FixSpotOff_;						// Queue strobe...
 					Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
-					dsendf("XM RFRSH:\n"); 										// ...wait for one retrace cycle...
+					//dsendf("XM RFRSH:\n"); 										// ...wait for one retrace cycle...
 					dsendf("vp %d\n",signal);									// ...flip the pg to the blank screen without pd marker.
 					oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
 					stage = fix_off;
@@ -285,10 +363,21 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				{
 
 					dsendf("vp %d\n",signal_pd);										// Flip the pg to the blank screen with the photodiode marker...
+					
+					while (!pdIsOn)
+					{
+						if (!In_FixWin)
+						{
+							fix_break_time = time();
+							stage = fix_break_test;
+						}
+						nexttick;
+					}
+					
 					fix_off_time = time();										// ...and record the time that the fixation point was extinguished.
 					Event_fifo[Set_event] = FixSpotOff_;						// Queue strobe...
 					Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
-					dsendf("XM RFRSH:\n"); 										// ...wait for one retrace cycle...
+					//dsendf("XM RFRSH:\n"); 										// ...wait for one retrace cycle...
 //					dsendf("vp %d\n",blank);									// ...flip the pg to the blank screen without pd marker.
 					dsendf("vp %d\n",signal);
 					oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
@@ -345,7 +434,7 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				Trl_Outcome = early_sacc;									// TRIAL OUTCOME ERROR (sacc before cued to do so)
 				LastStopOutcome = no_change;
 				dsendf("vp %d\n",blank);
-				dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
+				//dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
 				Event_fifo[Set_event] = EarlySaccade_;							// ...queue strobe...				
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
@@ -415,13 +504,34 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				{
 				
 //				dsendf("XM RFRSH:\n");
-				dsendf("vp %d\n",target_pd);								// ...flip the pg to the target with pd marker...	
 				aquire_targ_time = time(); 									// ...record the time...
+				Event_fifo[Set_event] = Decide_;							// ...queue strobe...
+				Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
+				dsendf("vp %d\n",target_pd);								// ...flip the pg to the target with pd marker...	
+				
+				
+				while (!pdIsOn)
+				{
+					if (!In_TargWin && trl_running)
+					{
+						Trl_Outcome = broke_targ;									// TRIAL OUTCOME ERROR (broke target fixation)
+						LastStopOutcome = no_change;
+						dsendf("vp %d\n",blank);
+						Event_fifo[Set_event] = BreakTFix_;					// ...queue strobe for Neuro Explorer
+						Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				
+						oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+						oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+						printf("Error (broke target fixation)\n");					// ...tell the user whats up...
+						sacctarg = 0;
+						trl_running = 0;											// ...and terminate the trial.
+						
+					}
+					nexttick;
+				}
+				
 				sacctarg = 0;
 				dsendf("XM RFRSH:\n"); 										// ...wait for one retrace cycle...
 				dsendf("vp %d\n",target);									// ...flip the pg to the target without pd marker.
-				Event_fifo[Set_event] = Decide_;							// ...queue strobe...
-				Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
 				stage = on_target;											// ...and advance to the next stage of the trial.
 				}
 			else if (time() > saccade_time + max_sacc_duration)				// But, if the eyes are out of the target window and time runs out...

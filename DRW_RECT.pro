@@ -16,9 +16,9 @@
 // 
 // Based on DRW_SQ by david.c.godlove@vanderbilt.edu
 
-declare DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, int color, int fill, float conversion_X, float conversion_Y);
+declare DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, int color, int fill, int doEllipse, float conversion_X, float conversion_Y);
 
-process DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, int color, int fill, float conversion_X, float conversion_Y)
+process DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, int color, int fill, int doEllipse, float conversion_X, float conversion_Y)
 {
 	declare hide float stim_ecc_x;
 	declare hide float stim_ecc_y;
@@ -29,13 +29,19 @@ process DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, i
 	declare hide int lrx;
 	declare hide int lry;
 	
+	if (referenceEcc > 0)
+	{
+		horizLn = horizLn*(1+((eccentricity-referenceEcc)*scaleFactor));
+		vertLn = vertLn*(1+((eccentricity-referenceEcc)*scaleFactor));
+	}
+	
 	// find the center of the box in x and y space based on the angle and eccentricity
 	stim_ecc_x = cos(angle) * eccentricity;
 	stim_ecc_y = sin(angle) * eccentricity;
 
 	// find locations of upper left and lower right corners based on location of center and size
-	half_sizeH = horizLn/2;
-	half_sizeV = vertLn/2;
+	half_sizeH = (horizLn/2);//*(eccentricity/5);
+	half_sizeV = (vertLn/2);//*(eccentricity/5);
 	ulx       = round((stim_ecc_x - half_sizeH)*conversion_X);
 	uly       = round((stim_ecc_y + half_sizeV)*conversion_Y);
 	lrx       = round((stim_ecc_x + half_sizeH)*conversion_X);
@@ -47,11 +53,23 @@ process DRW_RECT(float horizLn, float vertLn, float angle, float eccentricity, i
 	
 	if(fill == 0)
 		{
-		dsendf("ru %d,%d,%d,%d;\n",ulx,uly,lrx,lry);
+			if (doEllipse == 0)
+			{
+				dsendf("ru %d,%d,%d,%d;\n",ulx,uly,lrx,lry);
+			} else
+			{
+				dsendf("eu %d,%d,%d,%d;\n",stim_ecc_x*conversion_X,stim_ecc_y*conversion_Y,half_sizeH*conversion_X,half_sizeV*conversion_Y);
+			}
 		}
 	else
 		{
-		dsendf("rf %d,%d,%d,%d;\n",ulx,uly,lrx,lry);
+			if (doEllipse == 0)
+			{
+				dsendf("rf %d,%d,%d,%d;\n",ulx,uly,lrx,lry);
+			} else
+			{
+				dsendf("ef %d,%d,%d,%d;\n",stim_ecc_x*conversion_X,stim_ecc_y*conversion_Y,half_sizeH*conversion_X,half_sizeV*conversion_Y);
+			}
 		}
 
 }

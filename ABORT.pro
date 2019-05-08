@@ -15,13 +15,15 @@ process ABORT()
 	declare hide int run_delayed_sess = 6;
 	declare hide int run_search_sess = 7;
 	declare hide int run_anti_sess = 9;
+	declare hide int run_color_pop = 10;
 	
 	Event_fifo[Set_event] = Abort_;				// ...queue strobe...
 	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue...
 	
 	Event_fifo[Set_event] = Eot_;				// ...queue strobe...
 	Set_event = (Set_event + 1) % Event_fifo_N;	// ...incriment event queue...
-	                                            
+	
+	printf("\n\nAbout to run INFOS on an aborted trial\n\n\n");
 	spawnwait INFOS();							// ...queue a big ole` pile-o-strobes for plexon				
 	nexttick 10;								// Give TEMPO a chance to catch its breath before attempting.. 
                                                 // ...RDX communication with vdosync.

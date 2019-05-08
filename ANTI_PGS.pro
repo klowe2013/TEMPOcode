@@ -17,55 +17,25 @@
 
 #include C:/TEMPO/ProcLib/DRW_SQR.pro
 #include C:/TEMPO/ProcLib/DRW_RECT.pro
+#include C:/TEMPO/ProcLib/DRW_T.pro
+#include C:/TEMPO/ProcLib/DRW_L.pro
 
 declare hide float 	Size;   																	// Global output will be sent as stobes...        										
 declare hide int   	Color;	
 declare hide int  	singColor;
 declare hide int 	distColor;	
-declare hide int 	oppCol;						
+declare hide int 	oppCol;
+declare hide int 	bgColor;						
 declare hide float 	Eccentricity; 
 declare hide float 	Angle;   
 
 declare hide int id;     																// ...by INFOS.pro at trial end.
 
-declare hide float 	targ_orient; 
-declare hide float 	d1_orient; 
-declare hide float 	d2_orient; 
-declare hide float 	d3_orient; 
-declare hide float 	d4_orient; 
-declare hide float 	d5_orient; 
-declare hide float 	d6_orient; 
-declare hide float 	d7_orient; 
-declare hide float 	d8_orient; 
-declare hide float 	d9_orient; 
-declare hide float 	d10_orient; 
-declare hide float 	d11_orient; 
 
 declare hide float 	targ_angle;
 declare hide float 	d1_angle; 
-declare hide float 	d2_angle; 
-declare hide float 	d3_angle; 
-declare hide float 	d4_angle; 
-declare hide float 	d5_angle; 
-declare hide float 	d6_angle; 
-declare hide float 	d7_angle; 
-declare hide float 	d8_angle; 
-declare hide float 	d9_angle; 
-declare hide float 	d10_angle; 
-declare hide float 	d11_angle; 
       																
 declare hide float 	targ_ecc;
-declare hide float 	d1_ecc; 
-declare hide float 	d2_ecc; 
-declare hide float 	d3_ecc; 
-declare hide float 	d4_ecc; 
-declare hide float 	d5_ecc; 
-declare hide float 	d6_ecc; 
-declare hide float 	d7_ecc; 
-declare hide float 	d8_ecc; 
-declare hide float 	d9_ecc; 
-declare hide float 	d10_ecc; 
-declare hide float 	d11_ecc; 
 
 
 declare ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
@@ -104,7 +74,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	{										
 											
 	declare hide float 	pd_eccentricity;										
-	declare hide float	pd_angle;										
+	declare hide float	pd_angle;	
+	declare hide float  pd_angle2;
 	declare hide float 	opposite;										
 	declare hide float	adjacent;										
 	declare hide float	stim_ecc_x;										
@@ -137,8 +108,8 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	declare hide int	fixation    = 2;
 	//declare hide int 	cue_pd 		= 3;
 	declare hide int 	cue 		= 3;
-	//declare hide int	plac_pd   	= 4;										
-	//declare hide int	plac      	= 5;	
+	//declare hide int	plac_pd   	= 5;										
+	//declare hide int	plac      	= 6;	
 	declare hide int	target_f_pd = 4;										
 	declare hide int	target_f  	= 5;
 	declare hide int	target      = 6;			
@@ -152,10 +123,11 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	singColor 	= 251;
 	distColor  = 250;
 	oppCol 		= 248;
+	bgColor 	= 247;
 	
 	angle			= targ_angle; 		
-		//printf("In ANTI_PGS: angle = %d, index = %d",targ_angle,targInd);
-		//printf("\n");
+	//printf("In ANTI_PGS: angle = %d, index = %d",targ_angle,targInd);
+	//printf("\n");
 		
 	eccentricity	= targ_ecc;	
 										
@@ -165,26 +137,27 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	oSetAttribute(object_targ, aSIZE, size*deg2pix_X, size*deg2pix_Y);							// while we are at it, resize fixation object on animated graph
 	oSetAttribute(object_fix, aSIZE, 1*deg2pix_X, 1*deg2pix_Y);									
 	
-	opposite = ((scr_height/2)-pd_bottom);														// Figure out angle and eccentricity of photodiode marker in pixels
-	adjacent = ((scr_width/2)-pd_left);                                                         // NOTE: I am assuming your pd is in the lower left quadrant of your screen
-	pd_eccentricity = sqrt((opposite * opposite) + (adjacent * adjacent));
-	pd_angle = rad2deg(atan (opposite / adjacent));
-	pd_angle = pd_angle + 180; 																//change this for different quadrent or write some code for flexibility
+	adjacent = ((scr_height/2)-((pd_bottom/2)*unit2pix_Y));///deg2pix_Y;														// Figure out angle and eccentricity of photodiode marker in pixels
+	opposite = ((scr_width/2)-pd_left);///deg2pix_X;                                                         // NOTE: I am assuming your pd is in the lower left quadrant of your screen
+	//printf("adj=%d,opp=%d,size=%d\n",adjacent,opposite,PD_size);
+	//printf("PD_Size = %d\n",pd_size);
+	pd_eccentricity = sqrt(((opposite-(PD_size/2)) * (opposite-(PD_size/2))) + ((adjacent-(PD_size/2)) * (adjacent-(PD_size/2))));
+	pd_angle = 90+rad2deg(atan (opposite / adjacent));
+	pd_angle2 = pd_angle + 180;
 	
 	// Get distractor and target sizes
 	// The below should be eliminated if we put the "catch"
 	//    in the singleton difficulties, but kept for now
 	//printf("ANTI_PGS: Catch = %d, singDiff = %d\n",Catch,singDifficulty);
-	if (Catch)
-	{
-		targH = catchH;
-		targV = catchV;
-	}
-	else if (!Catch)
-	{
-		targH = stimHorizontal[singDifficulty];
-		targV = stimVertical[singDifficulty];
-	}
+	//if (Catch)
+	//{
+	//	targH = catchH;
+	//	targV = catchV;
+	//}
+	targH = stimHorizontal[singDifficulty];
+	targV = stimVertical[singDifficulty];
+	
+	//targ_orient = 1;
 	
 	id = 0;
 	while (id < SetSize)
@@ -205,25 +178,33 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("fixation with photodiode");
 	dsendf("rw %d,%d;\n",fixation_pd,fixation_pd); 												// draw first pg of video memory
 	dsendf("cl:\n");																			// clear screen
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
-	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    //spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,246,fill,deg2pix_X,deg2pix_Y);			// draw photodiode marker
+    //spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,246,fill,deg2pix_X,deg2pix_Y);			// draw photodiode marker
     
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 2	  
 	// print("fixation");
 	dsendf("rw %d,%d;\n",fixation,fixation);   													// draw second pg of video memory                                       
 	dsendf("cl:\n");																			// clear screen
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+    spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
     nexttick;
 	
 	//----------------------------------------------------------------------------------------------------------------------
 	// Draw pg 3
 	// print("cue with photodiode");
-	
-	/*dsendf("rw %d,%d;\n",cue_pd,cue_pd); 												// draw first pg of video memory
+	/*
+	dsendf("rw %d,%d;\n",cue_pd,cue_pd); 												// draw first pg of video memory
 	dsendf("cl:\n");																			// clear screen
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
-	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
     */
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
@@ -231,18 +212,23 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("cue");
 	dsendf("rw %d,%d;\n",cue,cue);   													// draw second pg of video memory                                       
 	dsendf("cl:\n");																			// clear screen
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+    spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
     nexttick;
 	
-	/* See if cutting out placeholders helps us
+	// See if cutting out placeholders helps us
+	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 5	 
 	// print("placeholders with photodiode");
-	
+	/*
 
 	dsendf("rw %d,%d;\n",plac_pd,plac_pd);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	
 	
 	if (SetSize > 0)
 		{
@@ -261,10 +247,11 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			nexttick;
 			}
 		}
+	
 		
-		
-	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
-	nexttick;
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+	spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    nexttick;
 		
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 6	 
@@ -274,6 +261,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
+	
 	if (SetSize > 0)
 		{
 		spawnwait DRW_PLAC(targ_angle, targ_ecc, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
@@ -293,11 +281,11 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			}
 			
 		}
-		
+	*/	
 	
 	
 	nexttick;
-	*/
+	
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 7	 
@@ -305,9 +293,21 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	dsendf("rw %d,%d;\n",target_f_pd,target_f_pd);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
 
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			//if (doTLs == 1)
+			//{
+			//	if (TargetType==1)
+			//	{
+			//		spawnwait DRW_T(targ_angle, targ_ecc, 250, TargOrt, fill, deg2pix_X, deg2pix_Y);          	
+			//	} else if (TargetType==2)
+			//		spawnwait DRW_L(targ_angle, targ_ecc, 250, TargOrt, fill, deg2pix_X, deg2pix_Y);          	
+			//	}
+			//} else
+			//{
+				spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, targEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+			//}
 		}
 	if (SetSize > 1)
 		{
@@ -315,24 +315,45 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		while (id < SetSize)
 			{
 			if (Angle_list[id] != targ_angle)
-				{
-				if (id == ((targInd + SetSize/2) % SetSize))
-				{
-					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
-				}
-				else
-				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
-				}
-				}
+			{
+				//if (doTLs == 1)
+				//{
+				//	if (TargetType==1 || (TargetType==2 && Catch==1))
+				//	{
+				//		spawnwait DRW_L(Angle_list[id], Eccentricity_list[id], 250, DistOrt, fill, deg2pix_X, deg2pix_Y);          	
+				//	} else if (TargetType==2 || (TargetType==1 && Catch==1))
+				//	{
+				//		spawnwait DRW_T(Angle_list[id], Eccentricity_list[id], 250, DistOrt, fill, deg2pix_X, deg2pix_Y);          	
+				//	}
+				//} else
+				//{
+
+					if (id == ((targInd + SetSize/2) % SetSize))
+					{
+						spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+					}
+					else
+					{
+						if (ghostOthers==1)
+						{
+							spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, open, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+						} else
+						{
+							spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+						}
+					}
+				//}
+			}
 			
 			id = id+1;
 			nexttick;
 			}
 		}
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
-
-	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+	//spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, 0, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,246,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
     nexttick;
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
@@ -341,35 +362,69 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	dsendf("rw %d,%d;\n",target_f,target_f);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
 
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			nexttick;
+			//if (doTLs == 1)
+			//{
+			//	if (TargetType==1)
+			//	{
+			//spawnwait DRW_T(targ_angle, targ_ecc, singColor, TargOrt, fill, deg2pix_X, deg2pix_Y);
+			//	} else if (TargetType==2)
+			//		spawnwait DRW_L(targ_angle, targ_ecc, singColor, TargOrt, fill, deg2pix_X, deg2pix_Y);          	
+			//	}
+			//} else
+			//{
+			//	spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, targEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+			//}
 		}
-	
 	if (SetSize > 1)
 		{
 		id = 0;
 		while (id < SetSize)
 			{
 			if (Angle_list[id] != targ_angle)
+			{
+				/*
+				if (doTLs == 1)
 				{
+					if (TargetType==1 || (TargetType==2 && Catch==1))
+					{
+						spawnwait DRW_L(Angle_list[id], Eccentricity_list[id], 250, DistOrt, fill, deg2pix_X, deg2pix_Y);          	
+					} else if (TargetType==2 || (TargetType==1 && Catch==1))
+					{
+						spawnwait DRW_T(Angle_list[id], Eccentricity_list[id], 250, DistOrt, fill, deg2pix_X, deg2pix_Y);          	
+					}
+				} else
+				{
+				*/
 				if (id == ((targInd + SetSize/2) % SetSize))
-				{
-					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
-				}
-				else
-				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
-				}
-				}
+					{
+						spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+					}
+					else
+					{
+						if (ghostOthers==1)
+						{
+							spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, open, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+						} else
+						{
+							spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+						}
+					}
+				//}
+			}
 			
 			id = id+1;
 			nexttick;
 			}
 		}
-		
-	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
-
+	//spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, 0, deg2pix_X, deg2pix_Y);   	// draw fixation point
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    
 	
 	//spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 
@@ -380,11 +435,25 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	dsendf("rw %d,%d;\n",target,target);  														// draw pg 4                                        
 	dsendf("cl:\n");																			// clear screen
 
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	if (SetSize > 0)
 		{
-		spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			nexttick;
+			if (doTLs == 1)
+			{
+				if (TargetType==1)
+				{
+					spawnwait DRW_T(targ_angle, targ_ecc, fixation_color, targ_orient, fill, deg2pix_X, deg2pix_Y);
+				} else if (TargetType==2)
+				{
+					spawnwait DRW_L(targ_angle, targ_ecc, fixation_color, targ_orient, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				}
+			
+			} else
+			{
+				spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, targEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+			}
 		}
-	
 	if (SetSize > 1)
 		{
 		id = 0;
@@ -392,15 +461,36 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 			{
 			if (Angle_list[id] != targ_angle)
 			{
-				if (id == ((targInd + SetSize/2) % SetSize))
+				
+				if (doTLs == 1)
 				{
-					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
-				}
-				else
+					if (TargetType==1 || (TargetType==2 && Catch==1))
+					{
+						spawnwait DRW_L(Angle_list[id], Eccentricity_list[id], fixation_color, dist_orient, fill, deg2pix_X, deg2pix_Y);          	
+					} else if (TargetType==2 || (TargetType==1 && Catch==1))
+					{
+						spawnwait DRW_T(Angle_list[id], Eccentricity_list[id], fixation_color, dist_orient, fill, deg2pix_X, deg2pix_Y);          	
+					}
+				} else
 				{
-				spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
+				
+					if (id == ((targInd + SetSize/2) % SetSize))
+					{
+						spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+					}
+					else
+					{
+						if (ghostOthers==1)
+						{
+							spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, open, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+						} else
+						{
+							spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, fill, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+						}
+					}
 				}
 			}
+			
 			id = id+1;
 			nexttick;
 			}
@@ -411,38 +501,95 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 		{
 		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, open, deg2pix_X, deg2pix_Y);
 		}
+	else if (soa_mode==2)
+		{
+			nexttick;
+		}
 	else
 		{
 		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);		
 		}
-	nexttick; 
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    nexttick; 
 	
 	// Draw pg 10	  
 	// print("target only");
 	dsendf("rw %d,%d;\n",targ_only,targ_only);  														// draw pg 4                                        
 	dsendf("cl:\n");																			// clear screen
 
+	//printf("\n\nDistCol = %d in ANTI_PGS\n\n",distCol);
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	if (SetSize > 0)
 		{
-		//if ((targV - targH) > zeroTol) // pro trial, leave on target
-		//{
-			spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, deg2pix_X, deg2pix_Y);          	// draw target
-		//} else 
-		if ((targH - targV) > zeroTol) // anti trial, leave on opposite
+		if (((targV - targH) > zeroTol) || (basicPopOut==1))// pro trial, leave on target
+		{
+			id = 0;
+			while (id < SetSize)
+			{
+				if (Angle_list[id] == targ_angle)
+				{
+					spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, targEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+				} else if (id ==  (targInd + (SetSize/2)) % SetSize)
+				{
+					if (leaveOther==2)//if we should leave the anti stim on even in pro trials...
+					{
+						spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, distEllipse, deg2pix_X, deg2pix_Y);  
+					} else if (ghost == 1)
+					{
+						spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, open, distEllipse, deg2pix_X, deg2pix_Y);  
+					}
+					
+				} else if (ghost == 1)
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, open, distEllipse, deg2pix_X, deg2pix_Y);  
+				}
+				id = id+1;
+				nexttick;
+			}
+		} else if ((targH - targV) > zeroTol) // anti trial, leave on opposite
 		{	
-			id = (targInd + (SetSize/2)) % SetSize;
-			spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, deg2pix_X, deg2pix_Y);          	// draw target
+			id = 0;
+			while (id < SetSize)
+			{
+				if (id == (targInd + (SetSize/2)) % SetSize)
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], oppCol, fill, distEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+				} else if (Angle_list[id] == targ_angle)
+				{
+					if (leaveOther > 0)  // if we don't want to extinguish the pro stim
+					{
+						spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, fill, targEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+					} else if (ghost == 1)
+					{
+						spawnwait DRW_RECT(targH,targV,targ_angle, targ_ecc, singColor, open, targEllipse, deg2pix_X, deg2pix_Y);          	// draw target
+					}
+				} else if (ghost == 1)
+				{
+					spawnwait DRW_RECT(distH[distDifficulty[id]],distV[distDifficulty[id]],Angle_list[id], Eccentricity_list[id], distColor, open, distEllipse, deg2pix_X, deg2pix_Y);  
+				}
+				id = id+1;
+				nexttick;
+			}	
 		}
+				
 		}
+		
 	if (soa_mode==1)
 		{
 		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, open, deg2pix_X, deg2pix_Y);
+		}
+	else if (soa_mode==2)
+		{
+			nexttick;
 		}
 	else
 		{
 		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, cue_color, fill, deg2pix_X, deg2pix_Y);		
 		}
-	nexttick; 
+	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,245,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker (but as black for max contrast)
+    nexttick; 
 	
 	//printf("reached blank start\n");
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
@@ -450,6 +597,7 @@ process ANTI_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("blank"); 																			
 	dsendf("rw %d,%d;\n",blank,blank);                                          				// draw the blank screen last so that it shows up first
 	dsendf("cl:\n");                                                                            // clear screen (that's all)
+	spawnwait DRW_SQR(40.0, 0.0, 0.0, bgColor, fill, deg2pix_X, deg2pix_Y);   						// draw fixation point
 	//printf("reached blank end\n");
 	
 	

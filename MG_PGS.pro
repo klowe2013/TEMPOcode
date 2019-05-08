@@ -52,7 +52,8 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	{										
 											
 	declare hide float 	pd_eccentricity;										
-	declare hide float	pd_angle;										
+	declare hide float	pd_angle;
+	declare hide float  pd_angle2;
 	declare hide float 	opposite;										
 	declare hide float	adjacent;										
 	declare hide float	stim_ecc_x;										
@@ -74,20 +75,28 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	size         = Size_list[curr_target];   													// Figure out the attributes of the current target 
 	angle        = Angle_list[curr_target]; 													// THESE USER DEFINED GLOBALS ARE ARRAYS SO 
 	eccentricity = Eccentricity_list[curr_target];												// THEY CANNOT BE PASSED INTO PROCESSES
-	color        = random(8);																// zero is reserved for black.  see SET_CLRS.pro							
-													
+	//color        = random(8);																// zero is reserved for black.  see SET_CLRS.pro							
+	color = 255;
+	
 	stim_ecc_x = cos(angle) * eccentricity;														// find the center of the box in x and y space based on the angle and eccentricity...
 	stim_ecc_y = sin(angle) * eccentricity * -1;												
 	oMove(object_targ, stim_ecc_x*deg2pix_X, stim_ecc_y*deg2pix_Y);								// ...and move the animated graph object there.
 	oSetAttribute(object_targ, aSIZE, size*deg2pix_X, size*deg2pix_Y);							// while we are at it, resize fixation object on animated graph
 	oSetAttribute(object_fix, aSIZE, 1*deg2pix_X, 1*deg2pix_Y);									
 	
+	/*
 	opposite = ((scr_height/2)-pd_bottom);														// Figure out angle and eccentricity of photodiode marker in pixels
 	adjacent = ((scr_width/2)-pd_left);                                                         // NOTE: I am assuming your pd is in the lower left quadrant of your screen
-	pd_eccentricity = sqrt((opposite * opposite) + (adjacent * adjacent));
-	pd_angle = rad2deg(atan (opposite / adjacent));
-	pd_angle = pd_angle + 180; 																	//change this for different quadrent or write some code for flexibility
+	pd_eccentricity = 200;//sqrt((opposite * opposite) + (adjacent * adjacent));
+	pd_angle = 90 + rad2deg(atan (opposite / adjacent));
+	pd_angle2 = pd_angle + 180; 																	//change this for different quadrent or write some code for flexibility
+	*/
 	
+	adjacent = ((scr_height/2)-((pd_bottom/2)*unit2pix_Y));///deg2pix_Y;														// Figure out angle and eccentricity of photodiode marker in pixels
+	opposite = ((scr_width/2)-pd_left);///deg2pix_X;                                                         // NOTE: I am assuming your pd is in the lower left quadrant of your screen
+	pd_eccentricity = sqrt(((opposite-(PD_size/2)) * (opposite-(PD_size/2))) + ((adjacent-(PD_size/2)) * (adjacent-(PD_size/2))));
+	pd_angle = 90+rad2deg(atan (opposite / adjacent));
+	pd_angle2 = pd_angle + 180;
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 1
@@ -96,7 +105,9 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	dsendf("cl:\n");																			// clear screen
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
-    
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    nexttick;
+	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	// Draw pg 2	  
 	// print("fixation");
@@ -110,24 +121,23 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("target with photodiode");
 	dsendf("rw %d,%d;\n",target_pd,target_pd);  												// draw pg 3                                        
 	dsendf("cl:\n");																			// clear screen
-	
-	if (!sacctarg)
-	{
+	//if (!sacctarg)
+	//{
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, fill, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
-	
-	}
+	/*}
 	else if (sacctarg)
 	{
 	spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, open, deg2pix_X, deg2pix_Y);   	// draw fixation point
 	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 	
-	}
+	}*/
 //	if (!Classic)																				// if we are doing stop-signal 2.0 (not classic)
 //		{
 //		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, open, deg2pix_X, deg2pix_Y); // draw fixation point
 //		}
 	spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
     nexttick;
 	
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
@@ -135,6 +145,7 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("target");
 	dsendf("rw %d,%d;\n",target,target);  														// draw pg 4                                        
 	dsendf("cl:\n");																			// clear screen
+	
 	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);         	// draw target
 //	if (!Classic)																				// if we are doing stop-signal 2.0 (not classic)
 //		{
@@ -146,19 +157,22 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// Draw pg 5 
 	// print("signal with photodiode");
 	dsendf("rw %d,%d;\n",signal_pd,signal_pd);    												// draw pg 5                                      
-	dsendf("cl:\n");																			// clear screen
+	dsendf("cl:\n");		// clear screen
+	nexttick;
 	//spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);         	// draw target
 	//if (Classic)
 	if (nogosoa == 1)
 	{
 		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, sig_color, fill, deg2pix_X, deg2pix_Y);   		// draw stop signal/ignore stim
 		spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
-	}
+		spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    }
 	else if (nogosoa == 0)
 	{
 		spawnwait DRW_SQR(fixation_size, 0.0, 0.0, fixation_color, open, deg2pix_X, deg2pix_Y);
 		spawnwait DRW_SQR(pd_size,pd_angle,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
-	}
+		spawnwait DRW_SQR(pd_size,pd_angle2,pd_eccentricity,15,fill,unit2pix_X,unit2pix_Y);			// draw photodiode marker
+    }
 		
 	//if (!Classic)																				// if we are doing stop-signal 2.0 (not classic)
 	//	{
@@ -172,6 +186,7 @@ process MG_PGS(int curr_target, 																// set SETC_TRL.pro
 	// print("signal");
 	dsendf("rw %d,%d;\n",signal,signal);   														// draw pg 6                                       					
 	dsendf("cl:\n");																			// clear screen
+	nexttick;
 //	spawnwait DRW_SQR(size, angle, eccentricity, color, fill, deg2pix_X, deg2pix_Y);          	// draw target
 	if (nogosoa == 1)
 	{

@@ -45,7 +45,7 @@ process FLSHSCRN()
 		}
 	dsend("EM RFRSH");
 	
-	//system("dialog Flash_Vars");
+	//system("dialog Color_Vars");
 		
 	if (Last_task != run_flash_sess)			// Only do this if we have gone into another task or if this is first run of day.
 		{
@@ -74,6 +74,8 @@ process FLSHSCRN()
 	Event_fifo[Set_event] = flashSessStart;									// queue TrialStart_ strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
 		
+	system("dialog Color_Vars");
+	
 	while (State == run_flash_sess)					// while the user has not yet terminated the countermanding task
 		{		
 		

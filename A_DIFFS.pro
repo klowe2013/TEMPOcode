@@ -1,4 +1,6 @@
 // This code sets the difficulty levels for the singleton and non-singletons for Pro/Anti
+// Edit 181119: Adding a new selection type to match the shape of the distractors to the singleton
+
 #include C:/TEMPO/ProcLib/SET_CONG.pro
 	
 declare A_DIFFS();
@@ -59,14 +61,14 @@ process A_DIFFS()
 	// are two alternatives, and should have 0/1 relative probabilities (i.e.,
 	// exclusively use alternative 2), then if randVal = 0 then the first option
 	// will be spuriously selected...
-	if (randVal > 49)
+	/*if (randVal > 49)
 	{
 		randVal = 100;
 	} else 
 	{
 		randVal = 0;
 	}
-	
+	*/
 	break = 0;
 	while (randVal >= cumTProbs[singDifficulty] && break == 0)
 	{
@@ -123,6 +125,15 @@ process A_DIFFS()
 				distDifficulty[id] = oppDiff;
 			}
 			id = id+1;
+		}
+	} else if (SearchType == 5) // Match distractors to singleton
+	{
+		id = 0;
+		while (id < SetSize)
+		{
+			distDifficulty[id] = singDifficulty;
+			id = id+1;
+			nexttick;
 		}
 	} else
 	{

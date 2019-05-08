@@ -14,7 +14,14 @@ process JUICE(int channel, int duration)
 	declare hide int open   = 1;	
 	declare hide int closed = 0;	
 	
+	Event_fifo[Set_event] = ExtraReward_;
+	Set_event = (Set_event + 1) % Event_fifo_N;
+	
 	mio_dig_set(channel,open);		// Start sending the TTL
 	wait(duration);					// Wait for user defined period of time (ms)
 	mio_dig_set(channel,closed);	// Stop sending the TTL
+	
+	Event_fifo[Set_event] = RewardOff_;
+	Set_event = (Set_event + 1) % Event_fifo_N;
+	
 	}

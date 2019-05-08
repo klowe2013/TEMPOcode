@@ -4,6 +4,8 @@
 // Process for locating fixation and target window locations.
 //
 // written by david.c.godlove@vanderbilt.edu 	January, 2011;    Adapted for search by joshu.d.cosman@vanderbilt.edu July, 2013
+//
+// 190228 - KL Added code to adjust target window size based on eccentricity in the same scaling manner as in DRW_RECT.pro
 
 declare hide int run_search_sess = 7;
 declare hide float targ_angle;
@@ -83,12 +85,18 @@ process WINDOWS(int curr_target,						// see SETC_TRL
 		}
 		
 	// if the user changes the size of the targ window update the graph
+	
 	if (Trl_number == 1			||
 		targ_win_size != old_targ_win_size)
 		{
 		oSetAttribute(object_targwin, aSIZE, targ_win_size*Deg2pix_X, targ_win_size*Deg2pix_Y);
 		oSetAttribute(object_targwin, aVISIBLE);
 		old_targ_win_size = targ_win_size;
+		}
+	if (referenceEcc > 0)
+		{
+		oSetAttribute(object_targwin, aSIZE, targ_win_size*(1+((eccentricity-referenceEcc)*scaleFactor))*Deg2pix_X,targ_win_size*(1+((eccentricity-referenceEcc)*scaleFactor))*Deg2pix_Y);
+		oSetAttribute(object_targwin, aVISIBLE);
 		}
 		
 		

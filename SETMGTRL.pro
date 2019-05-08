@@ -53,7 +53,7 @@ process SETMGTRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	declare hide float decide_trl_type; 							
 	declare hide float jitter, decide_jitter, holdtime_diff;
-	declare hide float decide_soa_jitter; 
+	declare hide float decide_soa_jitter, per_soa_jitter, soa_diff; 
 	declare hide int fixation_color 			= 255;			// see SET_CLRS.pro
 	declare hide int stop_sig_color 			= 254;			// see SET_CLRS.pro
 	declare hide int ignore_sig_color 			= 253;			// see SET_CLRS.pro
@@ -93,6 +93,7 @@ process SETMGTRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 //		}
 	
 	Curr_target = random(N_targ_pos);						// 	COULD WEIGHT THIS IF NEED BE (see logic below)
+	
 	// -----------------------------------------------------------------------------------------------
 	// 3) Set up all vdosync pages for the upcoming trial using globals defined by user and setc_trl
 	spawnwait MG_PGS(curr_target,							// set above
@@ -137,24 +138,34 @@ process SETMGTRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 		}
 	jitter 			= holdtime_diff * per_jitter;
 	Curr_holdtime 	= round(min_holdtime + jitter);
-		
+	printf("Min Hold = %d, Max = %d, Curr = %d\n",min_holdtime, max_holdtime, Curr_holdtime);	
 	
 	// -----------------------------------------------------------------------------------------------
 	// 5) Select current soa, as  (same logic as above)
 
 		
-		// per_soa_jitter 	= (random(1000) + 1)/ 1000.0;				// random number 0-100 (percentages)
-		// soa_jitter 			= soa_diff * per_soa_jitter;
-		// Curr_soa 			= round(min_soa + soa_jitter);	
-	
+		soa_diff = max_soa-min_soa;
+		if (expo_jitter)
+			{
+			decide_soa_jitter 	= (random(1000) + 1)/ 1000.0;				// random number 0-100 (percentages)
+			per_soa_jitter = exp(-1.0*(decide_soa_jitter/0.25));
+			}
+		else
+			{
+			per_soa_jitter = (random(1001))/1000.0;
+			}
+		soa_jitter 			= soa_diff * per_soa_jitter;
+		Curr_soa 			= round(min_soa + soa_jitter);	
 		
-		soa_jitter = random(4);
-		Curr_soa = SOA_list[soa_jitter];
+		//soa_jitter = random(4);
+		//Curr_soa = SOA_list[soa_jitter];
+		
 		// stimulation variable
-		if (TaskStim == 1)
+		/*if (TaskStim == 1)
 			{
 			StimTm = Random(4);
 			}
-		
+		*/
+		StimTm = 0;
 	}
 	

@@ -50,6 +50,9 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide int 	fixation_offset	= 6;
 	declare hide int 	in_flight 		= 7;
 	declare hide int 	on_target 		= 8;	
+	declare hide int 	targ_break_test  = 9;
+	declare hide int 	fix_cue_test 	= 10;
+	declare hide int 	fix_break_test	= 11;
 	declare hide int 	stage;
 	
 	// Number the stimuli pages to make reading easier
@@ -57,9 +60,9 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide int	fixation_pd = 1;
 	declare hide int	fixation    = 2;
 	//declare hide int 	cue_pd 		= 3;
-	declare hide int 	cue 		= 3;
-	//declare hide int	plac_pd   	= 4;
-	//declare hide int	plac      	= 5;
+	declare hide int 	cue 		= 4;//3;
+	//declare hide int	plac_pd   	= 5;
+	//declare hide int	plac      	= 6;
 	declare hide int	target_f_pd = 4;
 	declare hide int	target_f    = 5;
 	declare hide int	target      = 6;
@@ -82,7 +85,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide int constant nogo_wrong	= 8;	// error noncanceled trial
 	declare hide int constant body_move		= 12;	// error body movement (for training stillness)
 	declare hide int constant too_fast		= 14;	// low RT while in training to slow down.
-	                                        
+	declare hide int constant late_correct  = 15; 		// Eventually found the target but not on first saccade            
 	// Timing variables which will be used to time task
 	declare hide float 	fix_spot_time; 					
 	declare hide float  targ_time;
@@ -91,11 +94,11 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide float 	aquire_fix_time;
 	declare hide float 	stop_sig_time;
 	declare hide float	aquire_targ_time;
-		
+	declare hide float fix_break_time;	
 	
 	// This variable makes the while loop work
 	declare hide int 	trl_running;
-	
+	declare hide int isExtinguished;
 		// Stim complete?
 	declare hide int 	StimDone;
 	StimDone = 0;
@@ -103,6 +106,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	// Have to be reset on every iteration since 
 	// variable declaration only occurs at load time
 	trl_running 		= 1;
+	isExtinguished = 0;
 	stage 				= need_fix;
 	
 	// Tell the user what's up
@@ -181,6 +185,10 @@ else if (SingMode == 1)
 	Event_fifo[Set_event] = TrialStart_;									// queue TrialStart_ strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
 	
+	if (correctionTrials == 0 || lastWasWrong==0 || (nCorrections > maxCorrections && maxCorrections > 0))
+	{
+	isRepeat = 0;
+	nCorrections = 0;
 	spawnwait SETA_TRL(n_targ_pos,				// Select variables for the first search...
 				go_weight,						// ...trial.  This happens once outside of the while...
 				stop_weight,					// ...loop just to set up for the first iteration. After...
@@ -190,14 +198,26 @@ else if (SingMode == 1)
 				min_holdtime,
                 max_holdtime,
 				expo_jitter);
+	} else
+	{	
+		if (lastWasAbort==0)
+		{
+			nCorrections = nCorrections + 1;
+		}
+		isRepeat = 1;
+	}
 	
 	//printf("sending fixation_pd... %d\n",fixation_pd);
 	dsendf("vp %d\n",fixation_pd);											// flip the pg to the fixation stim with pd marker
+	while (pdIsOn == 0)
+	{
+		nexttick;
+	}
 	fix_spot_time = time();  												// record the time
 	Event_fifo[Set_event] = FixSpotOn_;										// queue strobe
 	Set_event = (Set_event + 1) % Event_fifo_N;								// incriment event queue
 	
-	dsendf("XM RFRSH:\n"); 													// wait one vertical retrace
+	//dsendf("XM RFRSH:\n"); 													// wait one vertical retrace
 	dsendf("vp %d\n",fixation);												// flip the pg to the fixation stim without pd marker
 	oSetAttribute(object_fix, aVISIBLE); 									// turn on the fixation point in animated graph
 	oSetAttribute(object_targ, aINVISIBLE); 									// turn on the fixation point in animated graph
@@ -234,6 +254,7 @@ else if (SingMode == 1)
 				lastsearchoutcome = failure;
 				printf("Aborted (no fixation)\n");							// ...tell the user whats up...
 				trl_running = 0;											// ...and terminate the trial.
+				this_abort_iti = abort_iti;
 				}			
 			}
 			
@@ -245,6 +266,10 @@ else if (SingMode == 1)
 			{
 			if (!In_FixWin)													// If the eyes stray out of the fixation window...
 				{
+				// Let's be more generous here too...
+				fix_break_time = time();
+				stage = fix_break_test;
+				/*
 				Trl_Outcome = broke_fix;									// TRIAL OUTCOME ERROR (broke fixation)
 				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -252,6 +277,8 @@ else if (SingMode == 1)
 				lastsearchoutcome = failure;
 				printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
 				trl_running = 0;											// ...and terminate the trial.
+				this_abort_iti = 0;
+				*/
 				}
 			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime)	// But if the eyes are still in the window at end of holdtime...
 				{
@@ -310,11 +337,31 @@ else if (SingMode == 1)
 			}
 		*/
 	//--------------------------------------------------------------------------------------------
+	else if (stage == fix_cue_test)
+	{
+		if (!In_FixWin && time() > fix_break_time + fix_tolerance)
+		{
+			Trl_Outcome = broke_fix;									// TRIAL OUTCOME ERROR (broke fixation)
+			dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+			oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+			oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+			lastsearchoutcome = failure;
+			printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
+			trl_running = 0;											// ...and terminate the trial.
+		} else if (In_FixWin)
+		{
+			stage = fixating_cue;
+			aquire_fix_time = time();
+		}
+	}
 	// STAGE fixating target(the subject is looking at the fixation point waiting for target onset)					
 	else if (stage == fixating_targ)
 			{			
 			if (!In_FixWin)													// If the eyes stray out of the fixation window...
 				{
+				fix_break_time = time();
+				stage = fix_break_test;
+				/*
 				Trl_Outcome = broke_fix;									// TRIAL OUTCOME ERROR (broke fixation)
 				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -322,12 +369,23 @@ else if (SingMode == 1)
 				lastsearchoutcome = failure;
 				printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
 				trl_running = 0;											// ...and terminate the trial.
+				*/
 				}	
 			else if (In_FixWin && time() > aquire_fix_time + curr_holdtime + curr_cuetime)	
 				{
+				dsendf("vp %d\n",target_f_pd);							// ...flip the pg to target, fixation, pd
+				while (pdIsOn == 0)
+				{
+					//printf("Checking PD Target...\n");
+					if (!In_FixWin)
+					{
+						fix_break_time = time();
+						stage = fix_break_test;
+					}
+					nexttick;
+				}
 				Event_fifo[Set_event] = Target_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;
-				dsendf("vp %d\n",target_f_pd);							// ...flip the pg to target, fixation, pd
 				targ_time = time(); 									// ...record the time...
 				
 				/*while (time() < (targ_time+200))
@@ -337,7 +395,7 @@ else if (SingMode == 1)
 				*/
 				//printf("Showing target_f: %d\n",target_f);
 				//printf("search_fix_time = %d\n",search_fix_time);
-				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+				//dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
 				dsendf("vp %d\n",target_f);								// ...and flip the pg to target plus fixation
 				dsendf("wm %d\n",search_fix_time);                 //declared at beginning of file - wait until fixation offset to respond
 				stage = fixating_off;
@@ -345,7 +403,23 @@ else if (SingMode == 1)
 			}	
 	//--------------------------------------------------------------------------------------------
 	// STAGE fixating offset(the subject is looking at the fixation point waiting for fixation offset)					
-	
+	else if (stage == fix_break_test)
+	{
+		if (!In_FixWin && time() > fix_break_time + fix_tolerance)
+		{
+			Trl_Outcome = broke_fix;									// TRIAL OUTCOME ERROR (broke fixation)
+			dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+			oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+			oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+			lastsearchoutcome = failure;
+			printf("Aborted (broke fixation)\n");						// ...tell the user whats up...
+			trl_running = 0;											// ...and terminate the trial.
+		} else if (In_FixWin)
+		{
+			stage = fixating_targ;
+			aquire_fix_time = time();
+		}
+	}
 	else if (stage == fixating_off)
 			{							
 			if (!In_FixWin)													// If the eyes stray out of the fixation window...
@@ -387,7 +461,7 @@ else if (SingMode == 1)
 				Event_fifo[Set_event] = FixSpotOff_;					// Queue strobe...
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue...
 					
-					if (StimDone == 0 && StimTm == 2)
+					if (StimTm == 2) // && StimDone == 0)
 						{
 						spawn STIM(stim_channel);
 						StimDone = 1;
@@ -402,6 +476,9 @@ else if (SingMode == 1)
 				{															
 				if (Catch == 1) //catch trial...
 					{
+					saccade_time = time();										// ...record the time...
+					Event_fifo[Set_event] = Saccade_;							// ...queue strobe...
+					Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
 					Trl_Outcome = nogo_wrong; 								// You dumbshit, you made a saccade on a catch trial!
 					dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
 					oSetAttribute(object_targ, aINVISIBLE); 				// ...remove target from animated graph...
@@ -409,6 +486,7 @@ else if (SingMode == 1)
 					Event_fifo[Set_event] = CatchIncorrectG_;										// queue strobe
 					Set_event = (Set_event + 1) % Event_fifo_N;
 					lastsearchoutcome = failure;
+					printf("rt = %d\n",saccade_time - targ_time - search_fix_time - plac_duration);				// ...tell the user whats up...
 					printf("Error (NoGo)\n");							// ...tell the user whats up...
 					trl_running = 0;
 					}
@@ -420,13 +498,18 @@ else if (SingMode == 1)
 						saccade_time = time();										// ...record the time...
 						Event_fifo[Set_event] = Saccade_;							// ...queue strobe...
 						Set_event = (Set_event + 1) % Event_fifo_N;					// ...incriment event queue...
+						//oSetAttribute(object_eye,aREPLACE);
 						printf("rt = %d\n",saccade_time - targ_time - search_fix_time - plac_duration);				// ...tell the user whats up...
 						current_rt = saccade_time - targ_time - search_fix_time - plac_duration;
-						//dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
-						//dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+						
+						if (extinguishTime == 1)
+						{
+							dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+							dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+						}
 						stage = in_flight;											// ...and advance to the next stage.
 						
-							if (saccade_time - fix_off_time < search_fix_time + plac_duration)
+						/*	if (saccade_time - fix_off_time < search_fix_time + plac_duration)
 								{
 								Trl_Outcome = too_fast; 								// TRIAL OUTCOME TOO FAST (too fast while being trained to slow down)
 								dsendf("vp %d\n",blank);								// Flip the pg to the blank screen...
@@ -437,7 +520,8 @@ else if (SingMode == 1)
 								lastsearchoutcome = failure;
 								printf("Error (too fast)\n");							// ...tell the user whats up...
 								trl_running = 0;										// ...and terminate the trial.
-								} 
+								}
+						*/
 /* 						}
 					else // if placeholders not present, its just normal search and no need to account for placeholder duration
 						{	
@@ -474,7 +558,13 @@ else if (SingMode == 1)
 				{
 				Trl_Outcome = no_saccade;           						// TRIAL OUTCOME ERROR - made saccade on catch trial
 				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
-				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);
+				} else
+				{
+					dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				}
 				Event_fifo[Set_event] = CatchIncorrectNG_;										// queue strobe
 				Set_event = (Set_event + 1) % Event_fifo_N;
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
@@ -507,6 +597,12 @@ else if (SingMode == 1)
 				
 			if (In_TargWin)													// If the eyes get into the target window...
 				{
+				if (extinguishTime == 2)
+				{
+					dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+					dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+					//printf("Catch=%d, extTime=%d, inTargWinReached\n",Catch,extinguishTime);
+				}
 				aquire_targ_time = time();									// ...record the time...
 				stage = on_target;											// ...and advance to the next stage of the trial.
 								
@@ -522,14 +618,30 @@ else if (SingMode == 1)
 			else if (time() > saccade_time + max_sacc_duration)				// But, if the eyes are out of the target window and time runs out...
 				{
 				Trl_Outcome = sacc_out;   									// TRIAL OUTCOME ERROR (innacurrate saccade)
-				dsendf("vp %d\n",blank);									// Flip the pg to the blank screen...
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);									// Flip the pg to the blank screen...
+				} else
+				{
+					dsendf("vp %d\n",blank);
+				}
 				Event_fifo[Set_event] = Error_sacc;					// ...queue strobe for Neuro Explorer
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+				//oSetAttribute(object_eye, aXOR);
 				printf("Error (inaccurate saccade)\n");						// ...tell the user whats up...
 				trl_running = 0; 											// ...and terminate the trial.
 				}
+			else if ((time() > saccade_time + helpDelay) && extinguishTime == 3 && !isExtinguished)
+			{
+				dsendf("XM RFRSH:\n"); 									// ...wait 1 vertical retrace...
+				dsendf("vp %d\n",targ_only);
+				Event_fifo[Set_event] = StimHelp_;				// Flip the pg to the blank screen...
+				Set_event = (Set_event + 1) % Event_fifo_N;
+				isExtinguished = 1;
+				//printf("Catch=%d, extTime=%d, inTargWinReached\n",Catch,extinguishTime);
+			}
 			}
 		
 		
@@ -540,23 +652,37 @@ else if (SingMode == 1)
 			{
 			if (!In_TargWin)												// If the eyes left the target window...
 				{			
+				//  Here let's be generous and give some leeway...
+				fix_break_time = time();
+				stage = targ_break_test;
+				/*
 				Trl_Outcome = broke_targ;									// TRIAL OUTCOME ERROR (broke target fixation)
-				
-				dsendf("vp %d\n",blank);
+				if (leaveStimsPunish == 1)
+				{
+					dsendf("vp %d\n",targ_only);
+				} else
+				{
+					dsendf("vp %d\n",blank);
+				}
 				Event_fifo[Set_event] = BreakTFix_;					// ...queue strobe for Neuro Explorer
 				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				// Flip the pg to the blank screen...
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
 				printf("Error (broke target fixation)\n");					// ...tell the user whats up...
 				trl_running = 0;											// ...and terminate the trial.
+				*/
 				}		
 			else if (In_TargWin  											// But if the eyes are still in the target window...
 				&&  time() > aquire_targ_time + targ_hold_time)				// ...and the target hold time is up...
 				{
 
-		
-					Trl_Outcome = go_correct;								//TRIAL OUTCOME CORRECT (correct go trial)
-					Correct_trls = Correct_trls + 1;						// ...set a global for 1DR...
+					if (isExtinguished == 1) {
+						Trl_Outcome = late_correct;
+					} else
+					{
+						Trl_Outcome = go_correct;								//TRIAL OUTCOME CORRECT (correct go trial)
+						Correct_trls = Correct_trls + 1;						// ...set a global for 1DR...
+					}
 					Event_fifo[Set_event] = Correct_;						// ...queue strobe...
 					Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue...
 					lastsearchoutcome = success;
@@ -574,10 +700,35 @@ else if (SingMode == 1)
 				
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
 				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+				//oSetAttribute(object_eye, aXOR);
 				trl_running = 0;											// ...and terminate the trial.
 				}			
 			}			
-			
+		else if (stage == targ_break_test)
+			{
+				if (!In_TargWin && time() > fix_break_time + fix_tolerance)
+				{
+					Trl_Outcome = broke_targ;									// TRIAL OUTCOME ERROR (broke target fixation)
+					if (leaveStimsPunish == 1)
+					{
+						dsendf("vp %d\n",targ_only);
+					} else
+					{
+						dsendf("vp %d\n",blank);
+					}
+					Event_fifo[Set_event] = BreakTFix_;					// ...queue strobe for Neuro Explorer
+					Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				// Flip the pg to the blank screen...
+					oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+					oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+					//oSetAttribute(object_eye, aXOR);
+					printf("Error (broke target fixation)\n");					// ...tell the user whats up...
+					trl_running = 0;											// ...and terminate the trial.
+				} else if (In_TargWin)
+				{
+					stage = on_target;
+				}
+			}
+		
 		if (Move_ct > 0)
 			{
 			Trl_Outcome = body_move;   										// TRIAL OUTCOME ABORTED (the body was moving)

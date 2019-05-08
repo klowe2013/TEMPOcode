@@ -126,7 +126,7 @@ process LSCH_PGS(int curr_target, 																// set SETC_TRL.pro
 	opposite = ((scr_height/2)-pd_bottom);														// Figure out angle and eccentricity of photodiode marker in pixels
 	adjacent = ((scr_width/2)-pd_left);                                                         // NOTE: I am assuming your pd is in the lower left quadrant of your screen
 	pd_eccentricity = sqrt((opposite * opposite) + (adjacent * adjacent));
-	pd_angle = rad2deg(atan (opposite / adjacent));
+	pd_angle = 90 + rad2deg(atan (opposite / adjacent));
 	pd_angle = pd_angle + 180; 																//change this for different quadrent or write some code for flexibility
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	

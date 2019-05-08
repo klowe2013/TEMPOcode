@@ -77,7 +77,11 @@ process FIXATION()
 					targ_hold_time,						// see ALL_VARS.pro and DEFAULT.pro
 					object_targ);						// animated graph object
 			
-			
+			while(Pause)							// gives the user the ability to pause the task without ending it
+			{
+			nexttick;
+			}
+		
 			Trl_number = Trl_number + 1;			
 			nexttick;									// wait at least one cycle and do it all again
 			wait Inter_trl_int;							// wait for the intertrial interval

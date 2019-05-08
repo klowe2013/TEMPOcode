@@ -2,6 +2,12 @@
 //
 // written by david.c.godlove@vanderbilt.edu 	January, 2011; modified by joshua.d.cosman@vanderbilt.edu, July 2013
 
+// 190110 - KL Added diffColorPerc to pro/anti task to manipulate the proportion of easy/hard trials for target/distractor similarity
+// Room selection
+// 190212 - KL added variables for RF mapping
+declare int Room;
+
+// Trial counters
 declare int		Trl_number;
 declare int		Comp_Trl_number;
 declare float	Rand_Comp_Trl_number_DP; 	//search specific - gives correct number of dist pres trials; see END_TRL.pro
@@ -125,6 +131,7 @@ declare	int		FixJitter;
 declare	int		LatStruct;
 declare int     Catch_Rew; //allows us to set how much we divide base reward by on catch trials relative to target trials
 declare int 	trialtype; //selects repeat vs random displays
+declare int 	backgroundColor[3];
 declare int		Singleton_color[3];	// need to make this more finely adjustable for luminance matching
 declare int		NonSingleton_color[3];	// need to make this more finely adjustable for luminance matching
 declare int		d1color;	// need to make this more finely adjustable for luminance matching
@@ -152,6 +159,8 @@ declare 		Rand_targ_angle;
 declare 		Rand_d1_angle;
 
 declare float 	catch_hold_time;
+declare float   min_catch_hold;
+declare float 	max_catch_hold;
 declare float 	search_fix_time;
 declare float 	plac_duration;
 declare float   max_plactime;
@@ -164,6 +173,7 @@ declare	int StimCond;
 declare	int LastStim;
 declare	int Npulse;
 declare	int PulseGap;
+declare int PercStim;
 
 ////////// Ultrasound Vars /////////
 
@@ -174,10 +184,10 @@ declare int		Fixation_color[3];		// need to make this more finely adjustable for
 declare int 	Cue_color[3]; 			// Pro/Anti only
 declare int		Mask_sig_color[3];		//temporal
 declare int		N_targ_pos;				// number of target positions (need to calculate this myself based on user input)
-declare int		Color_list[12,3];		// color of each stimulus individually (see critique above)
-declare float	Size_list[12];			// size of each stimulus individually (degrees)
-declare float	Angle_list[12];			// angle of each target individually (degrees)
-declare float	Eccentricity_list[12];	// distance of each target from center of screen individually (degrees)
+declare int		Color_list[20,3];		// color of each stimulus individually (see critique above)
+declare float	Size_list[20];			// size of each stimulus individually (degrees)
+declare float	Angle_list[200];			// angle of each target individually (degrees)
+declare float	Eccentricity_list[200];	// distance of each target from center of screen individually (degrees)
 declare float	Fixation_size;			// size of the fixatoin point (degrees)
 declare int		Set_Tones;				// sets up the tones to either high or low based on user input
 declare int		Success_Tone_bigR;		// positive secondary reinforcer in Hz (large reward)
@@ -187,6 +197,8 @@ declare int		Failure_Tone_smlP;		// negative secondary reinforcer in Hz (short t
 declare int		Failure_Tone_medP;		// negative secondary reinforcer in Hz (medium timeout)
 declare int		Failure_Tone_bigP;		// negative secondary reinforcer in Hz (long timeout)
 declare int		Fixation_Target;		// Target number for the fixation task (changed by key macros);
+declare hide float 	targ_orient; 
+declare hide float 	dist_orient; 
 
 // Set up Pro/Anti Variables
 declare float 	stimHorizontal[11]; // Singleton H dimension
@@ -197,7 +209,8 @@ declare int 	targDiffProbs[11];  // Relative probabilities of singleton difficul
 declare int 	distDiffProbs[11];  // Relative probabilities of non-singleton difficulties
 declare int 	tIsPro[11]; 		// Decides whether the singleton is pro or anti...
 declare int 	tIsAnti[11]; 		// See above, both used for congruency of anti location
- declare int 	tIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
+declare int 	tIsCatch[11]; 		// See above, will be used to pick square simulus if we add this as a "difficulty" level
+declare float 	stimEccs[11]; 		// This will be used to independently assign stimulus eccentricities
 declare int 	congProb[3]; 		// Will be used to set relative probabilities of congruent vs incongruent anti- distractors
 declare int 	dIsPro[11]; 		// Decides whether the singleton is pro or anti...
 declare int 	dIsAnti[11]; 		// See above, both used for congruency of anti location
@@ -231,10 +244,48 @@ declare int 	oppColor[3];
 declare int 	lumOffset;
 declare int 	isCong;
 declare int 	targProb[8];
-
+declare int  	leaveOther = 0;
+declare int 	extinguishTime = 0;
+declare int 	helpDelay;
+declare int 	leaveStimsPunish;
+declare int 	ghost;
+declare int 	nEccs;
+declare int 	dynamicColor;
+declare int	 	eccProbs[8];
+declare int 	eccList[8];
+declare int 	basicPopOut;
+declare int 	nPerRun;
+declare int 	nThisRun;
+declare int 	switchColors = 1;
+declare int 	whichSwitch = 1;
+declare int 	probSwitchSingleton;
+declare int 	countIncorrect;
+declare int 	colorProbs[6];
+declare int 	distColProbs[6];
+declare int		useBlue;
+declare int 	nClrs;
+declare int		lastSwitch = 0;
+declare int 	lastWasAbort = 0;
+declare int 	lastWasWrong = 0;
+declare int 	vertIsPro;
+declare int 	randAngle = 0;
+declare int 	superSetSize = 8;
+declare int 	correctionTrials;
+declare int 	nCorrections;
+declare int 	maxCorrections;
+declare int 	independentEcc;
+declare int 	isRepeat = 0;
+declare int 	ghostOthers;
+declare int 	referenceEcc = 5;
+declare float	scaleFactor = .2;
+declare float 	eccJitter = 0.0;
 //declare float	Ang_list[12] = {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}; //cardinal coords.
 declare hide float llength = 1.6;
 declare hide float lwidth = 0.5;
+declare int 	doTLs;
+declare int enforceBlocks;
+declare int blockNo;
+declare int lastBlock;
 
 //----------------------------------------------------------------------------------------------------------------
 declare float	Fix_win_size;			// size of fixation window (degrees)
@@ -247,6 +298,7 @@ declare float	Targ_win_size;			// size of target window (degrees)
 declare int		Allowed_fix_time;		// subject has this long to acquire fixation before a new trial is initiated
 declare int		Expo_Jitter;			// defines if exponential holdtime is used or if holdtime is sampled from rectanglular dist.
 declare int		Expo_Jitter_SOA;		// defines if exponential holdtime is used for fixation offset in mem guided sacc task
+declare float 	nonAgeVal = .2; 		// Determines the denominator in the exponential holdtime equation
 declare int		Min_Holdtime;			// minimum time after fixation before target presentation
 declare int		Max_Holdtime;			// maximum time after fixation before target presentation
 declare int		Min_SOA;				// minimum time from target onset to fixation offset (mem guided only)
@@ -279,8 +331,25 @@ declare int		Canc_alert;				// Alert operator that the monk has canceled a trial
 declare int		Fixed_trl_length;		// 1 for fixed trial length, 0 for fixied inter trial intervals
 declare int		Trial_length;			// fixed at this value (only works if Fixed_trl_length == 1) must figure out max time for this variable and include it in comments
 declare int		Inter_trl_int;			// how long between trials (only works if Fixed_trl_length == 0)
+declare int 	abort_iti;			// how long of an ITI to enforce for fixation breaks/non-achieval
+declare int 	this_abort_iti;		// which fix break/failure to fix iti to enforce
 declare int 	Exp_juice;				// Exponential juice reward duration by reaction time
 declare int 	nogosoa;
+declare int 	targ_on_time;
+declare int 	fix_tolerance;
+declare int		nJuiceGive = 1;
+//declare int 	doEllipse;
+declare int 	targEllipse;
+declare int 	distEllipse;
+declare int 	enforceColorDifficulty;
+declare int 	diffColorPerc;
+declare int 	thisTrialColorHard;
+declare int 	manualSingCol;
+declare int 	easySingDistMap[10];
+declare int 	hardSingDistMap[10];
+declare int 	colorCatch;
+declare int 	fixedSaccTime;
+
 //------------------------------------------------------------------------------------------------------------------
 // Globals needed for multiple processes which must be declared here to avoid dependancy conflicts
 declare int Reward_duration;			//GLOBAL OUTPUT FOR INFOS.pro will be set by END_TRL.pro
@@ -293,8 +362,88 @@ declare int Failure_tone;				//GLOBAL OUTPUT FOR INFOS.pro will be set by END_TR
 // Flash Variables
 declare float IFI;
 declare float flashTime;
+declare int redVal;
+declare int greenVal;
+declare int blueVal;
+declare int yrOff;
+declare int ygOff;
+declare int mrOff;
+declare int mbOff;
+declare int cgOff;
+declare int cbOff;
+declare int wrOff;
+declare int wgOff;
+declare int wbOff;
+declare int omrOff;
+declare int ombOff;
+declare int ocgOff;
+declare int ocbOff;
+declare int oggOff;
+declare int ogrOff;
+declare int ogbOff;
+declare int bgR;
+declare int bgG;
+declare int bgB;
 
+// RF Mapping variables
+//declare int run_rf = 12;
 
+declare int minTrPgs;
+declare int maxTrPgs;
+declare int maxTrStims;
+declare int minTrStims;
+declare int nParts = 5;
+declare int nEccs;
+declare int nAngs;
+declare int nSizes;
+declare int pgsThisTrial;
+declare float min_ecc;
+declare float max_ecc;
+declare float min_ang;
+declare float max_ang;
+declare float min_size;
+declare float max_size;
+declare float gap_ang;
+declare float gap_ecc;
+declare float gap_size;
+
+declare int thisTotalStim;
+declare float stimEccVal[300];
+declare int stimEccPg[300];
+declare int stimEccStim[300];
+declare float stimAngVal[300];
+declare int stimAngPg[300];
+declare int stimAngStim[300];
+declare float stimSizeVal[300];
+declare int stimSizePg[300];
+declare int stimSizeStim[300];
+declare int stimRingsVal[300];
+declare int stimRingsPg[300];
+declare int stimRingsStim[300];
+declare int stimsThisPg[10];
+declare int numStims[10];
+
+declare int Map_Page_Inds[10]; // Make sure this is >= maxTrPgs
+declare float isi_duration[10]; // same as above
+declare float stim_duration[10]; // same as above
+declare int doSaccade;
+declare int enforceRepeat;
+declare float percRepeat;
+declare int maxIndivPgs;
+declare int 	totalPresented;
+
+declare int min_isi;
+declare int max_isi;
+declare int max_stimDur;
+declare int min_stimDur;
+
+//PD Vars
+declare int pd_val;
+declare int pdThresh;
+declare int pdIsOn;
+declare int pdRefract;
+declare int pdN = 1;
+declare int pdVect[20];
 
 
 
