@@ -34,13 +34,13 @@ process WATCHPD(int PhotoD_channel)
 			lasttime = time();
 		}
 		*/
-		if ((pd_val > pdThresh)) // && (time() < (lastWasOn+pdRefract)))
+		if ((pd_val < pdThresh)) // && (time() < (lastWasOn+pdRefract)))
 		{
 			//Event_fifo[Set_event] = 8888;
 			//Set_event = (Set_event + 1) % Event_fifo_N;
 			pdIsOn = 1;
 			lastWasOn = time();
-		} else if ((pd_val < pdThresh) && (time() > (lastWasOn+pdRefract)))
+		} else if ((pd_val > pdThresh) && (time() > (lastWasOn+pdRefract)))
 		{
 			pdIsOn = 0;
 		}
