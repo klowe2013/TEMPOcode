@@ -2,14 +2,14 @@
 ; Copyright 1997-2019 Reflective Computing.  All Rights Reserved.
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
-; Fri Jun 07 12:24:52 2019
+; Mon Jun 10 11:48:11 2019
 ; GLOAD tempo.gcf
 
 
 ; WINDOW CONFIGURATION
 
 SCREENRES 1280,1024,32,1,0,0
-MAINWND 1,0,0,-1,-1,1,0,555,58,0
+MAINWND 1,0,0,-1,-1,1,0,555,57,0
 
 CMDWND 1,160,972,-1,-1,0,940,405,1001,0
 
