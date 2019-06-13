@@ -760,6 +760,8 @@ if(monkey == darwin)
 			correctionTrials 		= 1;
 			maxCorrections 			= 5;
 			nJuiceGive 				= 1;
+			percBonus 				= 5;
+			bonusSize 				= 5;
 			
 			targEllipse = 0;
 			distEllipse = 0;

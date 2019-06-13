@@ -519,6 +519,14 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	
 	SelEcc = Random(3); //choose from four eccentricities randomly; see line 130 LOC_RAND.pro
 	
+	// Choose if this is a bonus reward trial
+	randVal = random(100);
+	isBonus = 0;
+	if (randVal < percBonus)
+	{
+		isBonus = 1;
+	}
+	
 	}
 	
 	

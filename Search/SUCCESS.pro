@@ -48,6 +48,7 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 	declare hide int 	ignore_trl 	= 2;
 	
 	declare hide int 	nJuiceCount;
+	declare hide int 	nJuiceOld;
 	
 	spawn TONE(success_tone,tone_duration);				// give the secondary reinforcer tone
 	tone_time = time();									// record the time
@@ -82,6 +83,11 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 		}
 	else
 		{
+		if (isBonus)
+		{
+			nJuiceOld = nJuiceGive;
+			nJuiceGive = bonusSize;
+		}			
 		nJuiceCount = 0;
 		while (nJuiceCount < nJuiceGive)
 		{
@@ -93,6 +99,10 @@ process SUCCESS(int trial_length,						// see DEFAULT.pro and ALL_VARS.pro for e
 				nexttick;
 			}
 		}
+		if (isBonus)
+		{
+			nJuiceGive = nJuiceOld;
+		}			
 		trl_end_time = time();								// record the time b/c this is the end of the trial events
 	
 		Event_fifo[Set_event] = Reward_;					// ...queue strobe...
