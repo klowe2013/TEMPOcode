@@ -132,6 +132,7 @@ if ((State==run_anti_sess) || (State==run_color_pop) || (State==run_pop_prime))
 		if (enforceColorDifficulty==1)
 		{
 			randVal = random(100);
+			/*
 			if (randVal <= probSwitchSingleton)
 			{
 				oldDist = DistCol;
@@ -145,7 +146,19 @@ if ((State==run_anti_sess) || (State==run_color_pop) || (State==run_pop_prime))
 			{
 				DistCol = easySingDistMap[SingCol];
 			}
-			
+			*/
+			if (randVal <= probSwitchSingleton)
+			{
+				SingCol = hardSingDistMap[SingCol];
+			}
+			if (thisTrialColorHard==1)
+			{
+				DistCol = hardSingDistMap[SingCol];
+			} else if (thisTrialColorHard == 0)
+			{
+				DistCol = easySingDistMap[SingCol];
+			}
+						
 		}
 		if (colorCatch==1)
 		{
