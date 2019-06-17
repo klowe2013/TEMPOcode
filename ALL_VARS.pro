@@ -259,6 +259,7 @@ declare int 	nThisRun;
 declare int 	switchColors = 1;
 declare int 	whichSwitch = 1;
 declare int 	probSwitchSingleton;
+declare int 	probSwapColors;
 declare int 	countIncorrect;
 declare int 	colorProbs[6];
 declare int 	distColProbs[6];

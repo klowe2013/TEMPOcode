@@ -158,7 +158,13 @@ if ((State==run_anti_sess) || (State==run_color_pop) || (State==run_pop_prime))
 			{
 				DistCol = easySingDistMap[SingCol];
 			}
-						
+			randVal = random(100);
+			if (randVal <= probSwapColors)
+			{
+				oldDist = DistCol;
+				DistCol = SingCol;
+				SingCol = oldDist;
+			}			
 		}
 		if (colorCatch==1)
 		{

@@ -773,6 +773,7 @@ if(monkey == darwin)
 			enforceColorDifficulty = 1;
 			diffColorPerc = 50;
 			probSwitchSingleton = 50;
+			probSwapColors = 50;
 			
 			enforceBlocks = 1;
 			blockNo = 1;
