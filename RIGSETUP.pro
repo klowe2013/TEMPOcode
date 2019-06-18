@@ -133,18 +133,16 @@ process RIGSETUP(int Room)
 		// Hard set of off-red and off-green colors
 		yrOff = 5; // 190127 change 10; // Changed to orange... was 22 for yellow;
 		ygOff = 19; // 190127 change // Changed to orange... 6 for yellow;
-		oggOff = 2;
-		ogrOff = 23;
-		ogbOff = 22;
+		//oggOff = 2;
+		//ogrOff = 23;
+		//ogbOff = 22;
 		
 		// Easy set of off-red and off-green colors
-		/*
-		yrOff = 13;
-		ygOff = 11;
+		//yrOff = 13;
+		//ygOff = 11;
 		oggOff = 4;
 		ogrOff = 37;
 		ogbOff = 10;
-		*/
 		
 		bgR = 20;
 		bgG = 20;

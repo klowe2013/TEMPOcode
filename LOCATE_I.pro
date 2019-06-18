@@ -27,8 +27,15 @@
 // protocol.
 //
 // written by david.c.godlove@vanderbilt.edu 	January, 2011
+//
+//
+// 190618 - Added circWin to use a circle equation to enforce a circular, rather than rectangular, target window. The window won't render
+// as a circle in the graphs, but the underlying logic will be that of a circle inscribed in the graphed box. - KAL
 
-declare int In_FixWin, In_TargWin;
+
+declare int In_FixWin, In_TargWin; 
+declare float reportTime;
+declare float eccentricity, eccX, eccY;
 
 declare LOCATE_I(float eye_x,
 				float eye_y,
@@ -64,16 +71,31 @@ process LOCATE_I(float eye_x,
 	else
 		In_FixWin = 0;               // Subject is not inside fixation window
 		
-		
+	
+	
 	// See if subject is in the target window
-	if (eye_x >= targ_win_left  &&
-		eye_x <= targ_win_right &&
-		eye_y <= targ_win_down  &&
-		eye_y >= targ_win_up)
+	if (circWin)
+	{	
+		eccX = ((targ_win_right+targ_win_left)/2);
+		eccY = ((targ_win_up+targ_win_down)/2);
+		eccentricity = sqrt(eccX*eccX + eccY*eccY);
+		if (sqrt((eye_x-eccX)*(eye_x-eccX)+((eye_y-eccY)*(eye_y-eccY))) <= ((targ_win_size*(1+((eccentricity-referenceEcc)*scaleFactor)))/2))
 		{
-		In_TargWin = 1;               // Subject is inside target window
+			In_TargWin = 1;
+		} else
+		{
+			In_TargWin = 0;
 		}
-	else
-		In_TargWin = 0;               // Subject is not inside taraget window		
-
+	} else
+	{
+		if (eye_x >= targ_win_left  &&
+			eye_x <= targ_win_right &&
+			eye_y <= targ_win_down  &&
+			eye_y >= targ_win_up)
+			{
+			In_TargWin = 1;               // Subject is inside target window
+			}
+		else
+			In_TargWin = 0;               // Subject is not inside taraget window		
+	}
 	}

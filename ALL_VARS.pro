@@ -287,6 +287,7 @@ declare int 	doTLs;
 declare int enforceBlocks;
 declare int blockNo;
 declare int lastBlock;
+declare int circWin = 1;
 
 //----------------------------------------------------------------------------------------------------------------
 declare float	Fix_win_size;			// size of fixation window (degrees)
