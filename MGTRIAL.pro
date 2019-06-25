@@ -510,7 +510,7 @@ process MGTRIAL(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 				dsendf("vp %d\n",target_pd);								// ...flip the pg to the target with pd marker...	
 				
 				
-				while (!pdIsOn)
+				while (!pdIsOn && trl_running)
 				{
 					if (!In_TargWin && trl_running)
 					{
