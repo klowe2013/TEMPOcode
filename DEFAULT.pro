@@ -723,7 +723,7 @@ if(monkey == darwin)
 		if (task == run_anti_sess)
 			{
 			Trls_per_block 			= 100;
-			Base_Punish_time		= 2000;
+			Base_Punish_time		= 3000;
 			Catch_Rew               = 1; // 1 = full base reward; allows us to set how much we divide base reward by on catch trials relative to target trials
 			basicPopOut 			= 0;
 			Reward_Offset			= 0;	// how long after tone before juice is given (needed to seperate primary and secondary reinforcement)
@@ -771,7 +771,7 @@ if(monkey == darwin)
 			DistOrt = 1;
 			
 			enforceColorDifficulty = 1;
-			diffColorPerc = 50;
+			diffColorPerc = 60;
 			probSwitchSingleton = 50;
 			probSwapColors = 50;
 			
@@ -837,7 +837,7 @@ if(monkey == darwin)
 			eccList[7] = 10;
 			
 			eccProbs[0] = 0;
-			eccProbs[1] = 1;
+			eccProbs[1] = 0;
 			eccProbs[2] = 0;
 			eccProbs[3] = 1;
 			eccProbs[4] = 0;
@@ -879,7 +879,7 @@ if(monkey == darwin)
 											// That being the case, this percentage needs to be even on both pro and anti
 											// trials in order to be non-predictive of the ensuing stimulus
 			
-			targ_hold_time			= 1000;
+			targ_hold_time			= 700;
 			Max_sacc_duration		= 50;
 			helpDelay 				= 50;
 			Min_saccade_time		= 70;
