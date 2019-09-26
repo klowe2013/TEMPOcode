@@ -2,7 +2,7 @@
 ; Copyright 1997-2019 Reflective Computing.  All Rights Reserved.
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
-; Thu Jun 13 11:24:40 2019
+; Wed Sep 25 09:43:58 2019
 ; DLOAD C:\TEMPO\ProcLib\ALL_PROS.dcf
 
 ; DIALOGS
@@ -525,6 +525,7 @@ DIAOBJ   12,60,3,315,590,376,608,"","percBonus"
 DIAOBJ   12,61,1,8,623,136,645,"","Bonus Size"
 DIAOBJ   12,62,5,191,622,268,638,"","bonusSize"
 DIAOBJ   12,63,3,300,613,384,636,"","bonusSize"
+DIAOBJ   12,64,2,8,733,136,755,"Refill Solenoid","Dialog Refill_Solenoid"
 
 DIAPAGE 13,"Quit_Check"
 DIAPOS   13,0,0,0,-1,-1,440,320,800,498,13
@@ -1156,6 +1157,16 @@ DIAOBJ   35,6,5,117,61,197,90,"","blockNo"
 DIAOBJ   35,7,3,225,62,295,85,"","blockNo"
 DIAOBJ   35,8,2,338,101,415,134,"Apply","DSET;"
 DIAOBJ   35,9,2,17,146,177,176,"Reset Counters","quiet Pro_Comp_Trl_number = 0;\r\nquiet pro_inacc_sacc = 0;\r\nquiet ProPerAcc = 0;\r\nquiet avg_pro_rt = 0;\r\nquiet cum_pro_rt = 0;\r\nquiet Anti_Comp_Trl_number = 0;\r\nquiet anti_inacc_sacc = 0;\r\nquiet AntiPerAcc = 0;\r\nquiet avg_anti_rt = 0;\r\nquiet cum_anti_rt = 0;\r\nquiet Catch_Comp_Trl_number = 0;\r\nquiet catch_inacc_sacc = 0;\r\nquiet CatchPerAcc = 0;\r\nquiet Pro_Cong_Trl_number = 0;\r\nquiet ProCongAcc = 0;\r\nquiet pro_cong_inacc = 0;\r\nquiet Pro_ICong_Trl_number = 0;\r\nquiet ProICongAcc = 0;\r\nquiet pro_icong_inacc = 0;\r\nquiet Pro_CCong_Trl_number = 0;\r\nquiet ProCCongAcc = 0;\r\nquiet pro_ccong_inacc = 0;\r\nquiet Anti_Cong_Trl_number = 0;\r\nquiet AntiCongAcc = 0;\r\nquiet anti_cong_inacc = 0;\r\nquiet Anti_ICong_Trl_number = 0;\r\nquiet AntiICongAcc = 0;\r\nquiet anti_icong_inacc = 0;\r\nquiet Anti_CCong_Trl_number = 0;\r\nquiet AntiCCongAcc = 0;\r\nquiet anti_ccong_inacc = 0;"
+
+DIAPAGE 36,"Refill_Solenoid"
+DIAPOS   36,0,-1,-1,-1,-1,379,465,739,645,36
+DIAOBJ   36,0,2,264,15,328,37,"OK","DSET; DPOP"
+DIAOBJ   36,1,2,260,58,324,80,"Cancel","DPOP"
+DIAOBJ   36,2,1,16,30,120,50,"","Current Amount"
+DIAOBJ   36,3,1,19,68,112,89,"","Amount Added"
+DIAOBJ   36,4,5,134,29,195,53,"","currentMLs"
+DIAOBJ   36,5,5,132,67,193,86,"","refillAmount"
+DIAOBJ   36,6,2,266,94,325,113,"Refill","DSET;\r\nquiet Event_fifo[Set_event] = 2774;\r\nquiet Set_event = (Set_event + 1) % Event_fifo_N;\r\nquiet Event_fifo[Set_event] = 1000+dist_orient;\r\nquiet Set_event = (Set_event + 1) % Event_fifo_N;\r\nquiet Event_fifo[Set_event] = 2775;\r\nquiet Set_event = (Set_event + 1) % Event_fifo_N;\r\nquiet Event_fifo[Set_event] = 1000+targ_orient;\r\nSet_event = (Set_event + 1) % Event_fifo_N;"
 
 ; END OF DIALOGS
 

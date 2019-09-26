@@ -79,6 +79,10 @@ process A_DIFFS()
 			break = 1;
 		}
 	}
+	if (targDiffProbs[singDifficulty] == 0)
+	{
+		singDifficulty = 0;
+	}
 	/*if (singDifficulty > ntDifficulties)
 	{
 		singDifficulty = ntDifficulties;

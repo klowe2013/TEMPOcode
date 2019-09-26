@@ -289,6 +289,9 @@ declare int blockNo;
 declare int lastBlock;
 declare int circWin = 1;
 
+declare int currentMLs = 250;
+declare int refillAmount = 0;
+
 //----------------------------------------------------------------------------------------------------------------
 declare float	Fix_win_size;			// size of fixation window (degrees)
 declare float	Targ_win_size;			// size of target window (degrees)
