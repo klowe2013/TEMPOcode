@@ -723,7 +723,7 @@ if(monkey == darwin)
 		if (task == run_anti_sess)
 			{
 			Trls_per_block 			= 100;
-			Base_Punish_time		= 3000;
+			Base_Punish_time		= 2000;
 			Catch_Rew               = 1; // 1 = full base reward; allows us to set how much we divide base reward by on catch trials relative to target trials
 			basicPopOut 			= 0;
 			Reward_Offset			= 0;	// how long after tone before juice is given (needed to seperate primary and secondary reinforcement)
@@ -891,7 +891,7 @@ if(monkey == darwin)
 			Go_weight				= 100.0;
 			Stop_weight				= 0.0;
 			Ignore_weight			= 0.0;
-			Inter_trl_int			= 2000;	// how long between trials (only works if Fixed_trl_length == 0)
+			Inter_trl_int			= 1500;	// how long between trials (only works if Fixed_trl_length == 0)
 			abort_iti 			= 2000;
 			fix_tolerance 		= 10;
 			NonSingleton_color[r_]		= 35;	
@@ -992,9 +992,9 @@ if(monkey == darwin)
 			stimVertical[7] = .5;
 			
 			// Relative probability of color singleton options
-			targDiffProbs[0] = 4;
-			targDiffProbs[1] = 0;
-			targDiffProbs[2] = 3;
+			targDiffProbs[0] = 3;
+			targDiffProbs[1] = 3;
+			targDiffProbs[2] = 0;
 			targDiffProbs[3] = 0;
 			targDiffProbs[4] = 3;
 			targDiffProbs[5] = 0;
