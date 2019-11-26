@@ -501,6 +501,7 @@ if(monkey == darwin)
 			Max_saccade_time		= 500;
 			Base_Reward_time		= 100;
 			Base_Punish_time		= 2000;
+			isBonus 				= 0;
 			
 			N_targ_pos				= 8;
 			
