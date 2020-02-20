@@ -1,8 +1,8 @@
 ; TEMPO DIALOG CONFIGURATION FILE
-; Copyright 1997-2019 Reflective Computing.  All Rights Reserved.
+; Copyright 1997-2020 Reflective Computing.  All Rights Reserved.
 ; This file was created by TEMPO and should not be edited directly by the user.
 ; The commands in this file are undocumented and subject to change in future releases.
-; Wed Sep 25 09:43:58 2019
+; Wed Feb 19 10:29:55 2020
 ; DLOAD C:\TEMPO\ProcLib\ALL_PROS.dcf
 
 ; DIALOGS
@@ -460,9 +460,9 @@ DIAOBJ   11,62,5,405,156,475,180,"","SSD_list[11]"
 DIAOBJ   11,63,1,200,4,415,88,"","Set the stop-signal delays\r\nin vertical retrace units.\r\n(These must be monotonically\r\nincreasing.  The number of SSDs \r\nis calculated based on blanks.)"
 
 DIAPAGE 12,"In_Task_pane"
-DIAPOS   12,0,0,972,-1,-1,792,132,1230,942,12
-DIAOBJ   12,0,2,151,655,279,683,"Quit Task","dialog Quit_Check"
-DIAOBJ   12,1,2,294,657,420,685,"Apply Changes","DSET;"
+DIAPOS   12,0,0,972,-1,-1,797,43,1235,944,12
+DIAOBJ   12,0,2,150,751,278,779,"Quit Task","dialog Quit_Check"
+DIAOBJ   12,1,2,293,753,419,781,"Apply Changes","DSET;"
 DIAOBJ   12,2,3,277,176,377,200,"","Base_Punish_time"
 DIAOBJ   12,3,3,277,41,377,65,"","Fix_win_size"
 DIAOBJ   12,4,3,277,109,377,133,"","Targ_win_size"
@@ -477,7 +477,7 @@ DIAOBJ   12,12,1,10,181,171,210,"","Base punish time"
 DIAOBJ   12,13,1,9,34,171,63,"","Fix window size"
 DIAOBJ   12,14,1,14,5,257,29,"","Monitor and control in-task variables"
 DIAOBJ   12,15,1,325,1,395,26,"","(F4)"
-DIAOBJ   12,16,2,10,655,136,683,"Pause","quiet Pause = 1;\r\ndialog Resume"
+DIAOBJ   12,16,2,9,751,135,779,"Pause","quiet Pause = 1;\r\ndialog Resume"
 DIAOBJ   12,17,1,10,289,171,318,"","Set Size"
 DIAOBJ   12,18,1,10,217,175,246,"","Move timeout"
 DIAOBJ   12,19,3,277,280,377,312,"","SetSize"
@@ -499,13 +499,13 @@ DIAOBJ   12,34,5,190,386,260,413,"","SingMode"
 DIAOBJ   12,35,5,190,421,260,448,"","SingCol"
 DIAOBJ   12,36,3,277,392,377,421,"","SingMode"
 DIAOBJ   12,37,3,277,430,377,460,"","SingCol"
-DIAOBJ   12,38,2,155,698,284,723,"Timing Vars","Dialog Pre_Task_Trial_Timing"
+DIAOBJ   12,38,2,154,794,283,819,"Timing Vars","Dialog Pre_Task_Trial_Timing"
 DIAOBJ   12,39,3,277,469,377,493,"","DistCol"
-DIAOBJ   12,40,2,152,733,280,757,"General Task Stuff","dialog Pre_Task_Trial_Stimuli"
-DIAOBJ   12,41,2,9,695,136,721,"Search Stimuli","dialog Search_Info"
-DIAOBJ   12,42,2,292,697,420,722,"Pro/Anti Vars","Dialog PA_Vars;"
+DIAOBJ   12,40,2,151,829,279,853,"General Task Stuff","dialog Pre_Task_Trial_Stimuli"
+DIAOBJ   12,41,2,8,791,135,817,"Search Stimuli","dialog Search_Info"
+DIAOBJ   12,42,2,291,793,419,818,"Pro/Anti Vars","Dialog PA_Vars;"
 DIAOBJ   12,43,1,10,469,137,498,"","Distractor Color"
-DIAOBJ   12,44,2,292,729,422,751,"RF Map Vars","Dialog RF_Mapping;"
+DIAOBJ   12,44,2,291,825,421,847,"RF Map Vars","Dialog RF_Mapping;"
 DIAOBJ   12,45,5,190,456,260,482,"","DistCol"
 DIAOBJ   12,46,1,10,505,125,534,"","SOA Mode"
 DIAOBJ   12,47,5,190,490,260,517,"","soa_mode"
@@ -525,7 +525,13 @@ DIAOBJ   12,60,3,315,590,376,608,"","percBonus"
 DIAOBJ   12,61,1,8,623,136,645,"","Bonus Size"
 DIAOBJ   12,62,5,191,622,268,638,"","bonusSize"
 DIAOBJ   12,63,3,300,613,384,636,"","bonusSize"
-DIAOBJ   12,64,2,8,733,136,755,"Refill Solenoid","Dialog Refill_Solenoid"
+DIAOBJ   12,64,2,7,829,135,851,"Refill Solenoid","Dialog Refill_Solenoid"
+DIAOBJ   12,65,5,194,650,272,674,"","PercStim"
+DIAOBJ   12,66,3,310,645,391,668,"","PercStim"
+DIAOBJ   12,67,1,19,659,147,681,"","Percent Stim"
+DIAOBJ   12,68,1,20,688,148,710,"","Microstim Block?"
+DIAOBJ   12,69,5,191,681,267,702,"","isMicroStimBlock"
+DIAOBJ   12,70,3,301,677,385,699,"","isMicroStimBlock"
 
 DIAPAGE 13,"Quit_Check"
 DIAPOS   13,0,0,0,-1,-1,440,320,800,498,13
@@ -1048,8 +1054,8 @@ DIAPAGE 32,"Dialog2"
 DIAPOS   32,0,0,0,-1,-1,7,225,457,465,32
 DIAOBJ   32,0,2,340,20,420,49,"OK","DSET; DPOP"
 DIAOBJ   32,1,2,340,60,420,89,"Cancel","DPOP"
-DIAOBJ   32,2,3,10,78,170,108,"","max_catch_hold"
-DIAOBJ   32,3,5,10,20,170,49,"","max_catch_hold"
+DIAOBJ   32,2,3,10,78,170,108,"","isMicroStimBlock"
+DIAOBJ   32,3,5,10,20,170,49,"","isMicroStimBlock"
 DIAOBJ   32,4,2,330,104,420,128,"Apply","DSET;"
 
 DIAPAGE 33,"Off_Color_Vars"

@@ -95,6 +95,7 @@ process ANTITR(allowed_fix_time, 		// see ALL_VARS.pro and DEFAULT.pro
 	declare hide float 	stop_sig_time;
 	declare hide float	aquire_targ_time;
 	declare hide float fix_break_time;	
+	declare hide int postTargetStimTm = 100;
 	
 	// This variable makes the while loop work
 	declare hide int 	trl_running;
@@ -652,26 +653,56 @@ else if (SingMode == 1)
 			{
 			if (!In_TargWin)												// If the eyes left the target window...
 				{			
-				//  Here let's be generous and give some leeway...
-				fix_break_time = time();
-				stage = targ_break_test;
-				/*
-				Trl_Outcome = broke_targ;									// TRIAL OUTCOME ERROR (broke target fixation)
-				if (leaveStimsPunish == 1)
+				if (StimDone == 1)
 				{
-					dsendf("vp %d\n",targ_only);
+					if (isExtinguished == 1) {
+						Trl_Outcome = late_correct;
+					} else
+					{
+						Trl_Outcome = go_correct;								//TRIAL OUTCOME CORRECT (correct go trial)
+						Correct_trls = Correct_trls + 1;						// ...set a global for 1DR...
+					}
+					Event_fifo[Set_event] = Correct_;						// ...queue strobe...
+					Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue...
+					lastsearchoutcome = success;
+					printf("Correct (saccade)\n");							// ...tell the user whats up...
+																// Either way we are done, so...
+					dsendf("vp %d\n",blank);									// ...flip the pg to the blank screen...
+					////////////////////// Code for stimulating when fixated on target /////////////////////
+					dsendf("wm %d\n",200);
+					oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+					oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+					//oSetAttribute(object_eye, aXOR);
+					trl_running = 0;											// ...and terminate the trial.
 				} else
 				{
-					dsendf("vp %d\n",blank);
+					
+					//  Here let's be generous and give some leeway...
+					fix_break_time = time();
+					stage = targ_break_test;
+					/*
+					Trl_Outcome = broke_targ;									// TRIAL OUTCOME ERROR (broke target fixation)
+					if (leaveStimsPunish == 1)
+					{
+						dsendf("vp %d\n",targ_only);
+					} else
+					{
+						dsendf("vp %d\n",blank);
+					}
+					Event_fifo[Set_event] = BreakTFix_;					// ...queue strobe for Neuro Explorer
+					Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				// Flip the pg to the blank screen...
+					oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
+					oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
+					printf("Error (broke target fixation)\n");					// ...tell the user whats up...
+					trl_running = 0;											// ...and terminate the trial.
+					*/
 				}
-				Event_fifo[Set_event] = BreakTFix_;					// ...queue strobe for Neuro Explorer
-				Set_event = (Set_event + 1) % Event_fifo_N;				// ...incriment event queue.				// Flip the pg to the blank screen...
-				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...
-				oSetAttribute(object_fix, aINVISIBLE); 						// ...remove fixation point from animated graph...
-				printf("Error (broke target fixation)\n");					// ...tell the user whats up...
-				trl_running = 0;											// ...and terminate the trial.
-				*/
 				}		
+			else if (In_TargWin && time() > aquire_targ_time + postTargetStimTm && StimDone==0 && StimTm == 3)
+			{
+				spawn STIM(stim_channel);
+				StimDone = 1;
+			}				
 			else if (In_TargWin  											// But if the eyes are still in the target window...
 				&&  time() > aquire_targ_time + targ_hold_time)				// ...and the target hold time is up...
 				{
@@ -691,11 +722,13 @@ else if (SingMode == 1)
 				dsendf("vp %d\n",blank);									// ...flip the pg to the blank screen...
 				////////////////////// Code for stimulating when fixated on target /////////////////////
 				dsendf("wm %d\n",200);
+				/*
 				if (StimTm == 3)	
 				{ 
 				spawn STIM(stim_channel);
 				StimDone = 1;
 				}
+				*/
 				/////////////////////////////////////////////////////////////////////////////////////////////////
 				
 				oSetAttribute(object_targ, aINVISIBLE); 					// ...remove target from animated graph...

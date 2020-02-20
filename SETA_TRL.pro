@@ -503,6 +503,7 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	//doStim = random(2);
 	//StimTm = doStim*2;//Random(2); //allows us to randomize the time stim is delivered; see task stages in SCHTRIAL.pro
 	doStim = random(1000)/10;
+	/*
 	if (doStim <= PercStim)
 	{
 		StimTm = 2;
@@ -510,7 +511,14 @@ process SETA_TRL(int n_targ_pos,							// see DEFAULT.pro and ALL_VARS.pro for e
 	{
 		StimTm = 0;
 	}
-	
+	*/
+	if (doStim <= PercStim && isMicroStimBlock == 1)
+	{
+		StimTm = 3;
+	} else
+	{
+		StimTm = 0;
+	}
 	//StimTm = 1; //Single stim time
 	//StimTm = 0; //stim off
 	//StimTm = 5; //For prolonged stim protocol
